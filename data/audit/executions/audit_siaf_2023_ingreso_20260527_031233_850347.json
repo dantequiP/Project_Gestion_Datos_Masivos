@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T03:12:33.850132",
+  "source": "siaf",
+  "dataset": "2023_ingreso",
+  "status": "success",
+  "rows_extracted": 743452,
+  "files_written": [
+    "data\\bronze\\siaf\\2023_ingreso\\2023_ingreso_raw.parquet"
+  ],
+  "pages": 1
+}

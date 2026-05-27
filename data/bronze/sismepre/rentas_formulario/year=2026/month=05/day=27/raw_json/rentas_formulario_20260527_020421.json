@@ -1,0 +1,20 @@
+{
+  "source": "sismepre",
+  "dataset": "rentas_formulario",
+  "resource_id": "5473b6da-2453-48d0-bc50-e38afc8e732c",
+  "rows": 94,
+  "columns": [
+    "ORDEN_FORMULARIO",
+    "ESTADO_REGISTRO",
+    "ANO_APLICACION",
+    "PERIODO",
+    "TIPO_FORMULARIO",
+    "FORMULARIO_ID",
+    "TITULO",
+    "SUB_TITULO",
+    "CLASIFICACION",
+    "ABREVIATURA"
+  ],
+  "pages_fetched": 1,
+  "extraction_ts": "2026-05-27T02:04:21.511809"
+}

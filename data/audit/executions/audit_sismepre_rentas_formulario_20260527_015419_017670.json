@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T01:54:19.017118",
+  "source": "sismepre",
+  "dataset": "rentas_formulario",
+  "status": "success",
+  "rows_extracted": 94,
+  "files_written": [
+    "data\\bronze\\sismepre\\rentas_formulario\\year=2026\\month=05\\day=27\\rentas_formulario_page_0001_20260527_015418.parquet"
+  ],
+  "pages": 1
+}

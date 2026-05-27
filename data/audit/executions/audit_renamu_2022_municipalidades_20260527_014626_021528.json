@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-05-27T01:46:26.021071",
+  "source": "renamu",
+  "dataset": "2022_municipalidades",
+  "status": "success",
+  "rows_extracted": 1874,
+  "files_written": [
+    "data\\bronze\\renamu\\2022_municipalidades__Base_RENAMU_2022_f\\year=2026\\month=05\\day=27\\2022_municipalidades__Base_RENAMU_2022_f_20260527_014602.parquet"
+  ],
+  "zip_files_extracted": 3,
+  "parquets_generated": 1
+}

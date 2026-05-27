@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T02:04:23.304093",
+  "source": "sismepre",
+  "dataset": "rentas_preguntas",
+  "status": "success",
+  "rows_extracted": 696,
+  "files_written": [
+    "data\\bronze\\sismepre\\rentas_preguntas\\rentas_preguntas_raw.parquet"
+  ],
+  "pages": 2
+}

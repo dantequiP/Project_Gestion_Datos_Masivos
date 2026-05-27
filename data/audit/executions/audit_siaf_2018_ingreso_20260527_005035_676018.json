@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-05-27T00:50:35.675752",
+  "source": "siaf",
+  "dataset": "2018_ingreso",
+  "status": "success",
+  "rows_extracted": 656859,
+  "files_written": [
+    "data\\bronze\\siaf\\2018_ingreso\\year=2026\\month=05\\day=27\\2018_ingreso_20260527_003518.parquet"
+  ]
+}

@@ -1,0 +1,110 @@
+# ============================================================
+# config.yaml — Configuración central del pipeline RAW
+# Proyecto: Arquitectura Medallion — Capa Bronze (RAW)
+# ============================================================
+
+project:
+  name: "proyecto_datos_masivos"
+  version: "1.0.0"
+  layer: "bronze"
+  description: "Pipeline de ingestión RAW — datos exactamente como vienen de la fuente"
+
+# ---- Rutas -------------------------------------------------
+paths:
+  data_root: "data"
+  bronze_root: "data/bronze"
+  audit_root: "data/audit"
+  logs_root: "logs"
+
+# ---- HTTP --------------------------------------------------
+http:
+  timeout: 180         # 180s: el MEF tarda en responder páginas grandes
+  max_retries: 5       # 5 reintentos = 6 intentos totales (antes eran 3 reintentos)
+  backoff_factor: 3    # espera: 3s, 9s, 27s, 81s, 243s — más paciente con el 500
+  headers:
+    User-Agent: "DataEngineeringPipeline/1.0 (academic research)"
+    Accept: "application/json, text/csv, */*"
+
+# ---- CKAN --------------------------------------------------
+ckan:
+  page_limit: 500      # Bajado desde 10000: el MEF devuelve 500 con páginas grandes
+  base_url: "https://api.datosabiertos.mef.gob.pe/DatosAbiertos/v1/datastore_search"
+
+# ---- Parquet -----------------------------------------------
+parquet:
+  engine: "pyarrow"
+  compression: "snappy"   # snappy mantiene velocidad y compatibilidad
+  # ¡NO se aplica ningún schema forzado — tipos originales preservados!
+
+# ============================================================
+# FUENTE 1 — SIAF INGRESOS
+# ============================================================
+sources:
+  siaf:
+    name: "SIAF Ingresos"
+    description: "Sistema Integrado de Administración Financiera — ejecución de ingresos"
+    bronze_path: "data/bronze/siaf/ingresos"
+    raw_json_path: "data/bronze/siaf/ingresos/raw_json"
+
+    # Archivos CSV históricos descargados directamente
+    csv_resources:
+      # "2012_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2012-Ingreso.csv"
+      # "2013_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2013-Ingreso.csv"
+      # "2014_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2014-Ingreso.csv"
+      # "2015_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2015-Ingreso.csv"
+      # "2016_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2016-Ingreso.csv"
+      # "2017_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2017-Ingreso.csv"
+      # "2018_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2018-Ingreso.csv"
+      # "2019_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2019-Ingreso.csv"
+      # "2020_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2020-Ingreso.csv"
+      # "2021_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2021-Ingreso.csv"
+      "2024_ingreso": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2024-Ingreso.csv"
+      "2025_ingreso_mensual": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2025-Ingreso-Mensual.csv"
+      "2026_ingreso_mensual": "https://fs.datosabiertos.mef.gob.pe/datastorefiles/2026-Ingreso-Mensual.csv"
+
+    # Recursos vía API CKAN (paginados)
+    api_resources:
+      #"2022_ingreso": "031bc35d-f6e6-48ef-8aed-8df6c23b7a7a"
+      #"2023_ingreso": "aee29919-51e9-4aad-b3fa-a474ea1a7292"
+      #"2024_ingreso": "228c2d8b-f58f-435c-bf96-c7556e8c537d"
+      #"2025_ingreso_mensual": "989f451f-1a3d-4161-b498-7f1fa81cecad"
+      #"2025_ingreso_diario": "93c5ce61-e16c-4165-89c8-ac293422bd97"
+      #"2026_ingreso_mensual": "4723b94f-6b96-4b76-b990-d596c8da4cce"
+      #"2026_ingreso_diario": "534994e6-2422-4e3e-97aa-bb56acb80c97"
+
+  # ============================================================
+  # FUENTE 2 — SISMEPRE
+  # ============================================================
+  sismepre:
+    name: "SISMEPRE Predial"
+    description: "Sistema de Medición del Desempeño de la Recaudación Predial"
+    bronze_path: "data/bronze/sismepre/predial"
+    raw_json_path: "data/bronze/sismepre/predial/raw_json"
+    api_base: "https://api.datosabiertos.mef.gob.pe/DatosAbiertos/v1/datastore_search"
+
+    api_resources:
+      "rentas_preguntas":           "96b53d87-dc98-41ee-8fea-3b45e6201942"
+      "rentas_estadistica":         "69abaf52-1d36-4efb-86d0-38af739896c7"
+      "rentas_formulario":          "5473b6da-2453-48d0-bc50-e38afc8e732c"
+      "rentas_esat_estadistica_atm": "52f97ee4-6a52-465a-98e8-7e5ba8328b30"
+      "rentas_respuestas":          "d03c11b0-3c33-4c61-85fc-507bbcaf9cae"
+      "rentas_ano_aplicacion":      "d107f21c-686a-4217-ac0c-9f96b4f00df0"
+      "rentas_entidad_estado":      "5989e884-f198-4a92-817d-890d71e8984a"
+
+  # ============================================================
+  # FUENTE 3 — RENAMU
+  # ============================================================
+  renamu:
+    name: "RENAMU Municipalidades"
+    description: "Registro Nacional de Municipalidades — INEI"
+    bronze_path: "data/bronze/renamu/municipalidades"
+    raw_zip_path: "data/bronze/renamu/municipalidades/raw_zip"
+    raw_extracted_path: "data/bronze/renamu/municipalidades/raw_extracted"
+
+    datasets:
+      "2022_municipalidades":
+        url: "https://www.inei.gob.pe/media/DATOS_ABIERTOS/RENAMU/DATA/2022.zip"
+        type: "zip"
+      "2022_diccionario":
+        url: "https://www.inei.gob.pe/media/DATOS_ABIERTOS/RENAMU/DICCIONARIO/2022/Diccionario.pdf"
+        type: "pdf"

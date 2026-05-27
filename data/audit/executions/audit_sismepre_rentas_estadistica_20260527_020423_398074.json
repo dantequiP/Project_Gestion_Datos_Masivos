@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T02:04:23.397407",
+  "source": "sismepre",
+  "dataset": "rentas_estadistica",
+  "status": "success",
+  "rows_extracted": 233,
+  "files_written": [
+    "data\\bronze\\sismepre\\rentas_estadistica\\rentas_estadistica_raw.parquet"
+  ],
+  "pages": 1
+}

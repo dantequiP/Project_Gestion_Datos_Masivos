@@ -1,0 +1,25 @@
+{
+  "source": "sismepre",
+  "dataset": "rentas_preguntas",
+  "resource_id": "96b53d87-dc98-41ee-8fea-3b45e6201942",
+  "rows": 696,
+  "columns": [
+    "ESTADO_REGISTRO",
+    "ANO_APLICACION",
+    "PREGUNTA_PADRE_ID",
+    "RANGO_FIN",
+    "PERIODO",
+    "RESPUESTA",
+    "ORDEN_PREGUNTA",
+    "TEXTO_LECTURA",
+    "TEXTO_APOYO",
+    "OBJETO_ACTIVO",
+    "TIPO_CUESTIONARIO_ID",
+    "FORMULARIO_ID",
+    "DESCRIPCION",
+    "PREGUNTA_ID",
+    "RANGO_INI"
+  ],
+  "pages_fetched": 2,
+  "extraction_ts": "2026-05-27T02:04:21.511809"
+}

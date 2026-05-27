@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T03:35:53.078371",
+  "source": "siaf",
+  "dataset": "2026_ingreso_diario",
+  "status": "success",
+  "rows_extracted": 340015,
+  "files_written": [
+    "data\\bronze\\siaf\\2026_ingreso_diario\\2026_ingreso_diario_raw.parquet"
+  ],
+  "pages": 1
+}

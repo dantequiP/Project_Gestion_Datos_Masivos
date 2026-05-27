@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T02:06:14.458236",
+  "source": "sismepre",
+  "dataset": "rentas_entidad_estado",
+  "status": "success",
+  "rows_extracted": 19037,
+  "files_written": [
+    "data\\bronze\\sismepre\\rentas_entidad_estado\\rentas_entidad_estado_raw.parquet"
+  ],
+  "pages": 39
+}

@@ -1,0 +1,28 @@
+# Entorno virtual de Python
+.venv/
+venv/
+env/
+
+# Variables reales de entorno
+.env
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs temporales de ejecución
+logs/
+*.log
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Configuración local del editor
+.vscode/
+
+# Archivos temporales
+*.tmp
+*.temp

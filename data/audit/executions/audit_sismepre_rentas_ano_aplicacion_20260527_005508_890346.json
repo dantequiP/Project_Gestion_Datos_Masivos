@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-05-27T00:55:08.889538",
+  "source": "sismepre",
+  "dataset": "rentas_ano_aplicacion",
+  "status": "error",
+  "rows_extracted": 0,
+  "files_written": [],
+  "error": "Traceback (most recent call last):\n  File \"C:\\Users\\Maria\\Desktop\\Proyectos\\PROYECTO DATOS MASIVOS\\app\\services\\ingestion_service.py\", line 275, in ingest_sismepre\n    for page_num, (df_page, raw_json) in enumerate(\n                                         ~~~~~~~~~^\n        self.sismepre_client.fetch_all_pages(dataset_key, resource_id),\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        start=1,\n        ^^^^^^^^\n    ):\n    ^\n  File \"C:\\Users\\Maria\\Desktop\\Proyectos\\PROYECTO DATOS MASIVOS\\app\\clients\\sismepre_client.py\", line 93, in fetch_all_pages\n    raise RuntimeError(\n        f\"CKAN error | dataset={dataset_key} | error={error_info}\"\n    )\nRuntimeError: CKAN error | dataset=rentas_ano_aplicacion | error={}\n"
+}

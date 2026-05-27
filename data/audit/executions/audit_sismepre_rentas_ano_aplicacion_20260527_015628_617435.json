@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T01:56:28.616825",
+  "source": "sismepre",
+  "dataset": "rentas_ano_aplicacion",
+  "status": "success",
+  "rows_extracted": 26,
+  "files_written": [
+    "data\\bronze\\sismepre\\rentas_ano_aplicacion\\year=2026\\month=05\\day=27\\rentas_ano_aplicacion_page_0001_20260527_015418.parquet"
+  ],
+  "pages": 1
+}

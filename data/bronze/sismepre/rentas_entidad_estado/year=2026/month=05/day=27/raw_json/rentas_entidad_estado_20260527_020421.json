@@ -1,0 +1,24 @@
+{
+  "source": "sismepre",
+  "dataset": "rentas_entidad_estado",
+  "resource_id": "5989e884-f198-4a92-817d-890d71e8984a",
+  "rows": 19037,
+  "columns": [
+    "TIPO_META",
+    "SEC_EJE",
+    "ESTADO",
+    "IND_RESOL_ALCAL_ADJUNTO",
+    "USUARIO_CREACION_FECHA",
+    "FECHA_RESOL_ALCAL_ADJUNTO",
+    "PERIODO",
+    "USUARIO_FECHA_ENVIO",
+    "ANO_APLICACION",
+    "CLASIFICACION",
+    "ORIGEN_INFORMACION",
+    "SEC_EJEC",
+    "CORREO",
+    "USUARIO_ENVIO_ID"
+  ],
+  "pages_fetched": 39,
+  "extraction_ts": "2026-05-27T02:04:21.511809"
+}

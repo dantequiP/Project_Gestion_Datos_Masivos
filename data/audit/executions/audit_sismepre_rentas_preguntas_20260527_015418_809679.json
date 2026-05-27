@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-05-27T01:54:18.809225",
+  "source": "sismepre",
+  "dataset": "rentas_preguntas",
+  "status": "success",
+  "rows_extracted": 696,
+  "files_written": [
+    "data\\bronze\\sismepre\\rentas_preguntas\\year=2026\\month=05\\day=27\\rentas_preguntas_page_0001_20260527_015418.parquet",
+    "data\\bronze\\sismepre\\rentas_preguntas\\year=2026\\month=05\\day=27\\rentas_preguntas_page_0002_20260527_015418.parquet"
+  ],
+  "pages": 2
+}

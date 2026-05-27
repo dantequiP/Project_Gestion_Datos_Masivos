@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-27T02:56:03.381180",
+  "source": "siaf",
+  "dataset": "2022_ingreso",
+  "status": "success",
+  "rows_extracted": 774954,
+  "files_written": [
+    "data\\bronze\\siaf\\2022_ingreso\\2022_ingreso_raw.parquet"
+  ],
+  "pages": 1
+}
