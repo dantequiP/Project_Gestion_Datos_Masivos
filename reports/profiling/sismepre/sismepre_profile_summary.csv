@@ -1,0 +1,8 @@
+﻿dataset,row_count,column_count,duplicate_rows,duplicate_rows_pct,memory_mb,columns_with_missing,columns_all_missing,columns_high_missing_50pct,avg_missing_pct,avg_unique_pct,numeric_like_columns,datetime_like_columns,empty_or_null_columns,parquet_path,profile_status
+rentas_preguntas,696,15,0,0.0,0.2057,5,0,5,20.728,10.1916,8,0,0,data\bronze\sismepre\rentas_preguntas\rentas_preguntas_raw.parquet,OK
+rentas_estadistica,233,7,0,0.0,0.0164,1,0,0,2.8204,4.5371,5,0,0,data\bronze\sismepre\rentas_estadistica\rentas_estadistica_raw.parquet,OK
+rentas_formulario,94,10,0,0.0,0.0153,2,1,2,19.3617,8.7234,4,0,1,data\bronze\sismepre\rentas_formulario\rentas_formulario_raw.parquet,OK
+rentas_esat_estadistica_atm,133298,42,0,0.0,59.1604,3,1,3,6.8762,3.1778,35,0,1,data\bronze\sismepre\rentas_esat_estadistica_atm\rentas_esat_estadistica_atm_raw.parquet,OK
+rentas_respuestas,174210,11,0,0.0,18.516,2,0,1,8.877,0.8606,8,1,0,data\bronze\sismepre\rentas_respuestas\rentas_respuestas_raw.parquet,OK
+rentas_ano_aplicacion,26,9,0,0.0,0.0037,3,0,0,9.4017,50.0,4,4,0,data\bronze\sismepre\rentas_ano_aplicacion\rentas_ano_aplicacion_raw.parquet,OK
+rentas_entidad_estado,19037,14,0,0.0,3.0685,3,3,3,21.4286,1.398,6,1,3,data\bronze\sismepre\rentas_entidad_estado\rentas_entidad_estado_raw.parquet,OK

@@ -1,0 +1,132 @@
+
+    <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+    <title>Dashboard Profiling SISMEPRE — Bronze</title><style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px}
+    header h1{margin:0;font-size:24px}
+    header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}
+    .value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}
+    th{background:#111827;color:white}
+    tr:nth-child(even){background:#fafafa}
+    .bar-wrap{display:inline-block;width:120px;height:7px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}
+    .bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .bar-label{color:#2f7d46;font-weight:bold}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px}
+    .ok{background:#d9eadf;color:#245c36}
+    .warn{background:#fff3cd;color:#7a5b00}
+    </style></head>
+    <body><header><h1>Dashboard de Profiling — SISMEPRE Bronze</h1>
+    <p>Generado: 2026-05-29T15:37:35 | Pipeline: profiling_sismepre</p></header>
+    <main>
+    <h2 class="section-title">Resumen general</h2>
+    <div class="cards">
+      <div class="card"><div class="label">Datasets analizados</div><div class="value">7</div></div>
+      <div class="card"><div class="label">Filas perfiladas</div><div class="value">327,594</div></div>
+      <div class="card"><div class="label">Columnas perfiladas</div><div class="value">108</div></div>
+      <div class="card"><div class="label">Duplicados totales</div><div class="value">0</div></div>
+    </div>
+    <h2 class="section-title">Tabla resumen</h2>
+    <table><thead><tr>
+      <th>Dataset</th><th>Filas</th><th>Columnas</th><th>Duplicados</th><th>Completitud aprox.</th>
+      <th>Cols con faltantes</th><th>Cols 100% vacías</th><th>Cols numéricas</th><th>Cols fecha</th><th>Estado</th>
+    </tr></thead><tbody>
+        <tr>
+          <td><b>rentas_preguntas</b></td>
+          <td>696</td>
+          <td>15</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:79.27%"></div></div><span class="bar-label">79.3%</span></td>
+          <td>5</td>
+          <td>0</td>
+          <td>8</td>
+          <td>0</td>
+          <td><span class="badge warn">REVISAR</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_estadistica</b></td>
+          <td>233</td>
+          <td>7</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:97.18%"></div></div><span class="bar-label">97.2%</span></td>
+          <td>1</td>
+          <td>0</td>
+          <td>5</td>
+          <td>0</td>
+          <td><span class="badge ok">OK</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_formulario</b></td>
+          <td>94</td>
+          <td>10</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:80.64%"></div></div><span class="bar-label">80.6%</span></td>
+          <td>2</td>
+          <td>1</td>
+          <td>4</td>
+          <td>0</td>
+          <td><span class="badge warn">REVISAR</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_esat_estadistica_atm</b></td>
+          <td>133,298</td>
+          <td>42</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:93.12%"></div></div><span class="bar-label">93.1%</span></td>
+          <td>3</td>
+          <td>1</td>
+          <td>35</td>
+          <td>0</td>
+          <td><span class="badge warn">REVISAR</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_respuestas</b></td>
+          <td>174,210</td>
+          <td>11</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:91.12%"></div></div><span class="bar-label">91.1%</span></td>
+          <td>2</td>
+          <td>0</td>
+          <td>8</td>
+          <td>1</td>
+          <td><span class="badge warn">REVISAR</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_ano_aplicacion</b></td>
+          <td>26</td>
+          <td>9</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:90.60%"></div></div><span class="bar-label">90.6%</span></td>
+          <td>3</td>
+          <td>0</td>
+          <td>4</td>
+          <td>4</td>
+          <td><span class="badge ok">OK</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_entidad_estado</b></td>
+          <td>19,037</td>
+          <td>14</td>
+          <td>0</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:78.57%"></div></div><span class="bar-label">78.6%</span></td>
+          <td>3</td>
+          <td>3</td>
+          <td>6</td>
+          <td>1</td>
+          <td><span class="badge warn">REVISAR</span></td>
+        </tr>
+        </tbody></table>
+    </main></body></html>
+    

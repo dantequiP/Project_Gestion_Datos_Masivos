@@ -1,0 +1,16 @@
+{
+  "pipeline_name": "profiling_sismepre",
+  "status": "success",
+  "started_at": "2026-05-29T15:37:14.130523",
+  "finished_at": "2026-05-29T15:37:35.563671",
+  "duration_seconds": 21.433148,
+  "datasets_profiled": 7,
+  "total_rows_profiled": 327594,
+  "total_columns_profiled": 108,
+  "total_duplicate_rows": 0,
+  "outputs": {
+    "summary_csv": "reports\\profiling\\sismepre\\sismepre_profile_summary.csv",
+    "detail_csv": "reports\\profiling\\sismepre\\sismepre_profile_detail.csv",
+    "dashboard_html": "reports\\profiling\\sismepre\\sismepre_profile_dashboard.html"
+  }
+}
