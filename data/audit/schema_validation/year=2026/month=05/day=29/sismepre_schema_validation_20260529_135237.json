@@ -1,0 +1,18 @@
+{
+  "pipeline_name": "schema_validation_sismepre",
+  "status": "success",
+  "started_at": "2026-05-29T13:52:25.444901",
+  "finished_at": "2026-05-29T13:52:37.532869",
+  "duration_seconds": 12.087968,
+  "datasets_evaluated": 7,
+  "datasets_ok": 7,
+  "datasets_review": 0,
+  "columns_evaluated": 108,
+  "missing_columns_total": 0,
+  "extra_columns_total": 0,
+  "outputs": {
+    "summary_csv": "reports\\schema_validation\\sismepre\\sismepre_schema_validation_summary.csv",
+    "detail_csv": "reports\\schema_validation\\sismepre\\sismepre_schema_validation_detail.csv",
+    "html": "reports\\schema_validation\\sismepre\\sismepre_schema_validation.html"
+  }
+}
