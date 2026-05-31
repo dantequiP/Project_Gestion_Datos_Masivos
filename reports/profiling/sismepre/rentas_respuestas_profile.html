@@ -1,0 +1,515 @@
+
+    <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+    <title>Profiling SISMEPRE - rentas_respuestas</title><style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px}
+    header h1{margin:0;font-size:24px}
+    header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}
+    .value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}
+    th{background:#111827;color:white}
+    tr:nth-child(even){background:#fafafa}
+    .bar-wrap{display:inline-block;width:120px;height:7px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}
+    .bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .bar-label{color:#2f7d46;font-weight:bold}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px}
+    .ok{background:#d9eadf;color:#245c36}
+    .warn{background:#fff3cd;color:#7a5b00}
+    </style></head>
+    <body><header><h1>Profiling SISMEPRE — rentas_respuestas</h1>
+    <p>Generado: 2026-05-29T15:37:34 | Capa: Bronze | No transforma datos</p></header>
+    <main>
+    <div class="cards">
+      <div class="card"><div class="label">Filas</div><div class="value">174,210</div></div>
+      <div class="card"><div class="label">Columnas</div><div class="value">11</div></div>
+      <div class="card"><div class="label">Duplicados</div><div class="value">0</div></div>
+      <div class="card"><div class="label">Cols con faltantes</div><div class="value">2</div></div>
+    </div>
+    <h2 class="section-title">Resumen del dataset</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>row_count</th>
+      <th>column_count</th>
+      <th>duplicate_rows</th>
+      <th>duplicate_rows_pct</th>
+      <th>memory_mb</th>
+      <th>columns_with_missing</th>
+      <th>columns_all_missing</th>
+      <th>columns_high_missing_50pct</th>
+      <th>avg_missing_pct</th>
+      <th>avg_unique_pct</th>
+      <th>numeric_like_columns</th>
+      <th>datetime_like_columns</th>
+      <th>empty_or_null_columns</th>
+      <th>parquet_path</th>
+      <th>profile_status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>174210</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>18.516</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>8.877</td>
+      <td>0.8606</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>data\bronze\sismepre\rentas_respuestas\rentas_respuestas_raw.parquet</td>
+      <td>OK</td>
+    </tr>
+  </tbody>
+</table>
+    <h2 class="section-title">Perfil de columnas</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>column_name</th>
+      <th>parquet_type</th>
+      <th>inferred_type</th>
+      <th>row_count</th>
+      <th>null_count</th>
+      <th>null_pct</th>
+      <th>empty_string_count</th>
+      <th>empty_string_pct</th>
+      <th>missing_like_count</th>
+      <th>missing_like_pct</th>
+      <th>non_missing_count</th>
+      <th>unique_count</th>
+      <th>unique_pct</th>
+      <th>cardinality_class</th>
+      <th>min_length</th>
+      <th>max_length</th>
+      <th>avg_length</th>
+      <th>numeric_valid_count</th>
+      <th>numeric_valid_pct</th>
+      <th>numeric_min</th>
+      <th>numeric_max</th>
+      <th>numeric_mean</th>
+      <th>q1</th>
+      <th>q3</th>
+      <th>iqr</th>
+      <th>outlier_count_iqr</th>
+      <th>outlier_pct_iqr</th>
+      <th>datetime_valid_pct</th>
+      <th>datetime_detected_format</th>
+      <th>datetime_min</th>
+      <th>datetime_max</th>
+      <th>sample_values</th>
+      <th>top_values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>RESPUESTA_TEXTO</td>
+      <td>large_string</td>
+      <td>categorical_text</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>0.0011</td>
+      <td>2</td>
+      <td>0.0011</td>
+      <td>174208</td>
+      <td>4553</td>
+      <td>2.6135</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>1000</td>
+      <td>2.5252</td>
+      <td>105147</td>
+      <td>60.3572</td>
+      <td>0.0</td>
+      <td>2222.0</td>
+      <td>8.8088</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td>0.0006</td>
+      <td>%d/%m/%Y</td>
+      <td>2025-10-07 00:00:00</td>
+      <td>2025-10-07 00:00:00</td>
+      <td>["5", "0", "UNIDAD DE ADMINISTRACION TRIBUTARIA", "N", "S"]</td>
+      <td>{"0": 89046, "N": 35294, "S": 27140, "62": 2652, "63": 2400, "50": 1422, "3": 837, "61": 798, "59": 786, "60": 684}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>PERIODO</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>2</td>
+      <td>0.0011</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.0000</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.8243</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["1", "2"]</td>
+      <td>{"2": 143610, "1": 30600}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>PREGUNTA_ID</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>142</td>
+      <td>0.0815</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2.1534</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>1.0</td>
+      <td>154.0</td>
+      <td>61.4856</td>
+      <td>31.0</td>
+      <td>86.0</td>
+      <td>55.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["1", "9", "10", "11", "12"]</td>
+      <td>{"1": 1836, "9": 1836, "10": 1836, "11": 1836, "12": 1836, "13": 1836, "14": 1836, "15": 1836, "16": 1836, "17": 1836}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>SEC_EJEC</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>885</td>
+      <td>0.5080</td>
+      <td>baja_categorica</td>
+      <td>6</td>
+      <td>6</td>
+      <td>6.0000</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>300001.0</td>
+      <td>301901.0</td>
+      <td>301079.9082</td>
+      <td>300682.0</td>
+      <td>301512.0</td>
+      <td>830.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["300348", "301295", "301755", "300377", "300454"]</td>
+      <td>{"300440": 468, "301755": 393, "301757": 393, "300537": 393, "301210": 393, "301065": 393, "300121": 393, "300078": 393, "300817": 393, "300868": 393}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>ANO_APLICACION</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>4</td>
+      <td>0.0023</td>
+      <td>baja_categorica</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4.0000</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>2022.0</td>
+      <td>2025.0</td>
+      <td>2023.495</td>
+      <td>2023.0</td>
+      <td>2024.0</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["2022", "2023", "2024", "2025"]</td>
+      <td>{"2024": 74336, "2023": 48024, "2022": 30600, "2025": 21250}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>RESPUESTA_ID</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>184</td>
+      <td>0.1056</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1.9402</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>1.0</td>
+      <td>184.0</td>
+      <td>49.053</td>
+      <td>24.0</td>
+      <td>72.0</td>
+      <td>48.0</td>
+      <td>52</td>
+      <td>0.0298</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["1", "2", "3", "4", "5"]</td>
+      <td>{"1": 1833, "2": 1833, "3": 1833, "4": 1833, "5": 1833, "6": 1833, "7": 1833, "8": 1833, "9": 1833, "10": 1833}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>RESPUESTA_DECIMAL</td>
+      <td>large_string</td>
+      <td>decimal</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>5310</td>
+      <td>3.0480</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>12</td>
+      <td>1.2128</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>0.0</td>
+      <td>957841680.0</td>
+      <td>57173.5816</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["0", "100", "10", "50", "60"]</td>
+      <td>{"0": 165114, "1": 280, "5": 120, "2": 106, "6": 81, "10": 64, "3": 57, "50": 50, "7": 49, "20": 47}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>RESPUESTA_ENTERO</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>4683</td>
+      <td>2.6881</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>9</td>
+      <td>1.1847</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>0.0</td>
+      <td>992634512.0</td>
+      <td>103802.0109</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["0", "2", "7", "89", "6"]</td>
+      <td>{"0": 155793, "1": 1517, "2": 939, "3": 556, "4": 440, "5": 440, "10": 391, "6": 296, "15": 250, "20": 232}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>FORMULARIO_ID</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>6</td>
+      <td>0.0034</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.0000</td>
+      <td>174210</td>
+      <td>100.0000</td>
+      <td>1.0</td>
+      <td>6.0</td>
+      <td>1.7688</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>18936</td>
+      <td>10.8696</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["1", "2", "3", "4", "5"]</td>
+      <td>{"1": 104390, "2": 36196, "3": 14688, "5": 9520, "4": 8396, "6": 1020}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>ESTADO_REGISTRO</td>
+      <td>large_string</td>
+      <td>categorical_indicator</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>174210</td>
+      <td>2</td>
+      <td>0.0011</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["A", "I"]</td>
+      <td>{"A": 173968, "I": 242}</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>RESPUESTA_FECHA</td>
+      <td>large_string</td>
+      <td>datetime_or_date</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>170108</td>
+      <td>97.6454</td>
+      <td>170108</td>
+      <td>97.6454</td>
+      <td>4102</td>
+      <td>722</td>
+      <td>0.4144</td>
+      <td>baja_categorica</td>
+      <td>18</td>
+      <td>19</td>
+      <td>18.7728</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>100.0000</td>
+      <td>%d/%m/%Y %H:%M:%S</td>
+      <td>2020-01-01 00:00:00</td>
+      <td>2025-12-26 00:00:00</td>
+      <td>["15/02/2022 00:00:00", "1/04/2022 00:00:00", "31/05/2022 00:00:00", "2/02/2022 00:00:00", "15/01/2022 00:00:00"]</td>
+      <td>{"31/03/2023 00:00:00": 115, "31/03/2022 00:00:00": 109, "28/02/2023 00:00:00": 82, "29/02/2024 00:00:00": 73, "30/06/2023 00:00:00": 63, "30/04/2024 00:00:00": 63, "28/02/2022 00:00:00": 53, "29/03/2024 00:00:00": 50, "28/02/2024 00:00:00": 46, "1/02/2024 00:00:00": 43}</td>
+    </tr>
+  </tbody>
+</table>
+    </main></body></html>
+    

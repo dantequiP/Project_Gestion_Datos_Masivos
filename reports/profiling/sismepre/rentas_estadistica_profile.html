@@ -1,0 +1,371 @@
+
+    <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+    <title>Profiling SISMEPRE - rentas_estadistica</title><style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px}
+    header h1{margin:0;font-size:24px}
+    header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}
+    .value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}
+    th{background:#111827;color:white}
+    tr:nth-child(even){background:#fafafa}
+    .bar-wrap{display:inline-block;width:120px;height:7px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}
+    .bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .bar-label{color:#2f7d46;font-weight:bold}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px}
+    .ok{background:#d9eadf;color:#245c36}
+    .warn{background:#fff3cd;color:#7a5b00}
+    </style></head>
+    <body><header><h1>Profiling SISMEPRE — rentas_estadistica</h1>
+    <p>Generado: 2026-05-29T15:37:14 | Capa: Bronze | No transforma datos</p></header>
+    <main>
+    <div class="cards">
+      <div class="card"><div class="label">Filas</div><div class="value">233</div></div>
+      <div class="card"><div class="label">Columnas</div><div class="value">7</div></div>
+      <div class="card"><div class="label">Duplicados</div><div class="value">0</div></div>
+      <div class="card"><div class="label">Cols con faltantes</div><div class="value">1</div></div>
+    </div>
+    <h2 class="section-title">Resumen del dataset</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>row_count</th>
+      <th>column_count</th>
+      <th>duplicate_rows</th>
+      <th>duplicate_rows_pct</th>
+      <th>memory_mb</th>
+      <th>columns_with_missing</th>
+      <th>columns_all_missing</th>
+      <th>columns_high_missing_50pct</th>
+      <th>avg_missing_pct</th>
+      <th>avg_unique_pct</th>
+      <th>numeric_like_columns</th>
+      <th>datetime_like_columns</th>
+      <th>empty_or_null_columns</th>
+      <th>parquet_path</th>
+      <th>profile_status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>233</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0164</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2.8204</td>
+      <td>4.5371</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>data\bronze\sismepre\rentas_estadistica\rentas_estadistica_raw.parquet</td>
+      <td>OK</td>
+    </tr>
+  </tbody>
+</table>
+    <h2 class="section-title">Perfil de columnas</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>column_name</th>
+      <th>parquet_type</th>
+      <th>inferred_type</th>
+      <th>row_count</th>
+      <th>null_count</th>
+      <th>null_pct</th>
+      <th>empty_string_count</th>
+      <th>empty_string_pct</th>
+      <th>missing_like_count</th>
+      <th>missing_like_pct</th>
+      <th>non_missing_count</th>
+      <th>unique_count</th>
+      <th>unique_pct</th>
+      <th>cardinality_class</th>
+      <th>min_length</th>
+      <th>max_length</th>
+      <th>avg_length</th>
+      <th>numeric_valid_count</th>
+      <th>numeric_valid_pct</th>
+      <th>numeric_min</th>
+      <th>numeric_max</th>
+      <th>numeric_mean</th>
+      <th>q1</th>
+      <th>q3</th>
+      <th>iqr</th>
+      <th>outlier_count_iqr</th>
+      <th>outlier_pct_iqr</th>
+      <th>datetime_valid_pct</th>
+      <th>datetime_detected_format</th>
+      <th>datetime_min</th>
+      <th>datetime_max</th>
+      <th>sample_values</th>
+      <th>top_values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>ANO_ESTADISTICA_DESC</td>
+      <td>large_string</td>
+      <td>text</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>46</td>
+      <td>19.7425</td>
+      <td>46</td>
+      <td>19.7425</td>
+      <td>187</td>
+      <td>27</td>
+      <td>11.5880</td>
+      <td>media</td>
+      <td>4</td>
+      <td>13</td>
+      <td>5.2406</td>
+      <td>108</td>
+      <td>57.754</td>
+      <td>2017.0</td>
+      <td>2026.0</td>
+      <td>2022.7315</td>
+      <td>2021.0</td>
+      <td>2025.0</td>
+      <td>4.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["2019", "2020", "2021", "2022", "2023"]</td>
+      <td>{"2025": 31, "2024": 18, "2024-II": 16, "2023": 15, "2026-I": 12, "2020": 9, "2021": 9, "2022": 9, "2019": 8, "2024-I": 8}</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>FORMULARIO_ID</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>233</td>
+      <td>11</td>
+      <td>4.7210</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1.2575</td>
+      <td>233</td>
+      <td>100.000</td>
+      <td>6.0</td>
+      <td>16.0</td>
+      <td>8.7768</td>
+      <td>7.0</td>
+      <td>10.0</td>
+      <td>3.0</td>
+      <td>6</td>
+      <td>2.5751</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["6", "7", "8", "9", "14"]</td>
+      <td>{"7": 72, "8": 62, "6": 23, "12": 17, "9": 16, "14": 16, "13": 8, "11": 7, "10": 6, "16": 4}</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>PERIODO</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>233</td>
+      <td>2</td>
+      <td>0.8584</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.0000</td>
+      <td>233</td>
+      <td>100.000</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.3262</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["1", "2"]</td>
+      <td>{"1": 157, "2": 76}</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>MES_ESTADISTICA</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>233</td>
+      <td>13</td>
+      <td>5.5794</td>
+      <td>media</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1.6524</td>
+      <td>233</td>
+      <td>100.000</td>
+      <td>1.0</td>
+      <td>13.0</td>
+      <td>9.9227</td>
+      <td>6.0</td>
+      <td>13.0</td>
+      <td>7.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["13", "1", "2", "3", "4"]</td>
+      <td>{"13": 131, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 7, "8": 7, "9": 7}</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>ESTADO_REGISTRO</td>
+      <td>large_string</td>
+      <td>categorical_indicator</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>233</td>
+      <td>1</td>
+      <td>0.4292</td>
+      <td>baja_categorica</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1.0000</td>
+      <td>0</td>
+      <td>0.000</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["A"]</td>
+      <td>{"A": 233}</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>ANO_APLICACION</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>233</td>
+      <td>7</td>
+      <td>3.0043</td>
+      <td>baja_categorica</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4.0000</td>
+      <td>233</td>
+      <td>100.000</td>
+      <td>2020.0</td>
+      <td>2026.0</td>
+      <td>2023.309</td>
+      <td>2022.0</td>
+      <td>2025.0</td>
+      <td>3.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["2021", "2023", "2020", "2022", "2025"]</td>
+      <td>{"2025": 46, "2024": 45, "2023": 37, "2022": 33, "2021": 28, "2026": 26, "2020": 18}</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>ANO_ESTADISTICA</td>
+      <td>large_string</td>
+      <td>integer</td>
+      <td>233</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>233</td>
+      <td>13</td>
+      <td>5.5794</td>
+      <td>media</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4.0000</td>
+      <td>233</td>
+      <td>100.000</td>
+      <td>2014.0</td>
+      <td>2026.0</td>
+      <td>2022.2489</td>
+      <td>2020.0</td>
+      <td>2024.0</td>
+      <td>4.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>["2017", "2018", "2019", "2020", "2021"]</td>
+      <td>{"2024": 43, "2025": 39, "2023": 29, "2021": 25, "2022": 22, "2020": 19, "2026": 16, "2019": 14, "2018": 11, "2017": 7}</td>
+    </tr>
+  </tbody>
+</table>
+    </main></body></html>
+    

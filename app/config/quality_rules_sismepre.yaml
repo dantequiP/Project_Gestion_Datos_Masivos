@@ -1,0 +1,214 @@
+settings:
+  source: sismepre
+  bronze_root: data/bronze
+  reports_root: reports/quality/sismepre
+  data_quality_root: data/quality/sismepre
+  audit_root: data/audit/quality
+
+missing_tokens: ["", "nan", "NaN", "None", "none", "NULL", "null", "<NA>", "NaT"]
+
+dimensions:
+  - Completitud
+  - Exactitud
+  - Consistencia
+  - Integridad
+  - Razonabilidad
+  - Oportunidad
+  - Unicidad
+  - Validez
+
+global_rules:
+  duplicate_full_rows:
+    enabled: true
+    dimension: Unicidad
+    severity: Media
+    source: profiling_based
+
+  pattern_rules:
+    year_4_digits:
+      enabled: true
+      dimension: Exactitud
+      severity: Alta
+      source: naming_pattern
+      startswith: ["ANO_"]
+      min_year: 2000
+      max_year: 2030
+
+    date_parseable:
+      enabled: true
+      dimension: Validez
+      severity: Media
+      source: naming_pattern
+      contains: ["FECHA"]
+
+    monetary_non_negative:
+      enabled: true
+      dimension: Razonabilidad
+      severity: Alta
+      source: naming_pattern
+      startswith: ["MON_"]
+
+    count_non_negative_integer:
+      enabled: true
+      dimension: Razonabilidad
+      severity: Alta
+      source: naming_pattern
+      startswith: ["NUM_"]
+
+    ubigeo_6_digits:
+      enabled: true
+      dimension: Validez
+      severity: Alta
+      source: naming_pattern
+      exact_columns: ["UBIGEO"]
+      regex: "^\\d{6}$"
+
+    territorial_codes_2_digits:
+      enabled: true
+      dimension: Validez
+      severity: Media
+      source: naming_pattern
+      exact_columns: ["DEPARTAMENTO", "PROVINCIA", "DISTRITO"]
+      regex: "^\\d{2}$"
+
+datasets:
+  rentas_preguntas:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns: ["ESTADO_REGISTRO", "ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "PREGUNTA_ID", "DESCRIPCION"]
+    allowed_values:
+      ESTADO_REGISTRO: {values: ["A", "I"], dimension: Validez, severity: Alta, source: dictionary_csv}
+      OBJETO_ACTIVO: {values: ["0", "1"], dimension: Validez, severity: Media, source: dictionary_csv}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "PREGUNTA_ID", "PREGUNTA_PADRE_ID", "TIPO_CUESTIONARIO_ID"]
+    unique_keys:
+      - {columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "PREGUNTA_ID"], dimension: Unicidad, severity: Alta, source: inferred_business_key}
+
+  rentas_estadistica:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns: ["FORMULARIO_ID", "PERIODO", "MES_ESTADISTICA", "ESTADO_REGISTRO", "ANO_APLICACION", "ANO_ESTADISTICA"]
+    allowed_values:
+      ESTADO_REGISTRO: {values: ["A", "I"], dimension: Validez, severity: Alta, source: dictionary_csv}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns: ["FORMULARIO_ID", "PERIODO", "MES_ESTADISTICA", "ANO_APLICACION", "ANO_ESTADISTICA"]
+    unique_keys:
+      - {columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "ANO_ESTADISTICA", "MES_ESTADISTICA"], dimension: Unicidad, severity: Media, source: inferred_business_key}
+
+  rentas_formulario:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "ORDEN_FORMULARIO", "TITULO", "TIPO_FORMULARIO"]
+    allowed_values:
+      TIPO_FORMULARIO: {values: ["C", "E"], dimension: Validez, severity: Media, source: dictionary_csv}
+      ESTADO_REGISTRO: {values: ["A", "I"], dimension: Validez, severity: Baja, source: dictionary_csv}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID"]
+    unique_keys:
+      - {columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID"], dimension: Unicidad, severity: Alta, source: inferred_business_key}
+
+  rentas_esat_estadistica_atm:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns: ["PERIODO", "MUNICIPALIDAD_NOMBRE", "MES_ESTADISTICA", "PROVINCIA_NOMBRE", "ANO_APLICACION", "PROVINCIA", "ANO_ESTADISTICA", "DISTRITO_NOMBRE", "DISTRITO", "DEPARTAMENTO", "UBIGEO", "FORMULARIO_ID", "SEC_EJEC", "DEPARTAMENTO_NOMBRE"]
+    allowed_values:
+      FLAG_EMILIQUIDA: {values: ["S", "N"], dimension: Validez, severity: Baja, source: dictionary_csv}
+      FLAG_EMISION_INICIAL: {values: ["S", "N"], dimension: Validez, severity: Baja, source: dictionary_csv}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns: ["PERIODO", "MES_ESTADISTICA", "ANO_APLICACION", "ANO_ESTADISTICA", "FORMULARIO_ID", "SEC_EJEC"]
+    unique_keys:
+      - {columns: ["ANO_APLICACION", "PERIODO", "ANO_ESTADISTICA", "MES_ESTADISTICA", "SEC_EJEC", "FORMULARIO_ID"], dimension: Unicidad, severity: Media, source: inferred_business_key}
+
+  rentas_respuestas:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns: ["PERIODO", "PREGUNTA_ID", "SEC_EJEC", "ANO_APLICACION", "RESPUESTA_ID", "FORMULARIO_ID", "ESTADO_REGISTRO"]
+    allowed_values:
+      ESTADO_REGISTRO: {values: ["A", "I"], dimension: Validez, severity: Alta, source: dictionary_csv}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns: ["PERIODO", "PREGUNTA_ID", "SEC_EJEC", "ANO_APLICACION", "RESPUESTA_ID", "RESPUESTA_DECIMAL", "RESPUESTA_ENTERO", "FORMULARIO_ID"]
+    date_columns:
+      dimension: Validez
+      severity: Media
+      source: dictionary_csv
+      columns: ["RESPUESTA_FECHA"]
+    unique_keys:
+      - {columns: ["ANO_APLICACION", "PERIODO", "SEC_EJEC", "FORMULARIO_ID", "PREGUNTA_ID", "RESPUESTA_ID"], dimension: Unicidad, severity: Media, source: inferred_business_key}
+
+  rentas_ano_aplicacion:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns: ["ESTADO", "PERIODO", "ANO_APLICACION_FIN", "ANO_APLICACION_INICIO", "FECHA_CIERRE", "ANO_APLICACION"]
+    allowed_values:
+      ESTADO: {values: ["A", "I"], dimension: Validez, severity: Alta, source: dictionary_csv}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns: ["PERIODO", "ANO_APLICACION_FIN", "ANO_APLICACION_INICIO", "ANO_APLICACION"]
+    date_columns:
+      dimension: Validez
+      severity: Media
+      source: dictionary_csv
+      columns: ["FECHA_INI_CIERRE", "FECHA_ING", "FECHA_PRES_OFICIO", "FECHA_CIERRE"]
+    consistency_rules:
+      - {rule_type: less_or_equal, left_column: ANO_APLICACION_INICIO, right_column: ANO_APLICACION_FIN, dimension: Consistencia, severity: Alta, source: dictionary_csv}
+
+  rentas_entidad_estado:
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: fallback_metadata
+      columns: ["TIPO_META", "ESTADO", "IND_RESOL_ALCAL_ADJUNTO", "USUARIO_CREACION_FECHA", "PERIODO", "ANO_APLICACION", "CLASIFICACION", "ORIGEN_INFORMACION", "SEC_EJEC", "USUARIO_ENVIO_ID"]
+    observed_empty_columns:
+      dimension: Completitud
+      severity: Baja
+      source: profiling_based
+      columns: ["SEC_EJE", "USUARIO_FECHA_ENVIO", "CORREO"]
+    allowed_values:
+      ESTADO: {values: ["A", "I"], dimension: Validez, severity: Alta, source: profiling_based}
+      IND_RESOL_ALCAL_ADJUNTO: {values: ["P", "A"], dimension: Validez, severity: Media, source: profiling_based}
+      CLASIFICACION: {values: ["A", "B", "C", "D", "E", "F", "G"], dimension: Validez, severity: Media, source: profiling_based}
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: profiling_based
+      columns: ["TIPO_META", "PERIODO", "ANO_APLICACION", "ORIGEN_INFORMACION", "SEC_EJEC", "USUARIO_ENVIO_ID"]
+    date_columns:
+      dimension: Validez
+      severity: Media
+      source: profiling_based
+      columns: ["USUARIO_CREACION_FECHA", "FECHA_RESOL_ALCAL_ADJUNTO"]
+
+referential_integrity:
+  - {dataset: rentas_respuestas, column: FORMULARIO_ID, reference_dataset: rentas_formulario, reference_column: FORMULARIO_ID, dimension: Integridad, severity: Alta, source: referential_rule}
+  - {dataset: rentas_respuestas, column: PREGUNTA_ID, reference_dataset: rentas_preguntas, reference_column: PREGUNTA_ID, dimension: Integridad, severity: Alta, source: referential_rule}
+  - {dataset: rentas_esat_estadistica_atm, column: FORMULARIO_ID, reference_dataset: rentas_formulario, reference_column: FORMULARIO_ID, dimension: Integridad, severity: Media, source: referential_rule}
+  - {dataset: rentas_respuestas, column: SEC_EJEC, reference_dataset: rentas_entidad_estado, reference_column: SEC_EJEC, dimension: Integridad, severity: Media, source: referential_rule}
