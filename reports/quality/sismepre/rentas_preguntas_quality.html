@@ -1,0 +1,334 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Calidad SISMEPRE - rentas_preguntas</title><style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:24px} header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}.value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}th{background:#111827;color:white}tr:nth-child(even){background:#fafafa}
+    .bar-wrap{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.bar-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px;white-space:nowrap}.sin{background:#d9eadf;color:#245c36}.con{background:#fff3cd;color:#7a5b00}.noeval{background:#e5e7eb;color:#374151}
+    .alert-card{background:white;border-left:4px solid #c24141;border-radius:10px;padding:12px 16px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    </style></head><body>
+    <header><h1>Calidad de Datos — rentas_preguntas</h1><p>Capa evaluada: Bronze | Este reporte no modifica datos</p></header><main>
+    <div class="cards">
+    <div class="card"><div class="label">Reglas evaluadas</div><div class="value">17</div></div>
+    <div class="card"><div class="label">Reglas con observación</div><div class="value">1</div></div>
+    <div class="card"><div class="label">Observaciones</div><div class="value">696</div></div>
+    <div class="card"><div class="label">Score general</div><div class="value">75.0%</div></div>
+    </div><h2 class="section-title">Calidad por dimensión</h2><table><thead><tr><th>Dimensión</th><th>Score</th><th>Reglas</th><th>Observaciones</th><th>Estado</th></tr></thead><tbody><tr><td><b>Completitud</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>6</td><td>0</td><td><span class="badge sin">Sin observaciones</span></td></tr><tr><td><b>Exactitud</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">0.0%</span></td><td>1</td><td>696</td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>Consistencia</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Integridad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Razonabilidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Oportunidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Unicidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>2</td><td>0</td><td><span class="badge sin">Sin observaciones</span></td></tr><tr><td><b>Validez</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>8</td><td>0</td><td><span class="badge sin">Sin observaciones</span></td></tr></tbody></table>
+    <h2 class="section-title">Principales observaciones</h2><div class='alert-card'><b>Exactitud</b> — Año de 4 dígitos en rango: ANO_APLICACION<br>Columna: <code>ANO_APLICACION</code> | Fallidos: 696 | Severidad: Alta</div>
+    <h2 class="section-title">Detalle de reglas</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>dimension</th>
+      <th>rule_id</th>
+      <th>rule_name</th>
+      <th>column_name</th>
+      <th>rule_type</th>
+      <th>expected_value</th>
+      <th>evaluated_rows</th>
+      <th>passed_rows</th>
+      <th>failed_rows</th>
+      <th>score</th>
+      <th>severity</th>
+      <th>source</th>
+      <th>status</th>
+      <th>observation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Unicidad</td>
+      <td>rentas_preguntas.full_row_duplicates</td>
+      <td>Filas completamente duplicadas</td>
+      <td>*</td>
+      <td>duplicate_full_rows</td>
+      <td>sin duplicados completos</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Media</td>
+      <td>profiling_based</td>
+      <td>Sin observaciones</td>
+      <td>Filas idénticas repetidas en el dataset.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Completitud</td>
+      <td>rentas_preguntas.ESTADO_REGISTRO.required</td>
+      <td>Columna requerida no vacía: ESTADO_REGISTRO</td>
+      <td>ESTADO_REGISTRO</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en ESTADO_REGISTRO.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Completitud</td>
+      <td>rentas_preguntas.ANO_APLICACION.required</td>
+      <td>Columna requerida no vacía: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Completitud</td>
+      <td>rentas_preguntas.PERIODO.required</td>
+      <td>Columna requerida no vacía: PERIODO</td>
+      <td>PERIODO</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en PERIODO.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Completitud</td>
+      <td>rentas_preguntas.FORMULARIO_ID.required</td>
+      <td>Columna requerida no vacía: FORMULARIO_ID</td>
+      <td>FORMULARIO_ID</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Completitud</td>
+      <td>rentas_preguntas.PREGUNTA_ID.required</td>
+      <td>Columna requerida no vacía: PREGUNTA_ID</td>
+      <td>PREGUNTA_ID</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en PREGUNTA_ID.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Completitud</td>
+      <td>rentas_preguntas.DESCRIPCION.required</td>
+      <td>Columna requerida no vacía: DESCRIPCION</td>
+      <td>DESCRIPCION</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en DESCRIPCION.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.ESTADO_REGISTRO.allowed_values</td>
+      <td>Valores permitidos en ESTADO_REGISTRO</td>
+      <td>ESTADO_REGISTRO</td>
+      <td>allowed_values</td>
+      <td>['A', 'I']</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.OBJETO_ACTIVO.allowed_values</td>
+      <td>Valores permitidos en OBJETO_ACTIVO</td>
+      <td>OBJETO_ACTIVO</td>
+      <td>allowed_values</td>
+      <td>['0', '1']</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['0', '1']. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.ANO_APLICACION.numeric</td>
+      <td>Columna convertible a número: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.PERIODO.numeric</td>
+      <td>Columna convertible a número: PERIODO</td>
+      <td>PERIODO</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.FORMULARIO_ID.numeric</td>
+      <td>Columna convertible a número: FORMULARIO_ID</td>
+      <td>FORMULARIO_ID</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.PREGUNTA_ID.numeric</td>
+      <td>Columna convertible a número: PREGUNTA_ID</td>
+      <td>PREGUNTA_ID</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.PREGUNTA_PADRE_ID.numeric</td>
+      <td>Columna convertible a número: PREGUNTA_PADRE_ID</td>
+      <td>PREGUNTA_PADRE_ID</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Validez</td>
+      <td>rentas_preguntas.TIPO_CUESTIONARIO_ID.numeric</td>
+      <td>Columna convertible a número: TIPO_CUESTIONARIO_ID</td>
+      <td>TIPO_CUESTIONARIO_ID</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Unicidad</td>
+      <td>rentas_preguntas.unique_key.ANO_APLICACION+PERIODO+FORMULARIO_ID+PREGUNTA_ID</td>
+      <td>Clave candidata única: ['ANO_APLICACION', 'PERIODO', 'FORMULARIO_ID', 'PREGUNTA_ID']</td>
+      <td>ANO_APLICACION,PERIODO,FORMULARIO_ID,PREGUNTA_ID</td>
+      <td>unique_key</td>
+      <td>['ANO_APLICACION', 'PERIODO', 'FORMULARIO_ID', 'PREGUNTA_ID']</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Alta</td>
+      <td>inferred_business_key</td>
+      <td>Sin observaciones</td>
+      <td>Registros duplicados según clave candidata.</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Exactitud</td>
+      <td>rentas_preguntas.ANO_APLICACION.year_4_digits</td>
+      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_4_digits</td>
+      <td>2000-2030</td>
+      <td>696</td>
+      <td>0</td>
+      <td>696</td>
+      <td>0.0</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Con observaciones</td>
+      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+    </tr>
+  </tbody>
+</table>
+    </main></body></html>

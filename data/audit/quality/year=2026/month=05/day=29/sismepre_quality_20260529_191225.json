@@ -1,0 +1,18 @@
+{
+  "pipeline_name": "quality_sismepre",
+  "status": "success",
+  "started_at": "2026-05-29T19:12:19.183909",
+  "finished_at": "2026-05-29T19:12:25.556553",
+  "duration_seconds": 6.372644,
+  "datasets_evaluated": 7,
+  "rules_evaluated": 181,
+  "rules_with_observations": 18,
+  "observations_total": 562688,
+  "outputs": {
+    "summary_csv": "reports\\quality\\sismepre\\sismepre_quality_summary.csv",
+    "detail_csv": "reports\\quality\\sismepre\\sismepre_quality_detail.csv",
+    "dashboard_html": "reports\\quality\\sismepre\\sismepre_quality_dashboard.html",
+    "summary_parquet": "data\\quality\\sismepre\\sismepre_quality_summary.parquet",
+    "detail_parquet": "data\\quality\\sismepre\\sismepre_quality_detail.parquet"
+  }
+}

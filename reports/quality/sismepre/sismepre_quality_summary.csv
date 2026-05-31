@@ -1,0 +1,8 @@
+﻿dataset,rules_evaluated,rules_with_observations,observations_total,evaluated_rows_total,score_completitud,score_exactitud,score_consistencia,score_integridad,score_razonabilidad,score_oportunidad,score_unicidad,score_validez,score_general,estado_descriptivo
+rentas_ano_aplicacion,24,3,78,580,100.0,0.0,100.0,,,,100.0,100.0,80.0,Con observaciones
+rentas_entidad_estado,29,6,110190,533036,76.9231,0.0,,,,,100.0,86.2446,65.7919,Con observaciones
+rentas_esat_estadistica_atm,56,3,276767,7213023,100.0,0.0,,92.3697,100.0,,100.0,100.0,82.0616,Con observaciones
+rentas_estadistica,17,3,653,3915,100.0,0.0,,,,,100.0,100.0,75.0,Con observaciones
+rentas_formulario,14,1,94,1222,100.0,0.0,,,,,100.0,100.0,75.0,Con observaciones
+rentas_preguntas,17,1,696,11832,100.0,0.0,,,,,100.0,100.0,75.0,Con observaciones
+rentas_respuestas,24,1,174210,3840824,100.0,0.0,,100.0,,,100.0,100.0,80.0,Con observaciones
