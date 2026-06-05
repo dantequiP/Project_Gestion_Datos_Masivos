@@ -1,0 +1,3542 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Dashboard Silver SISMEPRE</title>
+
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
+  h1, h2, h3 { color: #111827; }
+  .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .metric { background: #ffffff; border-left: 5px solid #64748b; border-radius: 8px; padding: 12px; }
+  .metric .label { color: #64748b; font-size: 12px; text-transform: uppercase; }
+  .metric .value { color: #111827; font-size: 24px; font-weight: bold; margin-top: 4px; }
+  table { border-collapse: collapse; width: 100%; background: white; font-size: 13px; }
+  th, td { border: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+  th { background: #f3f4f6; text-align: left; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .ok { color: #166534; font-weight: bold; }
+  .warn { color: #92400e; font-weight: bold; }
+  .err { color: #991b1b; font-weight: bold; }
+  .small { font-size: 12px; color: #6b7280; }
+  code { background: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+</style>
+
+</head>
+<body>
+<h1>Dashboard Silver — SISMEPRE</h1>
+<p class="small">Reporte generado automáticamente por el pipeline Silver.</p>
+
+<div class="grid">
+  <div class="metric"><div class="label">Datasets procesados</div><div class="value">7</div></div>
+  <div class="metric"><div class="label">Filas Bronze</div><div class="value">327,594</div></div>
+  <div class="metric"><div class="label">Filas Silver</div><div class="value">327,594</div></div>
+  <div class="metric"><div class="label">Errores de conversión</div><div class="value">0</div></div>
+  <div class="metric"><div class="label">Columnas eliminadas</div><div class="value">1</div></div>
+</div>
+
+<div class="card">
+<h2>Resumen ejecutivo</h2>
+<p>La capa Silver estandariza tipos de datos, normaliza vacíos reales a <code>null</code>, conserva valores cero cuando representan datos válidos, agrega columnas técnicas de trazabilidad y aplica reglas específicas documentadas por dataset.</p>
+</div>
+
+<div class="card">
+<h2>Resumen por dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>bronze_rows</th>
+<th>silver_rows</th>
+<th>bronze_columns</th>
+<th>silver_columns</th>
+<th>columns_converted</th>
+<th>date_columns_converted</th>
+<th>numeric_columns_converted</th>
+<th>technical_columns_added</th>
+<th>columns_dropped</th>
+<th>dropped_columns</th>
+<th>conversion_errors</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>status</th>
+<th>notes</th>
+<th>silver_path</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>26</td>
+<td>26</td>
+<td>9</td>
+<td>14</td>
+<td>9</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>22</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_ano_aplicacion\rentas_ano_aplicacion_silver.parquet</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>94</td>
+<td>94</td>
+<td>10</td>
+<td>15</td>
+<td>10</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>182</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_formulario\rentas_formulario_silver.parquet</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>696</td>
+<td>696</td>
+<td>15</td>
+<td>20</td>
+<td>15</td>
+<td>0</td>
+<td>7</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>2164</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_preguntas\rentas_preguntas_silver.parquet</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>233</td>
+<td>233</td>
+<td>7</td>
+<td>12</td>
+<td>7</td>
+<td>0</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>46</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_estadistica\rentas_estadistica_silver.parquet</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>174210</td>
+<td>174210</td>
+<td>11</td>
+<td>16</td>
+<td>11</td>
+<td>1</td>
+<td>8</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>170110</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_respuestas\rentas_respuestas_silver.parquet</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>19037</td>
+<td>19037</td>
+<td>14</td>
+<td>18</td>
+<td>13</td>
+<td>3</td>
+<td>6</td>
+<td>5</td>
+<td>1</td>
+<td>SEC_EJE</td>
+<td>0</td>
+<td>19037</td>
+<td>55095</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_entidad_estado\rentas_entidad_estado_silver.parquet</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>133298</td>
+<td>133298</td>
+<td>42</td>
+<td>47</td>
+<td>42</td>
+<td>0</td>
+<td>31</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>384963</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_esat_estadistica_atm\rentas_esat_estadistica_atm_silver.parquet</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Glosario técnico</h2>
+<table>
+<thead><tr>
+<th>concepto</th>
+<th>explicacion</th>
+</tr></thead><tbody>
+<tr>
+<td>source_system</td>
+<td>Sistema de origen de los datos. Para este proceso: SISMEPRE.</td>
+</tr>
+<tr>
+<td>source_dataset</td>
+<td>Dataset Bronze del cual proviene cada registro.</td>
+</tr>
+<tr>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que se procesó el registro hacia Silver.</td>
+</tr>
+<tr>
+<td>record_hash</td>
+<td>Huella SHA-256 para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO, útil para integración temporal.</td>
+</tr>
+<tr>
+<td>0 preservado</td>
+<td>El valor 0 se mantiene cuando puede representar una respuesta, monto o cantidad válida.</td>
+</tr>
+<tr>
+<td>null</td>
+<td>Representa ausencia real de dato después de normalizar vacíos.</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Detalle de transformaciones por columna</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>conversion_errors</th>
+<th>special_values_handled</th>
+<th>status</th>
+<th>reason</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ESTADO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_INI_CIERRE</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>6</td>
+<td>6.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ANO_APLICACION_FIN</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ANO_APLICACION_INICIO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_ING</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>10</td>
+<td>10.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_PRES_OFICIO</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>6</td>
+<td>6.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_CIERRE</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ORDEN_FORMULARIO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni formato de orden del formulario.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ESTADO_REGISTRO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>94</td>
+<td>94.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze; se conserva como string nullable por trazabilidad con el diccionario oficial.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>TIPO_FORMULARIO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>TITULO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>SUB_TITULO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>88</td>
+<td>88.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; se conservan los valores disponibles y los vacíos se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>CLASIFICACION</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ABREVIATURA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ESTADO_REGISTRO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_PADRE_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_FIN</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>458</td>
+<td>458.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RESPUESTA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>445</td>
+<td>445.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ORDEN_PREGUNTA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_LECTURA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>398</td>
+<td>398.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_APOYO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>405</td>
+<td>405.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>OBJETO_ACTIVO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TIPO_CUESTIONARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>DESCRIPCION</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_INI</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>458</td>
+<td>458.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ANO_ESTADISTICA_DESC</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>46</td>
+<td>46.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; se conserva como descripción textual del año o periodo estadístico. | preserve_as_string: Puede contener valores compuestos como 2024-I o 2024-II; no debe convertirse a entero.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>MES_ESTADISTICA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ESTADO_REGISTRO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ANO_ESTADISTICA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_TEXTO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>2</td>
+<td>2.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede no aplicar cuando la respuesta está representada como entero, decimal o fecha. | preserve_as_string: Puede contener texto libre, respuestas S/N, códigos o números expresados como texto.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>PREGUNTA_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>SEC_EJEC</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_DECIMAL</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_ENTERO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>ESTADO_REGISTRO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_FECHA</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>170108</td>
+<td>170108.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; solo aplica cuando la respuesta corresponde a una fecha.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJE</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>19037</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>TIPO_META</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ESTADO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>IND_RESOL_ALCAL_ADJUNTO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_CREACION_FECHA</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>FECHA_RESOL_ALCAL_ADJUNTO</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>17021</td>
+<td>17021.0</td>
+<td>0</td>
+<td>17021</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_FECHA_ENVIO</td>
+<td>str</td>
+<td>datetime64[s]</td>
+<td>cast_to_datetime_nullable</td>
+<td>19037</td>
+<td>19037.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CLASIFICACION</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ORIGEN_INFORMACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJEC</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CORREO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>19037</td>
+<td>19037.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_ENVIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_COAC</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_COAC</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_ORDIN</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MUNICIPALIDAD_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MES_ESTADISTICA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_INICIALADULTOMAYOR</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOOTROUSO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIPREDIO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_AUTOAVALUO_INAFECTO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_EXON</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_EXON</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_ORD</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECUADADULTOMAYOR</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOTOTAL</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_ORDI</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_EXON</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_ESTADISTICA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_AFECTO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_AFECTO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>TIPO_META</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>133298</td>
+<td>133298.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_INSO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_COAC</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>UBIGEO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMILIQUIDA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>132983</td>
+<td>132983.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMISION_INICIAL</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>118682</td>
+<td>118682.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOUSOCH</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_CASA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIBADULTOMAYOR</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_PREDIALADULTOMAYOR</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>SEC_EJEC</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_OTROS</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_AFECTO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_INAFECTOS</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Diccionario Silver</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>business_name</th>
+<th>description</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation_applied</th>
+<th>nullable</th>
+<th>is_technical_column</th>
+<th>source</th>
+<th>notes</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ESTADO</td>
+<td>ESTADO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_INI_CIERRE</td>
+<td>FECHA_INI_CIERRE</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ANO_APLICACION_FIN</td>
+<td>ANO_APLICACION_FIN</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ANO_APLICACION_INICIO</td>
+<td>ANO_APLICACION_INICIO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_ING</td>
+<td>FECHA_ING</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_PRES_OFICIO</td>
+<td>FECHA_PRES_OFICIO</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>FECHA_CIERRE</td>
+<td>FECHA_CIERRE</td>
+<td></td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ORDEN_FORMULARIO</td>
+<td>ORDEN_FORMULARIO</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni formato de orden del formulario.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni formato de orden del formulario.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ESTADO_REGISTRO</td>
+<td>ESTADO_REGISTRO</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze; se conserva como string nullable por trazabilidad con el diccionario oficial.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze; se conserva como string nullable por trazabilidad con el diccionario oficial.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>TIPO_FORMULARIO</td>
+<td>TIPO_FORMULARIO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>TITULO</td>
+<td>TITULO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>SUB_TITULO</td>
+<td>SUB_TITULO</td>
+<td>documented_null_columns: Columna parcialmente vacía; se conservan los valores disponibles y los vacíos se convierten a null.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; se conservan los valores disponibles y los vacíos se convierten a null.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>CLASIFICACION</td>
+<td>CLASIFICACION</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>ABREVIATURA</td>
+<td>ABREVIATURA</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ESTADO_REGISTRO</td>
+<td>ESTADO_REGISTRO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_PADRE_ID</td>
+<td>PREGUNTA_PADRE_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_FIN</td>
+<td>RANGO_FIN</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RESPUESTA</td>
+<td>RESPUESTA</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ORDEN_PREGUNTA</td>
+<td>ORDEN_PREGUNTA</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_LECTURA</td>
+<td>TEXTO_LECTURA</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_APOYO</td>
+<td>TEXTO_APOYO</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>OBJETO_ACTIVO</td>
+<td>OBJETO_ACTIVO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TIPO_CUESTIONARIO_ID</td>
+<td>TIPO_CUESTIONARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>DESCRIPCION</td>
+<td>DESCRIPCION</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_ID</td>
+<td>PREGUNTA_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_INI</td>
+<td>RANGO_INI</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ANO_ESTADISTICA_DESC</td>
+<td>ANO_ESTADISTICA_DESC</td>
+<td>documented_null_columns: Columna parcialmente vacía; se conserva como descripción textual del año o periodo estadístico. | preserve_as_string: Puede contener valores compuestos como 2024-I o 2024-II; no debe convertirse a entero.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; se conserva como descripción textual del año o periodo estadístico. | preserve_as_string: Puede contener valores compuestos como 2024-I o 2024-II; no debe convertirse a entero.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>MES_ESTADISTICA</td>
+<td>MES_ESTADISTICA</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ESTADO_REGISTRO</td>
+<td>ESTADO_REGISTRO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>ANO_ESTADISTICA</td>
+<td>ANO_ESTADISTICA</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_TEXTO</td>
+<td>RESPUESTA_TEXTO</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede no aplicar cuando la respuesta está representada como entero, decimal o fecha. | preserve_as_string: Puede contener texto libre, respuestas S/N, códigos o números expresados como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede no aplicar cuando la respuesta está representada como entero, decimal o fecha. | preserve_as_string: Puede contener texto libre, respuestas S/N, códigos o números expresados como texto.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>PREGUNTA_ID</td>
+<td>PREGUNTA_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>SEC_EJEC</td>
+<td>SEC_EJEC</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_ID</td>
+<td>RESPUESTA_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_DECIMAL</td>
+<td>RESPUESTA_DECIMAL</td>
+<td>preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_ENTERO</td>
+<td>RESPUESTA_ENTERO</td>
+<td>preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>ESTADO_REGISTRO</td>
+<td>ESTADO_REGISTRO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>RESPUESTA_FECHA</td>
+<td>RESPUESTA_FECHA</td>
+<td>documented_null_columns: Columna parcialmente vacía; solo aplica cuando la respuesta corresponde a una fecha.</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; solo aplica cuando la respuesta corresponde a una fecha.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJE</td>
+<td>SEC_EJE</td>
+<td>Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>TIPO_META</td>
+<td>TIPO_META</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ESTADO</td>
+<td>ESTADO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>IND_RESOL_ALCAL_ADJUNTO</td>
+<td>IND_RESOL_ALCAL_ADJUNTO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_CREACION_FECHA</td>
+<td>USUARIO_CREACION_FECHA</td>
+<td></td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>FECHA_RESOL_ALCAL_ADJUNTO</td>
+<td>FECHA_RESOL_ALCAL_ADJUNTO</td>
+<td>documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_FECHA_ENVIO</td>
+<td>USUARIO_FECHA_ENVIO</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío.</td>
+<td>str</td>
+<td>datetime64[s]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CLASIFICACION</td>
+<td>CLASIFICACION</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ORIGEN_INFORMACION</td>
+<td>ORIGEN_INFORMACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJEC</td>
+<td>SEC_EJEC</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CORREO</td>
+<td>CORREO</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_ENVIO_ID</td>
+<td>USUARIO_ENVIO_ID</td>
+<td>preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_COAC</td>
+<td>MON_SALDOPREDIAL_COAC</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_COAC</td>
+<td>MON_RECAUDANTER_COAC</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_ORDIN</td>
+<td>MON_RECAUDACTUAL_ORDIN</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MUNICIPALIDAD_NOMBRE</td>
+<td>MUNICIPALIDAD_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MES_ESTADISTICA</td>
+<td>MES_ESTADISTICA</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_INICIALADULTOMAYOR</td>
+<td>MON_INICIALADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOOTROUSO</td>
+<td>NUM_PREDIOOTROUSO</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIPREDIO</td>
+<td>NUM_CONTRIPREDIO</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_AUTOAVALUO_INAFECTO</td>
+<td>MON_AUTOAVALUO_INAFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_EXON</td>
+<td>MON_EMISIONPREDIAL_EXON</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_EXON</td>
+<td>NUM_EMISIONPREDIAL_EXON</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA_NOMBRE</td>
+<td>PROVINCIA_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_ORD</td>
+<td>MON_SALDOPREDIAL_ORD</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECUADADULTOMAYOR</td>
+<td>MON_RECUADADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOTOTAL</td>
+<td>NUM_PREDIOTOTAL</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_ORDI</td>
+<td>MON_RECAUDANTER_ORDI</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_EXON</td>
+<td>MON_BASEIMPONIBLE_EXON</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA</td>
+<td>PROVINCIA</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_ESTADISTICA</td>
+<td>ANO_ESTADISTICA</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO_NOMBRE</td>
+<td>DISTRITO_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_AFECTO</td>
+<td>MON_EMISIONPREDIAL_AFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_AFECTO</td>
+<td>MON_BASEIMPONIBLE_AFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO</td>
+<td>DISTRITO</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>TIPO_META</td>
+<td>TIPO_META</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_INSO</td>
+<td>MON_EMISIONPREDIAL_INSO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_COAC</td>
+<td>MON_RECAUDACTUAL_COAC</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO</td>
+<td>DEPARTAMENTO</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>UBIGEO</td>
+<td>UBIGEO</td>
+<td>preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td>preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMILIQUIDA</td>
+<td>FLAG_EMILIQUIDA</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMISION_INICIAL</td>
+<td>FLAG_EMISION_INICIAL</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOUSOCH</td>
+<td>NUM_PREDIOUSOCH</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_CASA</td>
+<td>NUM_EMISIONPREDIAL_CASA</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIBADULTOMAYOR</td>
+<td>NUM_CONTRIBADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_PREDIALADULTOMAYOR</td>
+<td>MON_PREDIALADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>SEC_EJEC</td>
+<td>SEC_EJEC</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_OTROS</td>
+<td>NUM_EMISIONPREDIAL_OTROS</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_AFECTO</td>
+<td>NUM_EMISIONPREDIAL_AFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO_NOMBRE</td>
+<td>DEPARTAMENTO_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_INAFECTOS</td>
+<td>NUM_INAFECTOS</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_ano_aplicacion</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_formulario</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_estadistica</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_respuestas</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>

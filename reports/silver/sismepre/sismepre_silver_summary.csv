@@ -1,0 +1,8 @@
+﻿dataset,bronze_rows,silver_rows,bronze_columns,silver_columns,columns_converted,date_columns_converted,numeric_columns_converted,technical_columns_added,columns_dropped,dropped_columns,conversion_errors,nulls_before,nulls_after,status,notes,silver_path
+rentas_ano_aplicacion,26,26,9,14,9,4,4,5,0,,0,0,22,OK,,data\silver\sismepre\rentas_ano_aplicacion\rentas_ano_aplicacion_silver.parquet
+rentas_formulario,94,94,10,15,10,0,3,5,0,,0,0,182,OK,,data\silver\sismepre\rentas_formulario\rentas_formulario_silver.parquet
+rentas_preguntas,696,696,15,20,15,0,7,5,0,,0,0,2164,OK,,data\silver\sismepre\rentas_preguntas\rentas_preguntas_silver.parquet
+rentas_estadistica,233,233,7,12,7,0,5,5,0,,0,0,46,OK,,data\silver\sismepre\rentas_estadistica\rentas_estadistica_silver.parquet
+rentas_respuestas,174210,174210,11,16,11,1,8,5,0,,0,0,170110,OK,,data\silver\sismepre\rentas_respuestas\rentas_respuestas_silver.parquet
+rentas_entidad_estado,19037,19037,14,18,13,3,6,5,1,SEC_EJE,0,19037,55095,OK,,data\silver\sismepre\rentas_entidad_estado\rentas_entidad_estado_silver.parquet
+rentas_esat_estadistica_atm,133298,133298,42,47,42,0,31,5,0,,0,0,384963,OK,,data\silver\sismepre\rentas_esat_estadistica_atm\rentas_esat_estadistica_atm_silver.parquet

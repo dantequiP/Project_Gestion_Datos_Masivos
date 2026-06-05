@@ -1,0 +1,906 @@
+{
+  "source": "sismepre",
+  "layer": "silver",
+  "started_at": "2026-06-05T18:35:25.210476",
+  "finished_at": "2026-06-05T18:35:39.547429",
+  "duration_seconds": 14.337,
+  "datasets_processed": 7,
+  "total_bronze_rows": 327594,
+  "total_silver_rows": 327594,
+  "total_conversion_errors": 0,
+  "reports_root": "reports\\silver\\sismepre",
+  "silver_root": "data\\silver\\sismepre",
+  "summary": [
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "bronze_rows": 26,
+      "silver_rows": 26,
+      "bronze_columns": 9,
+      "silver_columns": 14,
+      "columns_converted": 9,
+      "date_columns_converted": 4,
+      "numeric_columns_converted": 4,
+      "technical_columns_added": 5,
+      "columns_dropped": 0,
+      "dropped_columns": "",
+      "conversion_errors": 0,
+      "nulls_before": 0,
+      "nulls_after": 22,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_ano_aplicacion\\rentas_ano_aplicacion_silver.parquet"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "bronze_rows": 94,
+      "silver_rows": 94,
+      "bronze_columns": 10,
+      "silver_columns": 15,
+      "columns_converted": 10,
+      "date_columns_converted": 0,
+      "numeric_columns_converted": 3,
+      "technical_columns_added": 5,
+      "columns_dropped": 0,
+      "dropped_columns": "",
+      "conversion_errors": 0,
+      "nulls_before": 0,
+      "nulls_after": 182,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_formulario\\rentas_formulario_silver.parquet"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "bronze_rows": 696,
+      "silver_rows": 696,
+      "bronze_columns": 15,
+      "silver_columns": 20,
+      "columns_converted": 15,
+      "date_columns_converted": 0,
+      "numeric_columns_converted": 7,
+      "technical_columns_added": 5,
+      "columns_dropped": 0,
+      "dropped_columns": "",
+      "conversion_errors": 0,
+      "nulls_before": 0,
+      "nulls_after": 2164,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_preguntas\\rentas_preguntas_silver.parquet"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "bronze_rows": 233,
+      "silver_rows": 233,
+      "bronze_columns": 7,
+      "silver_columns": 12,
+      "columns_converted": 7,
+      "date_columns_converted": 0,
+      "numeric_columns_converted": 5,
+      "technical_columns_added": 5,
+      "columns_dropped": 0,
+      "dropped_columns": "",
+      "conversion_errors": 0,
+      "nulls_before": 0,
+      "nulls_after": 46,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_estadistica\\rentas_estadistica_silver.parquet"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "bronze_rows": 174210,
+      "silver_rows": 174210,
+      "bronze_columns": 11,
+      "silver_columns": 16,
+      "columns_converted": 11,
+      "date_columns_converted": 1,
+      "numeric_columns_converted": 8,
+      "technical_columns_added": 5,
+      "columns_dropped": 0,
+      "dropped_columns": "",
+      "conversion_errors": 0,
+      "nulls_before": 0,
+      "nulls_after": 170110,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_respuestas\\rentas_respuestas_silver.parquet"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "bronze_rows": 19037,
+      "silver_rows": 19037,
+      "bronze_columns": 14,
+      "silver_columns": 18,
+      "columns_converted": 13,
+      "date_columns_converted": 3,
+      "numeric_columns_converted": 6,
+      "technical_columns_added": 5,
+      "columns_dropped": 1,
+      "dropped_columns": "SEC_EJE",
+      "conversion_errors": 0,
+      "nulls_before": 19037,
+      "nulls_after": 55095,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_entidad_estado\\rentas_entidad_estado_silver.parquet"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "bronze_rows": 133298,
+      "silver_rows": 133298,
+      "bronze_columns": 42,
+      "silver_columns": 47,
+      "columns_converted": 42,
+      "date_columns_converted": 0,
+      "numeric_columns_converted": 31,
+      "technical_columns_added": 5,
+      "columns_dropped": 0,
+      "dropped_columns": "",
+      "conversion_errors": 0,
+      "nulls_before": 0,
+      "nulls_after": 384963,
+      "status": "OK",
+      "notes": "",
+      "silver_path": "data\\silver\\sismepre\\rentas_esat_estadistica_atm\\rentas_esat_estadistica_atm_silver.parquet"
+    }
+  ],
+  "status_by_column": [
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "ESTADO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "FECHA_INI_CIERRE",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "ANO_APLICACION_FIN",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "ANO_APLICACION_INICIO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "FECHA_ING",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "FECHA_PRES_OFICIO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "FECHA_CIERRE",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_ano_aplicacion",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "ORDEN_FORMULARIO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "ESTADO_REGISTRO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "TIPO_FORMULARIO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "FORMULARIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "TITULO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "SUB_TITULO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "CLASIFICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_formulario",
+      "column_name": "ABREVIATURA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "ESTADO_REGISTRO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "PREGUNTA_PADRE_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "RANGO_FIN",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "RESPUESTA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "ORDEN_PREGUNTA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "TEXTO_LECTURA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "TEXTO_APOYO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "OBJETO_ACTIVO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "TIPO_CUESTIONARIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "FORMULARIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "DESCRIPCION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "PREGUNTA_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_preguntas",
+      "column_name": "RANGO_INI",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "ANO_ESTADISTICA_DESC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "FORMULARIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "MES_ESTADISTICA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "ESTADO_REGISTRO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_estadistica",
+      "column_name": "ANO_ESTADISTICA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "RESPUESTA_TEXTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "PREGUNTA_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "SEC_EJEC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "RESPUESTA_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "RESPUESTA_DECIMAL",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "RESPUESTA_ENTERO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "FORMULARIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "ESTADO_REGISTRO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_respuestas",
+      "column_name": "RESPUESTA_FECHA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "SEC_EJE",
+      "status": "DROPPED",
+      "conversion_errors": 0,
+      "transformation": "drop_column"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "TIPO_META",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "ESTADO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "IND_RESOL_ALCAL_ADJUNTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "USUARIO_CREACION_FECHA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "FECHA_RESOL_ALCAL_ADJUNTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "USUARIO_FECHA_ENVIO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_datetime_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "CLASIFICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "ORIGEN_INFORMACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "SEC_EJEC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "CORREO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_entidad_estado",
+      "column_name": "USUARIO_ENVIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_SALDOPREDIAL_COAC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_RECAUDANTER_COAC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "PERIODO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_RECAUDACTUAL_ORDIN",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MUNICIPALIDAD_NOMBRE",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MES_ESTADISTICA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_INICIALADULTOMAYOR",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_PREDIOOTROUSO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_CONTRIPREDIO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_AUTOAVALUO_INAFECTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_EMISIONPREDIAL_EXON",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_EMISIONPREDIAL_EXON",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "PROVINCIA_NOMBRE",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_SALDOPREDIAL_ORD",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "ANO_APLICACION",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_RECUADADULTOMAYOR",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_PREDIOTOTAL",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_RECAUDANTER_ORDI",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_BASEIMPONIBLE_EXON",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "PROVINCIA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "ANO_ESTADISTICA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "DISTRITO_NOMBRE",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_EMISIONPREDIAL_AFECTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_BASEIMPONIBLE_AFECTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "DISTRITO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "TIPO_META",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_EMISIONPREDIAL_INSO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_RECAUDACTUAL_COAC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "DEPARTAMENTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "UBIGEO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "FORMULARIO_ID",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "FLAG_EMILIQUIDA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "FLAG_EMISION_INICIAL",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_PREDIOUSOCH",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_EMISIONPREDIAL_CASA",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_CONTRIBADULTOMAYOR",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "MON_PREDIALADULTOMAYOR",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_decimal_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "SEC_EJEC",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_EMISIONPREDIAL_OTROS",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_EMISIONPREDIAL_AFECTO",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "DEPARTAMENTO_NOMBRE",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_string_nullable"
+    },
+    {
+      "dataset": "rentas_esat_estadistica_atm",
+      "column_name": "NUM_INAFECTOS",
+      "status": "OK",
+      "conversion_errors": 0,
+      "transformation": "cast_to_integer_nullable"
+    }
+  ]
+}

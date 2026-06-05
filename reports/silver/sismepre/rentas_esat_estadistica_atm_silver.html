@@ -1,0 +1,1271 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Silver — rentas_esat_estadistica_atm</title>
+
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
+  h1, h2, h3 { color: #111827; }
+  .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .metric { background: #ffffff; border-left: 5px solid #64748b; border-radius: 8px; padding: 12px; }
+  .metric .label { color: #64748b; font-size: 12px; text-transform: uppercase; }
+  .metric .value { color: #111827; font-size: 24px; font-weight: bold; margin-top: 4px; }
+  table { border-collapse: collapse; width: 100%; background: white; font-size: 13px; }
+  th, td { border: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+  th { background: #f3f4f6; text-align: left; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .ok { color: #166534; font-weight: bold; }
+  .warn { color: #92400e; font-weight: bold; }
+  .err { color: #991b1b; font-weight: bold; }
+  .small { font-size: 12px; color: #6b7280; }
+  code { background: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+</style>
+
+</head>
+<body>
+<h1>Reporte Silver — rentas_esat_estadistica_atm</h1>
+<p class="small">Transformaciones aplicadas desde Bronze hacia Silver.</p>
+
+<div class="card">
+<h2>Resumen del dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>bronze_rows</th>
+<th>silver_rows</th>
+<th>bronze_columns</th>
+<th>silver_columns</th>
+<th>columns_converted</th>
+<th>date_columns_converted</th>
+<th>numeric_columns_converted</th>
+<th>technical_columns_added</th>
+<th>columns_dropped</th>
+<th>dropped_columns</th>
+<th>conversion_errors</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>status</th>
+<th>notes</th>
+<th>silver_path</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>133298</td>
+<td>133298</td>
+<td>42</td>
+<td>47</td>
+<td>42</td>
+<td>0</td>
+<td>31</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>384963</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_esat_estadistica_atm\rentas_esat_estadistica_atm_silver.parquet</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Detalle por columna</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>conversion_errors</th>
+<th>special_values_handled</th>
+<th>status</th>
+<th>reason</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_COAC</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_COAC</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_ORDIN</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MUNICIPALIDAD_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MES_ESTADISTICA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_INICIALADULTOMAYOR</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOOTROUSO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIPREDIO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_AUTOAVALUO_INAFECTO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_EXON</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_EXON</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_ORD</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECUADADULTOMAYOR</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOTOTAL</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_ORDI</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_EXON</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_ESTADISTICA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_AFECTO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_AFECTO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>TIPO_META</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>133298</td>
+<td>133298.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_INSO</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_COAC</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>UBIGEO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMILIQUIDA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>132983</td>
+<td>132983.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMISION_INICIAL</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>118682</td>
+<td>118682.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOUSOCH</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_CASA</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIBADULTOMAYOR</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_PREDIALADULTOMAYOR</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>SEC_EJEC</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_OTROS</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_AFECTO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO_NOMBRE</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_INAFECTOS</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Diccionario Silver del dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>business_name</th>
+<th>description</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation_applied</th>
+<th>nullable</th>
+<th>is_technical_column</th>
+<th>source</th>
+<th>notes</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_COAC</td>
+<td>MON_SALDOPREDIAL_COAC</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_COAC</td>
+<td>MON_RECAUDANTER_COAC</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_ORDIN</td>
+<td>MON_RECAUDACTUAL_ORDIN</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MUNICIPALIDAD_NOMBRE</td>
+<td>MUNICIPALIDAD_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MES_ESTADISTICA</td>
+<td>MES_ESTADISTICA</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_INICIALADULTOMAYOR</td>
+<td>MON_INICIALADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOOTROUSO</td>
+<td>NUM_PREDIOOTROUSO</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIPREDIO</td>
+<td>NUM_CONTRIPREDIO</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_AUTOAVALUO_INAFECTO</td>
+<td>MON_AUTOAVALUO_INAFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_EXON</td>
+<td>MON_EMISIONPREDIAL_EXON</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_EXON</td>
+<td>NUM_EMISIONPREDIAL_EXON</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA_NOMBRE</td>
+<td>PROVINCIA_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_SALDOPREDIAL_ORD</td>
+<td>MON_SALDOPREDIAL_ORD</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECUADADULTOMAYOR</td>
+<td>MON_RECUADADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOTOTAL</td>
+<td>NUM_PREDIOTOTAL</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDANTER_ORDI</td>
+<td>MON_RECAUDANTER_ORDI</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_EXON</td>
+<td>MON_BASEIMPONIBLE_EXON</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>PROVINCIA</td>
+<td>PROVINCIA</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>ANO_ESTADISTICA</td>
+<td>ANO_ESTADISTICA</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO_NOMBRE</td>
+<td>DISTRITO_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_AFECTO</td>
+<td>MON_EMISIONPREDIAL_AFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_BASEIMPONIBLE_AFECTO</td>
+<td>MON_BASEIMPONIBLE_AFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DISTRITO</td>
+<td>DISTRITO</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>TIPO_META</td>
+<td>TIPO_META</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_EMISIONPREDIAL_INSO</td>
+<td>MON_EMISIONPREDIAL_INSO</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_RECAUDACTUAL_COAC</td>
+<td>MON_RECAUDACTUAL_COAC</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO</td>
+<td>DEPARTAMENTO</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>UBIGEO</td>
+<td>UBIGEO</td>
+<td>preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td>preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMILIQUIDA</td>
+<td>FLAG_EMILIQUIDA</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>FLAG_EMISION_INICIAL</td>
+<td>FLAG_EMISION_INICIAL</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_PREDIOUSOCH</td>
+<td>NUM_PREDIOUSOCH</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_CASA</td>
+<td>NUM_EMISIONPREDIAL_CASA</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_CONTRIBADULTOMAYOR</td>
+<td>NUM_CONTRIBADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>MON_PREDIALADULTOMAYOR</td>
+<td>MON_PREDIALADULTOMAYOR</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+<td>str</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>SEC_EJEC</td>
+<td>SEC_EJEC</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_OTROS</td>
+<td>NUM_EMISIONPREDIAL_OTROS</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_EMISIONPREDIAL_AFECTO</td>
+<td>NUM_EMISIONPREDIAL_AFECTO</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>DEPARTAMENTO_NOMBRE</td>
+<td>DEPARTAMENTO_NOMBRE</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>NUM_INAFECTOS</td>
+<td>NUM_INAFECTOS</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_esat_estadistica_atm</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>

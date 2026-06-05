@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Silver — rentas_preguntas</title>
+
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
+  h1, h2, h3 { color: #111827; }
+  .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .metric { background: #ffffff; border-left: 5px solid #64748b; border-radius: 8px; padding: 12px; }
+  .metric .label { color: #64748b; font-size: 12px; text-transform: uppercase; }
+  .metric .value { color: #111827; font-size: 24px; font-weight: bold; margin-top: 4px; }
+  table { border-collapse: collapse; width: 100%; background: white; font-size: 13px; }
+  th, td { border: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+  th { background: #f3f4f6; text-align: left; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .ok { color: #166534; font-weight: bold; }
+  .warn { color: #92400e; font-weight: bold; }
+  .err { color: #991b1b; font-weight: bold; }
+  .small { font-size: 12px; color: #6b7280; }
+  code { background: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+</style>
+
+</head>
+<body>
+<h1>Reporte Silver — rentas_preguntas</h1>
+<p class="small">Transformaciones aplicadas desde Bronze hacia Silver.</p>
+
+<div class="card">
+<h2>Resumen del dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>bronze_rows</th>
+<th>silver_rows</th>
+<th>bronze_columns</th>
+<th>silver_columns</th>
+<th>columns_converted</th>
+<th>date_columns_converted</th>
+<th>numeric_columns_converted</th>
+<th>technical_columns_added</th>
+<th>columns_dropped</th>
+<th>dropped_columns</th>
+<th>conversion_errors</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>status</th>
+<th>notes</th>
+<th>silver_path</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_preguntas</td>
+<td>696</td>
+<td>696</td>
+<td>15</td>
+<td>20</td>
+<td>15</td>
+<td>0</td>
+<td>7</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td>2164</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_preguntas\rentas_preguntas_silver.parquet</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Detalle por columna</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>conversion_errors</th>
+<th>special_values_handled</th>
+<th>status</th>
+<th>reason</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_preguntas</td>
+<td>ESTADO_REGISTRO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_PADRE_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_FIN</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>458</td>
+<td>458.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RESPUESTA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>445</td>
+<td>445.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ORDEN_PREGUNTA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_LECTURA</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>398</td>
+<td>398.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_APOYO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>405</td>
+<td>405.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>OBJETO_ACTIVO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TIPO_CUESTIONARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>FORMULARIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>DESCRIPCION</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_INI</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>458</td>
+<td>458.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Diccionario Silver del dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>business_name</th>
+<th>description</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation_applied</th>
+<th>nullable</th>
+<th>is_technical_column</th>
+<th>source</th>
+<th>notes</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_preguntas</td>
+<td>ESTADO_REGISTRO</td>
+<td>ESTADO_REGISTRO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_PADRE_ID</td>
+<td>PREGUNTA_PADRE_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_FIN</td>
+<td>RANGO_FIN</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RESPUESTA</td>
+<td>RESPUESTA</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>ORDEN_PREGUNTA</td>
+<td>ORDEN_PREGUNTA</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_LECTURA</td>
+<td>TEXTO_LECTURA</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TEXTO_APOYO</td>
+<td>TEXTO_APOYO</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>OBJETO_ACTIVO</td>
+<td>OBJETO_ACTIVO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>TIPO_CUESTIONARIO_ID</td>
+<td>TIPO_CUESTIONARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>FORMULARIO_ID</td>
+<td>FORMULARIO_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>DESCRIPCION</td>
+<td>DESCRIPCION</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>PREGUNTA_ID</td>
+<td>PREGUNTA_ID</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>RANGO_INI</td>
+<td>RANGO_INI</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_preguntas</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>
