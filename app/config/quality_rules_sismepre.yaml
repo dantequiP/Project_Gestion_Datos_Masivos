@@ -1,9 +1,36 @@
+# ============================================================
+# REGLAS DE CALIDAD DE DATOS - SISMEPRE
+# ============================================================
+# Este archivo define reglas para evaluar la calidad de los
+# Parquet Bronze de SISMEPRE. El pipeline NO modifica Bronze:
+# solo evalúa, reporta y genera auditoría.
+#
+# Criterios considerados:
+# - Completitud
+# - Exactitud
+# - Consistencia
+# - Integridad
+# - Razonabilidad
+# - Oportunidad
+# - Unicidad
+# - Validez
+#
+# Fuentes usadas:
+# - dictionary_csv: diccionario oficial separado del MEF.
+# - embedded_dictionary: diccionario embebido/manual del portal.
+# - profiling_based: hallazgos del profiling de Bronze.
+# - naming_pattern: regla inferida por patrón del nombre de columna.
+# - inferred_business_key: clave candidata inferida.
+# - referential_rule: relación interna entre datasets SISMEPRE.
+# ============================================================
+
 settings:
   source: sismepre
   bronze_root: data/bronze
   reports_root: reports/quality/sismepre
   data_quality_root: data/quality/sismepre
   audit_root: data/audit/quality
+  max_failed_samples_per_rule: 10
 
 missing_tokens: ["", "nan", "NaN", "None", "none", "NULL", "null", "<NA>", "NaT"]
 
@@ -25,17 +52,21 @@ global_rules:
     source: profiling_based
 
   pattern_rules:
+    # Exactitud: valida formato de año de 4 dígitos.
+    # La oportunidad temporal se evalúa con reglas separadas.
     year_4_digits:
       enabled: true
       dimension: Exactitud
       severity: Alta
       source: naming_pattern
       startswith: ["ANO_"]
-      min_year: 2000
-      max_year: 2030
+      min_year: 1000
+      max_year: 9999
+      skip_contains: ["DESC", "DESCRIPCION"]
 
+    # Desactivado para evitar duplicidad con fechas declaradas por dataset.
     date_parseable:
-      enabled: true
+      enabled: false
       dimension: Validez
       severity: Media
       source: naming_pattern
@@ -88,6 +119,11 @@ datasets:
       columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "PREGUNTA_ID", "PREGUNTA_PADRE_ID", "TIPO_CUESTIONARIO_ID"]
     unique_keys:
       - {columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "PREGUNTA_ID"], dimension: Unicidad, severity: Alta, source: inferred_business_key}
+    timeliness_rules:
+      # Oportunidad: el año usado no debe ser posterior al año de ejecución del pipeline.
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION"], dimension: Oportunidad, severity: Media, source: dictionary_csv}
+      # Oportunidad temporal interna: año/periodo debe existir en el catálogo rentas_ano_aplicacion.
+      - {rule_type: temporal_catalog_exists, columns: ["ANO_APLICACION", "PERIODO"], reference_dataset: rentas_ano_aplicacion, reference_columns: ["ANO_APLICACION", "PERIODO"], dimension: Oportunidad, severity: Media, source: internal_temporal_catalog}
 
   rentas_estadistica:
     required_columns:
@@ -104,6 +140,11 @@ datasets:
       columns: ["FORMULARIO_ID", "PERIODO", "MES_ESTADISTICA", "ANO_APLICACION", "ANO_ESTADISTICA"]
     unique_keys:
       - {columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID", "ANO_ESTADISTICA", "MES_ESTADISTICA"], dimension: Unicidad, severity: Media, source: inferred_business_key}
+    timeliness_rules:
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION", "ANO_ESTADISTICA"], dimension: Oportunidad, severity: Media, source: dictionary_csv}
+      # MES_ESTADISTICA acepta 1-13. El 13 se trata como periodo especial observado, no como mes calendario.
+      - {rule_type: month_period_between, columns: ["MES_ESTADISTICA"], min_value: 1, max_value: 13, dimension: Oportunidad, severity: Media, source: dictionary_csv_plus_profiling}
+      - {rule_type: temporal_catalog_exists, columns: ["ANO_APLICACION", "PERIODO"], reference_dataset: rentas_ano_aplicacion, reference_columns: ["ANO_APLICACION", "PERIODO"], dimension: Oportunidad, severity: Media, source: internal_temporal_catalog}
 
   rentas_formulario:
     required_columns:
@@ -121,6 +162,9 @@ datasets:
       columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID"]
     unique_keys:
       - {columns: ["ANO_APLICACION", "PERIODO", "FORMULARIO_ID"], dimension: Unicidad, severity: Alta, source: inferred_business_key}
+    timeliness_rules:
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION"], dimension: Oportunidad, severity: Media, source: dictionary_csv}
+      - {rule_type: temporal_catalog_exists, columns: ["ANO_APLICACION", "PERIODO"], reference_dataset: rentas_ano_aplicacion, reference_columns: ["ANO_APLICACION", "PERIODO"], dimension: Oportunidad, severity: Media, source: internal_temporal_catalog}
 
   rentas_esat_estadistica_atm:
     required_columns:
@@ -138,6 +182,10 @@ datasets:
       columns: ["PERIODO", "MES_ESTADISTICA", "ANO_APLICACION", "ANO_ESTADISTICA", "FORMULARIO_ID", "SEC_EJEC"]
     unique_keys:
       - {columns: ["ANO_APLICACION", "PERIODO", "ANO_ESTADISTICA", "MES_ESTADISTICA", "SEC_EJEC", "FORMULARIO_ID"], dimension: Unicidad, severity: Media, source: inferred_business_key}
+    timeliness_rules:
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION", "ANO_ESTADISTICA"], dimension: Oportunidad, severity: Media, source: dictionary_csv}
+      - {rule_type: month_period_between, columns: ["MES_ESTADISTICA"], min_value: 1, max_value: 13, dimension: Oportunidad, severity: Media, source: dictionary_csv_plus_profiling}
+      - {rule_type: temporal_catalog_exists, columns: ["ANO_APLICACION", "PERIODO"], reference_dataset: rentas_ano_aplicacion, reference_columns: ["ANO_APLICACION", "PERIODO"], dimension: Oportunidad, severity: Media, source: internal_temporal_catalog}
 
   rentas_respuestas:
     required_columns:
@@ -159,6 +207,10 @@ datasets:
       columns: ["RESPUESTA_FECHA"]
     unique_keys:
       - {columns: ["ANO_APLICACION", "PERIODO", "SEC_EJEC", "FORMULARIO_ID", "PREGUNTA_ID", "RESPUESTA_ID"], dimension: Unicidad, severity: Media, source: inferred_business_key}
+    timeliness_rules:
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION"], dimension: Oportunidad, severity: Media, source: dictionary_csv}
+      - {rule_type: date_not_future, columns: ["RESPUESTA_FECHA"], dimension: Oportunidad, severity: Baja, source: dictionary_csv}
+      - {rule_type: temporal_catalog_exists, columns: ["ANO_APLICACION", "PERIODO"], reference_dataset: rentas_ano_aplicacion, reference_columns: ["ANO_APLICACION", "PERIODO"], dimension: Oportunidad, severity: Media, source: internal_temporal_catalog}
 
   rentas_ano_aplicacion:
     required_columns:
@@ -180,12 +232,15 @@ datasets:
       columns: ["FECHA_INI_CIERRE", "FECHA_ING", "FECHA_PRES_OFICIO", "FECHA_CIERRE"]
     consistency_rules:
       - {rule_type: less_or_equal, left_column: ANO_APLICACION_INICIO, right_column: ANO_APLICACION_FIN, dimension: Consistencia, severity: Alta, source: dictionary_csv}
+    timeliness_rules:
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION", "ANO_APLICACION_INICIO", "ANO_APLICACION_FIN"], dimension: Oportunidad, severity: Media, source: dictionary_csv}
+      - {rule_type: date_not_future, columns: ["FECHA_ING", "FECHA_PRES_OFICIO"], dimension: Oportunidad, severity: Baja, source: dictionary_csv}
 
   rentas_entidad_estado:
     required_columns:
       dimension: Completitud
       severity: Alta
-      source: fallback_metadata
+      source: embedded_dictionary
       columns: ["TIPO_META", "ESTADO", "IND_RESOL_ALCAL_ADJUNTO", "USUARIO_CREACION_FECHA", "PERIODO", "ANO_APLICACION", "CLASIFICACION", "ORIGEN_INFORMACION", "SEC_EJEC", "USUARIO_ENVIO_ID"]
     observed_empty_columns:
       dimension: Completitud
@@ -193,19 +248,32 @@ datasets:
       source: profiling_based
       columns: ["SEC_EJE", "USUARIO_FECHA_ENVIO", "CORREO"]
     allowed_values:
-      ESTADO: {values: ["A", "I"], dimension: Validez, severity: Alta, source: profiling_based}
-      IND_RESOL_ALCAL_ADJUNTO: {values: ["P", "A"], dimension: Validez, severity: Media, source: profiling_based}
-      CLASIFICACION: {values: ["A", "B", "C", "D", "E", "F", "G"], dimension: Validez, severity: Media, source: profiling_based}
+      ESTADO: {values: ["A", "R", "E"], dimension: Validez, severity: Alta, source: embedded_dictionary}
+      IND_RESOL_ALCAL_ADJUNTO: {values: ["P", "A"], dimension: Validez, severity: Media, source: embedded_dictionary}
+      CLASIFICACION: {values: ["A", "B", "C", "D", "E", "F", "G"], dimension: Validez, severity: Media, source: embedded_dictionary}
+      ORIGEN_INFORMACION: {values: ["1", "2", "3"], dimension: Validez, severity: Media, source: embedded_dictionary}
     numeric_columns:
       dimension: Validez
       severity: Alta
-      source: profiling_based
+      source: embedded_dictionary
       columns: ["TIPO_META", "PERIODO", "ANO_APLICACION", "ORIGEN_INFORMACION", "SEC_EJEC", "USUARIO_ENVIO_ID"]
     date_columns:
       dimension: Validez
       severity: Media
-      source: profiling_based
-      columns: ["USUARIO_CREACION_FECHA", "FECHA_RESOL_ALCAL_ADJUNTO"]
+      source: embedded_dictionary
+      columns: ["USUARIO_CREACION_FECHA"]
+    conditional_date_rules:
+      - condition_column: IND_RESOL_ALCAL_ADJUNTO
+        condition_value: "A"
+        date_column: FECHA_RESOL_ALCAL_ADJUNTO
+        dimension: Consistencia
+        severity: Media
+        source: embedded_dictionary
+        description: "Si la resolución está adjunta, debe existir una fecha válida."
+    timeliness_rules:
+      - {rule_type: year_not_future, columns: ["ANO_APLICACION"], dimension: Oportunidad, severity: Media, source: embedded_dictionary}
+      - {rule_type: date_not_future, columns: ["USUARIO_CREACION_FECHA"], dimension: Oportunidad, severity: Baja, source: embedded_dictionary}
+      - {rule_type: temporal_catalog_exists, columns: ["ANO_APLICACION", "PERIODO"], reference_dataset: rentas_ano_aplicacion, reference_columns: ["ANO_APLICACION", "PERIODO"], dimension: Oportunidad, severity: Media, source: internal_temporal_catalog}
 
 referential_integrity:
   - {dataset: rentas_respuestas, column: FORMULARIO_ID, reference_dataset: rentas_formulario, reference_column: FORMULARIO_ID, dimension: Integridad, severity: Alta, source: referential_rule}

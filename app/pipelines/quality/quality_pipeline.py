@@ -9,7 +9,18 @@ from app.utils.logger import get_logger
 
 logger = get_logger(__name__, log_dir=Path("logs"))
 
+
 def run_quality_pipeline(source: str = "sismepre") -> dict[str, str]:
+    """
+    Pipeline principal de calidad para SISMEPRE.
+
+    Flujo:
+    1. Carga reglas YAML.
+    2. Lee Parquet Bronze.
+    3. Evalúa reglas por dimensión.
+    4. Genera CSV, Parquet, HTML y auditoría.
+    5. No modifica archivos Bronze.
+    """
     if source != "sismepre":
         raise ValueError("Por ahora solo está implementada calidad para source='sismepre'.")
 
@@ -27,27 +38,37 @@ def run_quality_pipeline(source: str = "sismepre") -> dict[str, str]:
     audit_root.mkdir(parents=True, exist_ok=True)
 
     checker = QualityChecker(config)
-    detail_df = checker.run()
+    detail_df, failed_samples_df = checker.run()
     summary_df = build_summary(detail_df)
 
     detail_csv = reports_root / "sismepre_quality_detail.csv"
     summary_csv = reports_root / "sismepre_quality_summary.csv"
+    failed_samples_csv = reports_root / "sismepre_quality_failed_samples.csv"
+
     dashboard_html = reports_root / "sismepre_quality_dashboard.html"
     detail_parquet = data_quality_root / "sismepre_quality_detail.parquet"
     summary_parquet = data_quality_root / "sismepre_quality_summary.parquet"
+    failed_samples_parquet = data_quality_root / "sismepre_quality_failed_samples.parquet"
 
+    # Salidas tabulares para revisión y trazabilidad.
     detail_df.to_csv(detail_csv, index=False, encoding="utf-8-sig")
     summary_df.to_csv(summary_csv, index=False, encoding="utf-8-sig")
+    failed_samples_df.to_csv(failed_samples_csv, index=False, encoding="utf-8-sig")
+
+    # Salidas Parquet para posible consumo posterior por Silver/Gold o analítica.
     detail_df.to_parquet(detail_parquet, index=False)
     summary_df.to_parquet(summary_parquet, index=False)
+    failed_samples_df.to_parquet(failed_samples_parquet, index=False)
 
+    # Reportes HTML ejecutivos.
     write_dashboard_html(summary_df, detail_df, dashboard_html)
 
     for _, row in summary_df.iterrows():
         dataset = row["dataset"]
         write_dataset_html(dataset, detail_df[detail_df["dataset"] == dataset].copy(), row, reports_root / f"{dataset}_quality.html")
 
-    audit_path = write_quality_audit(summary_df, detail_df, audit_root, reports_root, data_quality_root, started_at)
+    # Auditoría de ejecución.
+    audit_path = write_quality_audit(summary_df, detail_df, failed_samples_df, audit_root, reports_root, data_quality_root, started_at)
 
     logger.info("Pipeline de calidad finalizado.")
     logger.info("Dashboard HTML: %s", dashboard_html)
@@ -56,9 +77,11 @@ def run_quality_pipeline(source: str = "sismepre") -> dict[str, str]:
     return {
         "summary_csv": str(summary_csv),
         "detail_csv": str(detail_csv),
+        "failed_samples_csv": str(failed_samples_csv),
         "dashboard_html": str(dashboard_html),
         "summary_parquet": str(summary_parquet),
         "detail_parquet": str(detail_parquet),
+        "failed_samples_parquet": str(failed_samples_parquet),
         "reports_dir": str(reports_root),
         "audit_path": str(audit_path),
     }

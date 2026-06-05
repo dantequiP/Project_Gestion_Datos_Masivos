@@ -1,42 +1,121 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Calidad SISMEPRE - rentas_estadistica</title><style>
     body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
-    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:24px} header p{margin:8px 0 0;color:#cbd5e1}
+    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:25px} header p{margin:8px 0 0;color:#cbd5e1}
     main{padding:24px 32px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card,.qcard{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .qcard{min-height:180px}.qcard h3{margin:0 0 6px;font-size:15px}.desc{font-size:12px;color:#6b7280;min-height:34px}
     .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}.value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .score-big{font-size:26px;font-weight:bold;color:#2f7d46;float:right}.small{font-size:12px;color:#6b7280}
     .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
     table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px}
     th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}th{background:#111827;color:white}tr:nth-child(even){background:#fafafa}
-    .bar-wrap{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.bar-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
+    .bar-wrap{width:100%;height:7px;background:#e5e7eb;border-radius:999px;margin:10px 0}.bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .inline-bar{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.inline-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
     .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px;white-space:nowrap}.sin{background:#d9eadf;color:#245c36}.con{background:#fff3cd;color:#7a5b00}.noeval{background:#e5e7eb;color:#374151}
     .alert-card{background:white;border-left:4px solid #c24141;border-radius:10px;padding:12px 16px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .note{background:#eef2ff;border-left:4px solid #3b82f6;border-radius:10px;padding:14px 16px;margin-bottom:20px}
+    code{background:#eef2ff;padding:2px 4px;border-radius:4px}
     </style></head><body>
     <header><h1>Calidad de Datos — rentas_estadistica</h1><p>Capa evaluada: Bronze | Este reporte no modifica datos</p></header><main>
+    <div class="note">Lectura ejecutiva: este reporte muestra el cumplimiento de reglas de calidad por dimensión. Una observación no siempre significa error crítico; su importancia depende de la severidad y de la fuente de la regla.</div>
     <div class="cards">
-    <div class="card"><div class="label">Reglas evaluadas</div><div class="value">17</div></div>
-    <div class="card"><div class="label">Reglas con observación</div><div class="value">3</div></div>
-    <div class="card"><div class="label">Observaciones</div><div class="value">653</div></div>
-    <div class="card"><div class="label">Score general</div><div class="value">75.0%</div></div>
-    </div><h2 class="section-title">Calidad por dimensión</h2><table><thead><tr><th>Dimensión</th><th>Score</th><th>Reglas</th><th>Observaciones</th><th>Estado</th></tr></thead><tbody><tr><td><b>Completitud</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>6</td><td>0</td><td><span class="badge sin">Sin observaciones</span></td></tr><tr><td><b>Exactitud</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">0.0%</span></td><td>3</td><td>653</td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>Consistencia</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Integridad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Razonabilidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Oportunidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td><td><span class="badge noeval">No evaluable</span></td></tr><tr><td><b>Unicidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>2</td><td>0</td><td><span class="badge sin">Sin observaciones</span></td></tr><tr><td><b>Validez</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>6</td><td>0</td><td><span class="badge sin">Sin observaciones</span></td></tr></tbody></table>
-    <h2 class="section-title">Principales observaciones</h2><div class='alert-card'><b>Exactitud</b> — Año de 4 dígitos en rango: ANO_APLICACION<br>Columna: <code>ANO_APLICACION</code> | Fallidos: 233 | Severidad: Alta</div><div class='alert-card'><b>Exactitud</b> — Año de 4 dígitos en rango: ANO_ESTADISTICA<br>Columna: <code>ANO_ESTADISTICA</code> | Fallidos: 233 | Severidad: Alta</div><div class='alert-card'><b>Exactitud</b> — Año de 4 dígitos en rango: ANO_ESTADISTICA_DESC<br>Columna: <code>ANO_ESTADISTICA_DESC</code> | Fallidos: 187 | Severidad: Alta</div>
-    <h2 class="section-title">Detalle de reglas</h2><table border="1" class="dataframe">
+      <div class="card"><div class="label">Reglas evaluadas</div><div class="value">20</div></div>
+      <div class="card"><div class="label">Reglas con observación</div><div class="value">0</div></div>
+      <div class="card"><div class="label">Observaciones</div><div class="value">0</div></div>
+      <div class="card"><div class="label">Score general</div><div class="value">100.0%</div></div>
+    </div>
+    <h2 class="section-title">Resumen ejecutivo por dimensión</h2>
+    <div class="quality-grid">
+        <div class="qcard">
+          <h3>Completitud <span class="score-big">100.0%</span></h3>
+          <div class="desc">Campos obligatorios con datos disponibles.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>6</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Exactitud <span class="score-big">100.0%</span></h3>
+          <div class="desc">Valores con formato correcto según el tipo esperado.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>2</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Consistencia <span class="score-big">N/E</span></h3>
+          <div class="desc">Coherencia entre columnas relacionadas dentro del dataset.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div>
+          <div class="small">Reglas: <b>0</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge noeval">No evaluable</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Integridad <span class="score-big">N/E</span></h3>
+          <div class="desc">Relaciones válidas entre datasets internos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div>
+          <div class="small">Reglas: <b>0</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge noeval">No evaluable</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Razonabilidad <span class="score-big">N/E</span></h3>
+          <div class="desc">Valores lógicos para el dominio, como montos no negativos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div>
+          <div class="small">Reglas: <b>0</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge noeval">No evaluable</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Oportunidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Vigencia temporal del dato respecto al periodo de análisis.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>4</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Unicidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Ausencia de duplicados y claves candidatas únicas.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>2</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Validez <span class="score-big">100.0%</span></h3>
+          <div class="desc">Formatos, catálogos y tipos de datos permitidos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>6</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        </div>
+    <h2 class="section-title">Observaciones por severidad</h2><div class="alert-card">No hay observaciones por severidad.</div>
+    <h2 class="section-title">Principales observaciones</h2><div class="alert-card">No se detectaron observaciones en las reglas evaluadas.</div>
+    
+    <h2 class="section-title">Glosario de columnas del reporte</h2>
+    <table><thead><tr><th>Columna técnica</th><th>Nombre en español</th><th>Explicación</th></tr></thead><tbody><tr><td><code>dataset</code></td><td>Dataset evaluado</td><td>Archivo o tabla analizada.</td></tr><tr><td><code>dimension</code></td><td>Dimensión de calidad</td><td>Criterio de calidad evaluado.</td></tr><tr><td><code>rule_id</code></td><td>Identificador de regla</td><td>Código único de la regla aplicada.</td></tr><tr><td><code>rule_name</code></td><td>Regla aplicada</td><td>Descripción breve de la validación.</td></tr><tr><td><code>column_name</code></td><td>Columna evaluada</td><td>Campo específico revisado.</td></tr><tr><td><code>evaluated_rows</code></td><td>Filas evaluadas</td><td>Cantidad de registros revisados por la regla.</td></tr><tr><td><code>passed_rows</code></td><td>Filas que cumplen</td><td>Registros que cumplieron la regla.</td></tr><tr><td><code>failed_rows</code></td><td>Filas observadas</td><td>Registros que no cumplieron o quedaron observados.</td></tr><tr><td><code>score</code></td><td>Porcentaje de cumplimiento</td><td>Porcentaje de cumplimiento de la regla.</td></tr><tr><td><code>severity</code></td><td>Severidad</td><td>Nivel de importancia de la observación.</td></tr><tr><td><code>source</code></td><td>Fuente de la regla</td><td>Origen que justifica la regla: diccionario, profiling o inferencia documentada.</td></tr><tr><td><code>status</code></td><td>Estado</td><td>Resultado de la regla.</td></tr><tr><td><code>sample_failed_rows</code></td><td>Filas de ejemplo</td><td>Índices de filas usados como ejemplo de evidencia.</td></tr></tbody></table>
+    
+    <h2 class="section-title">Detalle completo de reglas</h2><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>dataset</th>
-      <th>dimension</th>
-      <th>rule_id</th>
-      <th>rule_name</th>
-      <th>column_name</th>
-      <th>rule_type</th>
-      <th>expected_value</th>
-      <th>evaluated_rows</th>
-      <th>passed_rows</th>
-      <th>failed_rows</th>
-      <th>score</th>
-      <th>severity</th>
-      <th>source</th>
-      <th>status</th>
-      <th>observation</th>
+      <th>Dataset evaluado</th>
+      <th>Dimensión de calidad</th>
+      <th>Identificador de regla</th>
+      <th>Regla aplicada</th>
+      <th>Columna evaluada</th>
+      <th>Tipo de regla</th>
+      <th>Valor esperado</th>
+      <th>Filas evaluadas</th>
+      <th>Filas que cumplen</th>
+      <th>Filas observadas</th>
+      <th>Porcentaje de cumplimiento</th>
+      <th>Severidad</th>
+      <th>Fuente de la regla</th>
+      <th>Estado</th>
+      <th>Descripción de la observación</th>
+      <th>Filas de ejemplo</th>
     </tr>
   </thead>
   <tbody>
@@ -56,6 +135,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -73,6 +153,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -90,6 +171,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -107,6 +189,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en MES_ESTADISTICA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -124,6 +207,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ESTADO_REGISTRO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -141,6 +225,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -158,6 +243,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_ESTADISTICA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -175,6 +261,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -192,6 +279,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -209,6 +297,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -226,6 +315,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -243,6 +333,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -260,6 +351,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -276,58 +368,116 @@
       <td>Media</td>
       <td>inferred_business_key</td>
       <td>Sin observaciones</td>
-      <td>Registros duplicados según clave candidata.</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.ANO_ESTADISTICA.year_not_future</td>
+      <td>Año no futuro: ANO_ESTADISTICA</td>
+      <td>ANO_ESTADISTICA</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.MES_ESTADISTICA.month_period_between</td>
+      <td>Periodo estadístico válido: MES_ESTADISTICA</td>
+      <td>MES_ESTADISTICA</td>
+      <td>month_period_between</td>
+      <td>1-13; 13=periodo especial observado</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Media</td>
+      <td>dictionary_csv_plus_profiling</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango de periodo estadístico permitido. Se acepta 13 como periodo especial observado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
       <td>Exactitud</td>
       <td>rentas_estadistica.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>233</td>
       <td>233</td>
       <td>0</td>
-      <td>233</td>
-      <td>0.0</td>
+      <td>100.0</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
       <td>Exactitud</td>
       <td>rentas_estadistica.ANO_ESTADISTICA.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_ESTADISTICA</td>
+      <td>Año con formato de 4 dígitos: ANO_ESTADISTICA</td>
       <td>ANO_ESTADISTICA</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>233</td>
       <td>233</td>
       <td>0</td>
-      <td>233</td>
-      <td>0.0</td>
+      <td>100.0</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
-    </tr>
-    <tr>
-      <td>rentas_estadistica</td>
-      <td>Exactitud</td>
-      <td>rentas_estadistica.ANO_ESTADISTICA_DESC.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_ESTADISTICA_DESC</td>
-      <td>ANO_ESTADISTICA_DESC</td>
-      <td>year_4_digits</td>
-      <td>2000-2030</td>
-      <td>187</td>
-      <td>0</td>
-      <td>187</td>
-      <td>0.0</td>
-      <td>Alta</td>
-      <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
   </tbody>
 </table>
