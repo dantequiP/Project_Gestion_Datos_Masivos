@@ -1,0 +1,543 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Silver — rentas_entidad_estado</title>
+
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
+  h1, h2, h3 { color: #111827; }
+  .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .metric { background: #ffffff; border-left: 5px solid #64748b; border-radius: 8px; padding: 12px; }
+  .metric .label { color: #64748b; font-size: 12px; text-transform: uppercase; }
+  .metric .value { color: #111827; font-size: 24px; font-weight: bold; margin-top: 4px; }
+  table { border-collapse: collapse; width: 100%; background: white; font-size: 13px; }
+  th, td { border: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+  th { background: #f3f4f6; text-align: left; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .ok { color: #166534; font-weight: bold; }
+  .warn { color: #92400e; font-weight: bold; }
+  .err { color: #991b1b; font-weight: bold; }
+  .small { font-size: 12px; color: #6b7280; }
+  code { background: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+</style>
+
+</head>
+<body>
+<h1>Reporte Silver — rentas_entidad_estado</h1>
+<p class="small">Transformaciones aplicadas desde Bronze hacia Silver.</p>
+
+<div class="card">
+<h2>Resumen del dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>bronze_rows</th>
+<th>silver_rows</th>
+<th>bronze_columns</th>
+<th>silver_columns</th>
+<th>columns_converted</th>
+<th>date_columns_converted</th>
+<th>numeric_columns_converted</th>
+<th>technical_columns_added</th>
+<th>columns_dropped</th>
+<th>dropped_columns</th>
+<th>conversion_errors</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>status</th>
+<th>notes</th>
+<th>silver_path</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>19037</td>
+<td>19037</td>
+<td>14</td>
+<td>18</td>
+<td>13</td>
+<td>3</td>
+<td>6</td>
+<td>5</td>
+<td>1</td>
+<td>SEC_EJE</td>
+<td>0</td>
+<td>19037</td>
+<td>55095</td>
+<td class='ok'>OK</td>
+<td></td>
+<td>data\silver\sismepre\rentas_entidad_estado\rentas_entidad_estado_silver.parquet</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Detalle por columna</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>conversion_errors</th>
+<th>special_values_handled</th>
+<th>status</th>
+<th>reason</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJE</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>19037</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>TIPO_META</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ESTADO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>IND_RESOL_ALCAL_ADJUNTO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_CREACION_FECHA</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>FECHA_RESOL_ALCAL_ADJUNTO</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>17021</td>
+<td>17021.0</td>
+<td>0</td>
+<td>17021</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>PERIODO</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_FECHA_ENVIO</td>
+<td>str</td>
+<td>datetime64[s]</td>
+<td>cast_to_datetime_nullable</td>
+<td>19037</td>
+<td>19037.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ANO_APLICACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CLASIFICACION</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ORIGEN_INFORMACION</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJEC</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CORREO</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>19037</td>
+<td>19037.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_ENVIO_ID</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original.</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Diccionario Silver del dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>business_name</th>
+<th>description</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation_applied</th>
+<th>nullable</th>
+<th>is_technical_column</th>
+<th>source</th>
+<th>notes</th>
+</tr></thead><tbody>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJE</td>
+<td>SEC_EJE</td>
+<td>Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>TIPO_META</td>
+<td>TIPO_META</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ESTADO</td>
+<td>ESTADO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>IND_RESOL_ALCAL_ADJUNTO</td>
+<td>IND_RESOL_ALCAL_ADJUNTO</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_CREACION_FECHA</td>
+<td>USUARIO_CREACION_FECHA</td>
+<td></td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>FECHA_RESOL_ALCAL_ADJUNTO</td>
+<td>FECHA_RESOL_ALCAL_ADJUNTO</td>
+<td>documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.</td>
+<td>str</td>
+<td>datetime64[us]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>PERIODO</td>
+<td>PERIODO</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_FECHA_ENVIO</td>
+<td>USUARIO_FECHA_ENVIO</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío.</td>
+<td>str</td>
+<td>datetime64[s]</td>
+<td>cast_to_datetime_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ANO_APLICACION</td>
+<td>ANO_APLICACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CLASIFICACION</td>
+<td>CLASIFICACION</td>
+<td></td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>ORIGEN_INFORMACION</td>
+<td>ORIGEN_INFORMACION</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>SEC_EJEC</td>
+<td>SEC_EJEC</td>
+<td></td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>CORREO</td>
+<td>CORREO</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto.</td>
+<td>str</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>USUARIO_ENVIO_ID</td>
+<td>USUARIO_ENVIO_ID</td>
+<td>preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original.</td>
+<td>str</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>source_system</td>
+<td>source_system</td>
+<td>Sistema de origen de los datos.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Sistema de origen de los datos.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>source_dataset</td>
+<td>source_dataset</td>
+<td>Nombre del dataset de origen.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Nombre del dataset de origen.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>silver_processed_at</td>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Fecha y hora en que el registro fue procesado hacia Silver.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>anio_periodo_key</td>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>True</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal.</td>
+</tr>
+<tr>
+<td>rentas_entidad_estado</td>
+<td>record_hash</td>
+<td>record_hash</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+<td>not_in_bronze</td>
+<td>technical</td>
+<td>added_technical_column</td>
+<td>False</td>
+<td>True</td>
+<td>silver_pipeline</td>
+<td>Huella del registro para trazabilidad y detección de cambios.</td>
+</tr>
+</tbody></table>
+</div>
+</body>
+</html>

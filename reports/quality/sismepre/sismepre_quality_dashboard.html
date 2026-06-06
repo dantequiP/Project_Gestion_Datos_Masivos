@@ -1,38 +1,206 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Dashboard Calidad SISMEPRE</title><style>
     body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
-    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:24px} header p{margin:8px 0 0;color:#cbd5e1}
+    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:25px} header p{margin:8px 0 0;color:#cbd5e1}
     main{padding:24px 32px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card,.qcard{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .qcard{min-height:180px}.qcard h3{margin:0 0 6px;font-size:15px}.desc{font-size:12px;color:#6b7280;min-height:34px}
     .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}.value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .score-big{font-size:26px;font-weight:bold;color:#2f7d46;float:right}.small{font-size:12px;color:#6b7280}
     .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
     table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px}
     th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}th{background:#111827;color:white}tr:nth-child(even){background:#fafafa}
-    .bar-wrap{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.bar-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
+    .bar-wrap{width:100%;height:7px;background:#e5e7eb;border-radius:999px;margin:10px 0}.bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .inline-bar{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.inline-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
     .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px;white-space:nowrap}.sin{background:#d9eadf;color:#245c36}.con{background:#fff3cd;color:#7a5b00}.noeval{background:#e5e7eb;color:#374151}
     .alert-card{background:white;border-left:4px solid #c24141;border-radius:10px;padding:12px 16px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .note{background:#eef2ff;border-left:4px solid #3b82f6;border-radius:10px;padding:14px 16px;margin-bottom:20px}
+    code{background:#eef2ff;padding:2px 4px;border-radius:4px}
     </style></head><body>
     <header><h1>Dashboard de Calidad de Datos — SISMEPRE Bronze</h1><p>Evaluación con 8 dimensiones: completitud, exactitud, consistencia, integridad, razonabilidad, oportunidad, unicidad y validez</p></header><main>
-    <div class="cards"><div class="card"><div class="label">Datasets evaluados</div><div class="value">7</div></div><div class="card"><div class="label">Reglas evaluadas</div><div class="value">181</div></div><div class="card"><div class="label">Reglas con observación</div><div class="value">18</div></div><div class="card"><div class="label">Score promedio</div><div class="value">76.1%</div></div></div>
-    <h2 class="section-title">Resumen por dimensión</h2><table><thead><tr><th>Dimensión</th><th>Score promedio</th><th>Reglas</th><th>Observaciones</th></tr></thead><tbody><tr><td><b>Completitud</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:94.83%"></div></div><span class="bar-label">94.8%</span></td><td>58</td><td>57,111</td></tr><tr><td><b>Exactitud</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">0.0%</span></td><td>12</td><td>461,364</td></tr><tr><td><b>Consistencia</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>1</td><td>0</td></tr><tr><td><b>Integridad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:98.09%"></div></div><span class="bar-label">98.1%</span></td><td>4</td><td>10,171</td></tr><tr><td><b>Razonabilidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>25</td><td>0</td></tr><tr><td><b>Oportunidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div><span class="bar-label">N/E</span></td><td>0</td><td>0</td></tr><tr><td><b>Unicidad</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div><span class="bar-label">100.0%</span></td><td>12</td><td>0</td></tr><tr><td><b>Validez</b></td><td><div class="bar-wrap"><div class="bar-fill" style="width:97.33%"></div></div><span class="bar-label">97.3%</span></td><td>69</td><td>34,042</td></tr></tbody></table>
-    <h2 class="section-title">Resumen por dataset</h2><table><thead><tr><th>Dataset</th><th>Reglas</th><th>Reglas con observación</th><th>Observaciones</th><th>Score general</th><th>Estado</th></tr></thead><tbody><tr><td><b>rentas_ano_aplicacion</b></td><td>24</td><td>3</td><td>78</td><td><div class="bar-wrap"><div class="bar-fill" style="width:80.00%"></div></div><span class="bar-label">80.0%</span></td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>rentas_entidad_estado</b></td><td>29</td><td>6</td><td>110,190</td><td><div class="bar-wrap"><div class="bar-fill" style="width:65.79%"></div></div><span class="bar-label">65.8%</span></td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>rentas_esat_estadistica_atm</b></td><td>56</td><td>3</td><td>276,767</td><td><div class="bar-wrap"><div class="bar-fill" style="width:82.06%"></div></div><span class="bar-label">82.1%</span></td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>rentas_estadistica</b></td><td>17</td><td>3</td><td>653</td><td><div class="bar-wrap"><div class="bar-fill" style="width:75.00%"></div></div><span class="bar-label">75.0%</span></td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>rentas_formulario</b></td><td>14</td><td>1</td><td>94</td><td><div class="bar-wrap"><div class="bar-fill" style="width:75.00%"></div></div><span class="bar-label">75.0%</span></td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>rentas_preguntas</b></td><td>17</td><td>1</td><td>696</td><td><div class="bar-wrap"><div class="bar-fill" style="width:75.00%"></div></div><span class="bar-label">75.0%</span></td><td><span class="badge con">Con observaciones</span></td></tr><tr><td><b>rentas_respuestas</b></td><td>24</td><td>1</td><td>174,210</td><td><div class="bar-wrap"><div class="bar-fill" style="width:80.00%"></div></div><span class="bar-label">80.0%</span></td><td><span class="badge con">Con observaciones</span></td></tr></tbody></table>
+    <div class="note">Este dashboard evalúa la calidad interna de SISMEPRE. Las validaciones cruzadas con SIAF y RENAMU se deben incorporar después de ingesta, validación y profiling de esas fuentes.</div>
+    <div class="cards">
+      <div class="card"><div class="label">Datasets evaluados</div><div class="value">7</div></div>
+      <div class="card"><div class="label">Reglas evaluadas</div><div class="value">196</div></div>
+      <div class="card"><div class="label">Reglas con observación</div><div class="value">4</div></div>
+      <div class="card"><div class="label">Score promedio</div><div class="value">99.3%</div></div>
+    </div>
+    <h2 class="section-title">Resumen ejecutivo por dimensión</h2>
+    <div class="quality-grid">
+        <div class="qcard">
+          <h3>Completitud <span class="score-big">94.8%</span></h3>
+          <div class="desc">Campos obligatorios con datos disponibles.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:94.83%"></div></div>
+          <div class="small">Reglas: <b>58</b> · Observaciones: <b>57,111</b></div>
+          <p><span class="badge con">Con observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Exactitud <span class="score-big">100.0%</span></h3>
+          <div class="desc">Valores con formato correcto según el tipo esperado.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>11</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Consistencia <span class="score-big">100.0%</span></h3>
+          <div class="desc">Coherencia entre columnas relacionadas dentro del dataset.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>2</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Integridad <span class="score-big">98.1%</span></h3>
+          <div class="desc">Relaciones válidas entre datasets internos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:98.09%"></div></div>
+          <div class="small">Reglas: <b>4</b> · Observaciones: <b>10,171</b></div>
+          <p><span class="badge con">Con observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Razonabilidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Valores lógicos para el dominio, como montos no negativos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>25</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Oportunidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Vigencia temporal del dato respecto al periodo de análisis.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>23</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Unicidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Ausencia de duplicados y claves candidatas únicas.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>12</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Validez <span class="score-big">100.0%</span></h3>
+          <div class="desc">Formatos, catálogos y tipos de datos permitidos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>61</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        </div>
+    <h2 class="section-title">Observaciones por severidad</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Severidad</th>
+      <th>Reglas con observación</th>
+      <th>Total de observaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Baja</td>
+      <td>3</td>
+      <td>57111</td>
+    </tr>
+    <tr>
+      <td>Media</td>
+      <td>1</td>
+      <td>10171</td>
+    </tr>
+  </tbody>
+</table>
+    <h2 class="section-title">Resumen por dataset</h2>
+    <table><thead><tr><th>Dataset evaluado</th><th>Reglas</th><th>Reglas con observación</th><th>Total de observaciones</th><th>Score general</th><th>Estado</th></tr></thead><tbody>
+        <tr>
+          <td><b>rentas_ano_aplicacion</b></td>
+          <td>25</td>
+          <td>0</td>
+          <td>0</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:100.00%"></span></span><span class="bar-label">100.0%</span></td>
+          <td><span class="badge sin">Sin observaciones</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_entidad_estado</b></td>
+          <td>30</td>
+          <td>3</td>
+          <td>57,111</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:96.15%"></span></span><span class="bar-label">96.2%</span></td>
+          <td><span class="badge con">Con observaciones</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_esat_estadistica_atm</b></td>
+          <td>60</td>
+          <td>1</td>
+          <td>10,171</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:98.91%"></span></span><span class="bar-label">98.9%</span></td>
+          <td><span class="badge con">Con observaciones</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_estadistica</b></td>
+          <td>20</td>
+          <td>0</td>
+          <td>0</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:100.00%"></span></span><span class="bar-label">100.0%</span></td>
+          <td><span class="badge sin">Sin observaciones</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_formulario</b></td>
+          <td>16</td>
+          <td>0</td>
+          <td>0</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:100.00%"></span></span><span class="bar-label">100.0%</span></td>
+          <td><span class="badge sin">Sin observaciones</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_preguntas</b></td>
+          <td>19</td>
+          <td>0</td>
+          <td>0</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:100.00%"></span></span><span class="bar-label">100.0%</span></td>
+          <td><span class="badge sin">Sin observaciones</span></td>
+        </tr>
+        
+        <tr>
+          <td><b>rentas_respuestas</b></td>
+          <td>26</td>
+          <td>0</td>
+          <td>0</td>
+          <td><span class="inline-bar"><span class="inline-fill" style="display:block;width:100.00%"></span></span><span class="bar-label">100.0%</span></td>
+          <td><span class="badge sin">Sin observaciones</span></td>
+        </tr>
+        </tbody></table>
+    <h2 class="section-title">Principales observaciones</h2><div class='alert-card'><b>rentas_entidad_estado</b> · Completitud — Columna con ausencia observada: SEC_EJE<br>Columna: <code>SEC_EJE</code> | Filas observadas: 19,037 | Cumplimiento: 0.0% | Severidad: Baja</div><div class='alert-card'><b>rentas_entidad_estado</b> · Completitud — Columna con ausencia observada: USUARIO_FECHA_ENVIO<br>Columna: <code>USUARIO_FECHA_ENVIO</code> | Filas observadas: 19,037 | Cumplimiento: 0.0% | Severidad: Baja</div><div class='alert-card'><b>rentas_entidad_estado</b> · Completitud — Columna con ausencia observada: CORREO<br>Columna: <code>CORREO</code> | Filas observadas: 19,037 | Cumplimiento: 0.0% | Severidad: Baja</div><div class='alert-card'><b>rentas_esat_estadistica_atm</b> · Integridad — Integridad referencial rentas_esat_estadistica_atm.FORMULARIO_ID → rentas_formulario.FORMULARIO_ID<br>Columna: <code>FORMULARIO_ID</code> | Filas observadas: 10,171 | Cumplimiento: 92.4% | Severidad: Media</div>
+    
+    <h2 class="section-title">Glosario de columnas del reporte</h2>
+    <table><thead><tr><th>Columna técnica</th><th>Nombre en español</th><th>Explicación</th></tr></thead><tbody><tr><td><code>dataset</code></td><td>Dataset evaluado</td><td>Archivo o tabla analizada.</td></tr><tr><td><code>dimension</code></td><td>Dimensión de calidad</td><td>Criterio de calidad evaluado.</td></tr><tr><td><code>rule_id</code></td><td>Identificador de regla</td><td>Código único de la regla aplicada.</td></tr><tr><td><code>rule_name</code></td><td>Regla aplicada</td><td>Descripción breve de la validación.</td></tr><tr><td><code>column_name</code></td><td>Columna evaluada</td><td>Campo específico revisado.</td></tr><tr><td><code>evaluated_rows</code></td><td>Filas evaluadas</td><td>Cantidad de registros revisados por la regla.</td></tr><tr><td><code>passed_rows</code></td><td>Filas que cumplen</td><td>Registros que cumplieron la regla.</td></tr><tr><td><code>failed_rows</code></td><td>Filas observadas</td><td>Registros que no cumplieron o quedaron observados.</td></tr><tr><td><code>score</code></td><td>Porcentaje de cumplimiento</td><td>Porcentaje de cumplimiento de la regla.</td></tr><tr><td><code>severity</code></td><td>Severidad</td><td>Nivel de importancia de la observación.</td></tr><tr><td><code>source</code></td><td>Fuente de la regla</td><td>Origen que justifica la regla: diccionario, profiling o inferencia documentada.</td></tr><tr><td><code>status</code></td><td>Estado</td><td>Resultado de la regla.</td></tr><tr><td><code>sample_failed_rows</code></td><td>Filas de ejemplo</td><td>Índices de filas usados como ejemplo de evidencia.</td></tr></tbody></table>
+    
     <h2 class="section-title">Detalle completo</h2><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>dataset</th>
-      <th>dimension</th>
-      <th>rule_id</th>
-      <th>rule_name</th>
-      <th>column_name</th>
-      <th>rule_type</th>
-      <th>expected_value</th>
-      <th>evaluated_rows</th>
-      <th>passed_rows</th>
-      <th>failed_rows</th>
-      <th>score</th>
-      <th>severity</th>
-      <th>source</th>
-      <th>status</th>
-      <th>observation</th>
+      <th>Dataset evaluado</th>
+      <th>Dimensión de calidad</th>
+      <th>Identificador de regla</th>
+      <th>Regla aplicada</th>
+      <th>Columna evaluada</th>
+      <th>Tipo de regla</th>
+      <th>Valor esperado</th>
+      <th>Filas evaluadas</th>
+      <th>Filas que cumplen</th>
+      <th>Filas observadas</th>
+      <th>Porcentaje de cumplimiento</th>
+      <th>Severidad</th>
+      <th>Fuente de la regla</th>
+      <th>Estado</th>
+      <th>Descripción de la observación</th>
+      <th>Filas de ejemplo</th>
     </tr>
   </thead>
   <tbody>
@@ -52,6 +220,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -69,6 +238,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ESTADO_REGISTRO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -86,6 +256,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -103,6 +274,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -120,6 +292,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -137,6 +310,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PREGUNTA_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -154,6 +328,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en DESCRIPCION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -171,6 +346,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -188,6 +364,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['0', '1']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -205,6 +382,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -222,6 +400,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -239,6 +418,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -256,6 +436,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -273,6 +454,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -290,6 +472,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
@@ -306,24 +489,62 @@
       <td>Alta</td>
       <td>inferred_business_key</td>
       <td>Sin observaciones</td>
-      <td>Registros duplicados según clave candidata.</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Oportunidad</td>
+      <td>rentas_preguntas.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_preguntas</td>
+      <td>Oportunidad</td>
+      <td>rentas_preguntas.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>696</td>
+      <td>696</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_preguntas</td>
       <td>Exactitud</td>
       <td>rentas_preguntas.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>696</td>
       <td>696</td>
       <td>0</td>
-      <td>696</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -341,6 +562,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -358,6 +580,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -375,6 +598,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -392,6 +616,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en MES_ESTADISTICA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -409,6 +634,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ESTADO_REGISTRO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -426,6 +652,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -443,6 +670,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_ESTADISTICA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -460,6 +688,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -477,6 +706,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -494,6 +724,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -511,6 +742,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -528,6 +760,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -545,6 +778,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
@@ -561,58 +795,116 @@
       <td>Media</td>
       <td>inferred_business_key</td>
       <td>Sin observaciones</td>
-      <td>Registros duplicados según clave candidata.</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.ANO_ESTADISTICA.year_not_future</td>
+      <td>Año no futuro: ANO_ESTADISTICA</td>
+      <td>ANO_ESTADISTICA</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.MES_ESTADISTICA.month_period_between</td>
+      <td>Periodo estadístico válido: MES_ESTADISTICA</td>
+      <td>MES_ESTADISTICA</td>
+      <td>month_period_between</td>
+      <td>1-13; 13=periodo especial observado</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv_plus_profiling</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango de periodo estadístico permitido. Se acepta 13 como periodo especial observado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_estadistica</td>
+      <td>Oportunidad</td>
+      <td>rentas_estadistica.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>233</td>
+      <td>233</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
       <td>Exactitud</td>
       <td>rentas_estadistica.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>233</td>
       <td>233</td>
       <td>0</td>
-      <td>233</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_estadistica</td>
       <td>Exactitud</td>
       <td>rentas_estadistica.ANO_ESTADISTICA.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_ESTADISTICA</td>
+      <td>Año con formato de 4 dígitos: ANO_ESTADISTICA</td>
       <td>ANO_ESTADISTICA</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>233</td>
       <td>233</td>
       <td>0</td>
-      <td>233</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
-    </tr>
-    <tr>
-      <td>rentas_estadistica</td>
-      <td>Exactitud</td>
-      <td>rentas_estadistica.ANO_ESTADISTICA_DESC.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_ESTADISTICA_DESC</td>
-      <td>ANO_ESTADISTICA_DESC</td>
-      <td>year_4_digits</td>
-      <td>2000-2030</td>
-      <td>187</td>
-      <td>0</td>
-      <td>187</td>
-      <td>0.0000</td>
-      <td>Alta</td>
-      <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -630,6 +922,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -647,6 +940,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -664,6 +958,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -681,6 +976,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -698,6 +994,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ORDEN_FORMULARIO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -715,6 +1012,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en TITULO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -732,6 +1030,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en TIPO_FORMULARIO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -749,6 +1048,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['C', 'E']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -766,6 +1066,7 @@
       <td>dictionary_csv</td>
       <td>No evaluable</td>
       <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -783,6 +1084,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -800,6 +1102,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -817,6 +1120,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
@@ -833,24 +1137,62 @@
       <td>Alta</td>
       <td>inferred_business_key</td>
       <td>Sin observaciones</td>
-      <td>Registros duplicados según clave candidata.</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_formulario</td>
+      <td>Oportunidad</td>
+      <td>rentas_formulario.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>94</td>
+      <td>94</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_formulario</td>
+      <td>Oportunidad</td>
+      <td>rentas_formulario.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>94</td>
+      <td>94</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_formulario</td>
       <td>Exactitud</td>
       <td>rentas_formulario.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>94</td>
       <td>94</td>
       <td>0</td>
-      <td>94</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -868,6 +1210,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -885,6 +1228,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -902,6 +1246,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en MUNICIPALIDAD_NOMBRE.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -919,6 +1264,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en MES_ESTADISTICA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -936,6 +1282,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PROVINCIA_NOMBRE.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -953,6 +1300,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -970,6 +1318,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PROVINCIA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -987,6 +1336,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_ESTADISTICA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1004,6 +1354,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en DISTRITO_NOMBRE.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1021,6 +1372,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en DISTRITO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1038,6 +1390,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en DEPARTAMENTO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1055,6 +1408,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en UBIGEO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1072,6 +1426,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1089,6 +1444,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en SEC_EJEC.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1106,6 +1462,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en DEPARTAMENTO_NOMBRE.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1123,6 +1480,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['S', 'N']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1140,6 +1498,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['S', 'N']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1157,6 +1516,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1174,6 +1534,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1191,6 +1552,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1208,6 +1570,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1225,6 +1588,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1242,6 +1606,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1258,41 +1623,116 @@
       <td>Media</td>
       <td>inferred_business_key</td>
       <td>Sin observaciones</td>
-      <td>Registros duplicados según clave candidata.</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_esat_estadistica_atm</td>
+      <td>Oportunidad</td>
+      <td>rentas_esat_estadistica_atm.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>133298</td>
+      <td>133298</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_esat_estadistica_atm</td>
+      <td>Oportunidad</td>
+      <td>rentas_esat_estadistica_atm.ANO_ESTADISTICA.year_not_future</td>
+      <td>Año no futuro: ANO_ESTADISTICA</td>
+      <td>ANO_ESTADISTICA</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>133298</td>
+      <td>133298</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_esat_estadistica_atm</td>
+      <td>Oportunidad</td>
+      <td>rentas_esat_estadistica_atm.MES_ESTADISTICA.month_period_between</td>
+      <td>Periodo estadístico válido: MES_ESTADISTICA</td>
+      <td>MES_ESTADISTICA</td>
+      <td>month_period_between</td>
+      <td>1-13; 13=periodo especial observado</td>
+      <td>133298</td>
+      <td>133298</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv_plus_profiling</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango de periodo estadístico permitido. Se acepta 13 como periodo especial observado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_esat_estadistica_atm</td>
+      <td>Oportunidad</td>
+      <td>rentas_esat_estadistica_atm.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>133298</td>
+      <td>133298</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
       <td>Exactitud</td>
       <td>rentas_esat_estadistica_atm.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>133298</td>
       <td>133298</td>
       <td>0</td>
-      <td>133298</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
       <td>Exactitud</td>
       <td>rentas_esat_estadistica_atm.ANO_ESTADISTICA.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_ESTADISTICA</td>
+      <td>Año con formato de 4 dígitos: ANO_ESTADISTICA</td>
       <td>ANO_ESTADISTICA</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>133298</td>
       <td>133298</td>
       <td>0</td>
-      <td>133298</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1310,6 +1750,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1327,6 +1768,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1344,6 +1786,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1361,6 +1804,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1378,6 +1822,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1395,6 +1840,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1412,6 +1858,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1429,6 +1876,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1446,6 +1894,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1463,6 +1912,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1480,6 +1930,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1497,6 +1948,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1514,6 +1966,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1531,6 +1984,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1548,6 +2002,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1565,6 +2020,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1582,6 +2038,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1599,6 +2056,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1616,6 +2074,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1633,6 +2092,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1650,6 +2110,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1667,6 +2128,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1684,6 +2146,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1701,6 +2164,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1718,6 +2182,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1735,6 +2200,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores que no cumplen el patrón ^\d{6}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1752,6 +2218,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores que no cumplen el patrón ^\d{2}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1769,6 +2236,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores que no cumplen el patrón ^\d{2}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -1786,6 +2254,7 @@
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
       <td>Valores que no cumplen el patrón ^\d{2}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1803,6 +2272,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1820,6 +2290,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1837,6 +2308,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PREGUNTA_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1854,6 +2326,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en SEC_EJEC.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1871,6 +2344,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1888,6 +2362,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en RESPUESTA_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1905,6 +2380,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1922,6 +2398,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ESTADO_REGISTRO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1939,6 +2416,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1956,6 +2434,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1973,6 +2452,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -1990,6 +2470,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2007,6 +2488,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2024,6 +2506,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2041,6 +2524,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2058,6 +2542,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2075,6 +2560,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2092,6 +2578,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -2108,41 +2595,80 @@
       <td>Media</td>
       <td>inferred_business_key</td>
       <td>Sin observaciones</td>
-      <td>Registros duplicados según clave candidata.</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>Oportunidad</td>
+      <td>rentas_respuestas.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>174210</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>Oportunidad</td>
+      <td>rentas_respuestas.RESPUESTA_FECHA.date_not_future</td>
+      <td>Fecha no futura: RESPUESTA_FECHA</td>
+      <td>RESPUESTA_FECHA</td>
+      <td>date_not_future</td>
+      <td><= 2026-06-04</td>
+      <td>4102</td>
+      <td>4102</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Fechas posteriores a la ejecución del pipeline o no convertibles a fecha.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_respuestas</td>
+      <td>Oportunidad</td>
+      <td>rentas_respuestas.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>174210</td>
+      <td>174210</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
       <td>Exactitud</td>
       <td>rentas_respuestas.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
       <td>174210</td>
-      <td>0</td>
       <td>174210</td>
-      <td>0.0000</td>
-      <td>Alta</td>
-      <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
-    </tr>
-    <tr>
-      <td>rentas_respuestas</td>
-      <td>Validez</td>
-      <td>rentas_respuestas.RESPUESTA_FECHA.date_parseable</td>
-      <td>Fecha parseable: RESPUESTA_FECHA</td>
-      <td>RESPUESTA_FECHA</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>4102</td>
-      <td>4102</td>
       <td>0</td>
       <td>100.0000</td>
-      <td>Media</td>
+      <td>Alta</td>
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2160,6 +2686,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2177,6 +2704,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ESTADO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2194,6 +2722,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2211,6 +2740,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION_FIN.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2228,6 +2758,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION_INICIO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2245,6 +2776,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en FECHA_CIERRE.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2262,6 +2794,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2279,6 +2812,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2296,6 +2830,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2313,6 +2848,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2330,6 +2866,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2347,6 +2884,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2364,6 +2902,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2381,6 +2920,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2398,6 +2938,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2415,6 +2956,7 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
@@ -2432,125 +2974,151 @@
       <td>dictionary_csv</td>
       <td>Sin observaciones</td>
       <td>Registros donde ANO_APLICACION_INICIO no es menor o igual que ANO_APLICACION_FIN.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_ano_aplicacion</td>
+      <td>Oportunidad</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>26</td>
+      <td>26</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_ano_aplicacion</td>
+      <td>Oportunidad</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION_INICIO.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION_INICIO</td>
+      <td>ANO_APLICACION_INICIO</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>26</td>
+      <td>26</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_ano_aplicacion</td>
+      <td>Oportunidad</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION_FIN.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION_FIN</td>
+      <td>ANO_APLICACION_FIN</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>26</td>
+      <td>26</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_ano_aplicacion</td>
+      <td>Oportunidad</td>
+      <td>rentas_ano_aplicacion.FECHA_ING.date_not_future</td>
+      <td>Fecha no futura: FECHA_ING</td>
+      <td>FECHA_ING</td>
+      <td>date_not_future</td>
+      <td><= 2026-06-04</td>
+      <td>16</td>
+      <td>16</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Fechas posteriores a la ejecución del pipeline o no convertibles a fecha.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_ano_aplicacion</td>
+      <td>Oportunidad</td>
+      <td>rentas_ano_aplicacion.FECHA_PRES_OFICIO.date_not_future</td>
+      <td>Fecha no futura: FECHA_PRES_OFICIO</td>
+      <td>FECHA_PRES_OFICIO</td>
+      <td>date_not_future</td>
+      <td><= 2026-06-04</td>
+      <td>20</td>
+      <td>20</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>dictionary_csv</td>
+      <td>Sin observaciones</td>
+      <td>Fechas posteriores a la ejecución del pipeline o no convertibles a fecha.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
       <td>Exactitud</td>
       <td>rentas_ano_aplicacion.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>26</td>
       <td>26</td>
       <td>0</td>
-      <td>26</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
       <td>Exactitud</td>
       <td>rentas_ano_aplicacion.ANO_APLICACION_FIN.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION_FIN</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION_FIN</td>
       <td>ANO_APLICACION_FIN</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>26</td>
       <td>26</td>
       <td>0</td>
-      <td>26</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_ano_aplicacion</td>
       <td>Exactitud</td>
       <td>rentas_ano_aplicacion.ANO_APLICACION_INICIO.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION_INICIO</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION_INICIO</td>
       <td>ANO_APLICACION_INICIO</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
+      <td>1000-9999</td>
+      <td>26</td>
       <td>26</td>
       <td>0</td>
-      <td>26</td>
-      <td>0.0000</td>
+      <td>100.0000</td>
       <td>Alta</td>
       <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
-    </tr>
-    <tr>
-      <td>rentas_ano_aplicacion</td>
-      <td>Validez</td>
-      <td>rentas_ano_aplicacion.FECHA_CIERRE.date_parseable</td>
-      <td>Fecha parseable: FECHA_CIERRE</td>
-      <td>FECHA_CIERRE</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>26</td>
-      <td>26</td>
-      <td>0</td>
-      <td>100.0000</td>
-      <td>Media</td>
-      <td>naming_pattern</td>
       <td>Sin observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
-    </tr>
-    <tr>
-      <td>rentas_ano_aplicacion</td>
-      <td>Validez</td>
-      <td>rentas_ano_aplicacion.FECHA_ING.date_parseable</td>
-      <td>Fecha parseable: FECHA_ING</td>
-      <td>FECHA_ING</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>16</td>
-      <td>16</td>
-      <td>0</td>
-      <td>100.0000</td>
-      <td>Media</td>
-      <td>naming_pattern</td>
-      <td>Sin observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
-    </tr>
-    <tr>
-      <td>rentas_ano_aplicacion</td>
-      <td>Validez</td>
-      <td>rentas_ano_aplicacion.FECHA_INI_CIERRE.date_parseable</td>
-      <td>Fecha parseable: FECHA_INI_CIERRE</td>
-      <td>FECHA_INI_CIERRE</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>20</td>
-      <td>20</td>
-      <td>0</td>
-      <td>100.0000</td>
-      <td>Media</td>
-      <td>naming_pattern</td>
-      <td>Sin observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
-    </tr>
-    <tr>
-      <td>rentas_ano_aplicacion</td>
-      <td>Validez</td>
-      <td>rentas_ano_aplicacion.FECHA_PRES_OFICIO.date_parseable</td>
-      <td>Fecha parseable: FECHA_PRES_OFICIO</td>
-      <td>FECHA_PRES_OFICIO</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>20</td>
-      <td>20</td>
-      <td>0</td>
-      <td>100.0000</td>
-      <td>Media</td>
-      <td>naming_pattern</td>
-      <td>Sin observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2568,6 +3136,7 @@
       <td>profiling_based</td>
       <td>Sin observaciones</td>
       <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2582,9 +3151,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en TIPO_META.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2599,9 +3169,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ESTADO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2616,9 +3187,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en IND_RESOL_ALCAL_ADJUNTO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2633,9 +3205,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en USUARIO_CREACION_FECHA.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2650,9 +3223,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en PERIODO.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2667,9 +3241,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ANO_APLICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2684,9 +3259,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en CLASIFICACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2701,9 +3277,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en ORIGEN_INFORMACION.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2718,9 +3295,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en SEC_EJEC.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2735,9 +3313,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>fallback_metadata</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Registros vacíos o nulos en USUARIO_ENVIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2755,6 +3334,7 @@
       <td>profiling_based</td>
       <td>Con observaciones</td>
       <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2772,6 +3352,7 @@
       <td>profiling_based</td>
       <td>Con observaciones</td>
       <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2789,6 +3370,7 @@
       <td>profiling_based</td>
       <td>Con observaciones</td>
       <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2797,15 +3379,16 @@
       <td>Valores permitidos en ESTADO</td>
       <td>ESTADO</td>
       <td>allowed_values</td>
-      <td>['A', 'I']</td>
+      <td>['A', 'R', 'E']</td>
       <td>19037</td>
       <td>19037</td>
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
-      <td>Valores fuera del catálogo permitido ['A', 'I']. Los vacíos se evalúan en Completitud.</td>
+      <td>Valores fuera del catálogo permitido ['A', 'R', 'E']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2820,9 +3403,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Media</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['P', 'A']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2837,9 +3421,28 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Media</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores fuera del catálogo permitido ['A', 'B', 'C', 'D', 'E', 'F', 'G']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_entidad_estado</td>
+      <td>Validez</td>
+      <td>rentas_entidad_estado.ORIGEN_INFORMACION.allowed_values</td>
+      <td>Valores permitidos en ORIGEN_INFORMACION</td>
+      <td>ORIGEN_INFORMACION</td>
+      <td>allowed_values</td>
+      <td>['1', '2', '3']</td>
+      <td>19037</td>
+      <td>19037</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>embedded_dictionary</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2', '3']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2854,9 +3457,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2871,9 +3475,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2888,9 +3493,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2905,9 +3511,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2922,9 +3529,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2939,9 +3547,10 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Alta</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
@@ -2956,94 +3565,100 @@
       <td>0</td>
       <td>100.0000</td>
       <td>Media</td>
-      <td>profiling_based</td>
+      <td>embedded_dictionary</td>
       <td>Sin observaciones</td>
       <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
-      <td>Validez</td>
-      <td>rentas_entidad_estado.FECHA_RESOL_ALCAL_ADJUNTO.date_parseable</td>
-      <td>Fecha parseable: FECHA_RESOL_ALCAL_ADJUNTO</td>
-      <td>FECHA_RESOL_ALCAL_ADJUNTO</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>19037</td>
+      <td>Consistencia</td>
+      <td>rentas_entidad_estado.FECHA_RESOL_ALCAL_ADJUNTO.conditional_date</td>
+      <td>Fecha válida en FECHA_RESOL_ALCAL_ADJUNTO cuando IND_RESOL_ALCAL_ADJUNTO = A</td>
+      <td>IND_RESOL_ALCAL_ADJUNTO,FECHA_RESOL_ALCAL_ADJUNTO</td>
+      <td>conditional_date</td>
+      <td>FECHA_RESOL_ALCAL_ADJUNTO fecha válida si IND_RESOL_ALCAL_ADJUNTO=A</td>
       <td>2016</td>
-      <td>17021</td>
-      <td>10.5899</td>
+      <td>2016</td>
+      <td>0</td>
+      <td>100.0000</td>
       <td>Media</td>
-      <td>profiling_based</td>
-      <td>Con observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>embedded_dictionary</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde IND_RESOL_ALCAL_ADJUNTO=A pero FECHA_RESOL_ALCAL_ADJUNTO no es fecha válida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_entidad_estado</td>
+      <td>Oportunidad</td>
+      <td>rentas_entidad_estado.ANO_APLICACION.year_not_future</td>
+      <td>Año no futuro: ANO_APLICACION</td>
+      <td>ANO_APLICACION</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>19037</td>
+      <td>19037</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>embedded_dictionary</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_entidad_estado</td>
+      <td>Oportunidad</td>
+      <td>rentas_entidad_estado.USUARIO_CREACION_FECHA.date_not_future</td>
+      <td>Fecha no futura: USUARIO_CREACION_FECHA</td>
+      <td>USUARIO_CREACION_FECHA</td>
+      <td>date_not_future</td>
+      <td><= 2026-06-04</td>
+      <td>19037</td>
+      <td>19037</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>embedded_dictionary</td>
+      <td>Sin observaciones</td>
+      <td>Fechas posteriores a la ejecución del pipeline o no convertibles a fecha.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>rentas_entidad_estado</td>
+      <td>Oportunidad</td>
+      <td>rentas_entidad_estado.ANO_APLICACION+PERIODO.temporal_catalog_exists</td>
+      <td>Año/periodo reconocido en catálogo temporal SISMEPRE</td>
+      <td>ANO_APLICACION,PERIODO</td>
+      <td>temporal_catalog_exists</td>
+      <td>rentas_ano_aplicacion.ANO_APLICACION,PERIODO</td>
+      <td>19037</td>
+      <td>19037</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>internal_temporal_catalog</td>
+      <td>Sin observaciones</td>
+      <td>Combinaciones ['ANO_APLICACION', 'PERIODO'] que no existen en rentas_ano_aplicacion.['ANO_APLICACION', 'PERIODO'].</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_entidad_estado</td>
       <td>Exactitud</td>
       <td>rentas_entidad_estado.ANO_APLICACION.year_4_digits</td>
-      <td>Año de 4 dígitos en rango: ANO_APLICACION</td>
+      <td>Año con formato de 4 dígitos: ANO_APLICACION</td>
       <td>ANO_APLICACION</td>
       <td>year_4_digits</td>
-      <td>2000-2030</td>
-      <td>19037</td>
-      <td>0</td>
-      <td>19037</td>
-      <td>0.0000</td>
-      <td>Alta</td>
-      <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores que no tienen 4 dígitos o no están entre 2000 y 2030.</td>
-    </tr>
-    <tr>
-      <td>rentas_entidad_estado</td>
-      <td>Validez</td>
-      <td>rentas_entidad_estado.FECHA_RESOL_ALCAL_ADJUNTO.date_parseable</td>
-      <td>Fecha parseable: FECHA_RESOL_ALCAL_ADJUNTO</td>
-      <td>FECHA_RESOL_ALCAL_ADJUNTO</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>19037</td>
-      <td>2016</td>
-      <td>17021</td>
-      <td>10.5899</td>
-      <td>Media</td>
-      <td>naming_pattern</td>
-      <td>Con observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
-    </tr>
-    <tr>
-      <td>rentas_entidad_estado</td>
-      <td>Validez</td>
-      <td>rentas_entidad_estado.USUARIO_CREACION_FECHA.date_parseable</td>
-      <td>Fecha parseable: USUARIO_CREACION_FECHA</td>
-      <td>USUARIO_CREACION_FECHA</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
+      <td>1000-9999</td>
       <td>19037</td>
       <td>19037</td>
       <td>0</td>
       <td>100.0000</td>
-      <td>Media</td>
+      <td>Alta</td>
       <td>naming_pattern</td>
       <td>Sin observaciones</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
-    </tr>
-    <tr>
-      <td>rentas_entidad_estado</td>
-      <td>Validez</td>
-      <td>rentas_entidad_estado.USUARIO_FECHA_ENVIO.date_parseable</td>
-      <td>Fecha parseable: USUARIO_FECHA_ENVIO</td>
-      <td>USUARIO_FECHA_ENVIO</td>
-      <td>date_parseable</td>
-      <td>fecha válida</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>Media</td>
-      <td>naming_pattern</td>
-      <td>No evaluable</td>
-      <td>Valores no convertibles a fecha. Los vacíos se evalúan en Completitud.</td>
+      <td>Valores que no tienen 4 dígitos. La vigencia temporal se evalúa en Oportunidad.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -3061,6 +3676,7 @@
       <td>referential_rule</td>
       <td>Sin observaciones</td>
       <td>Valores de rentas_respuestas.FORMULARIO_ID que no existen en rentas_formulario.FORMULARIO_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -3078,6 +3694,7 @@
       <td>referential_rule</td>
       <td>Sin observaciones</td>
       <td>Valores de rentas_respuestas.PREGUNTA_ID que no existen en rentas_preguntas.PREGUNTA_ID.</td>
+      <td>[]</td>
     </tr>
     <tr>
       <td>rentas_esat_estadistica_atm</td>
@@ -3095,6 +3712,7 @@
       <td>referential_rule</td>
       <td>Con observaciones</td>
       <td>Valores de rentas_esat_estadistica_atm.FORMULARIO_ID que no existen en rentas_formulario.FORMULARIO_ID.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
     </tr>
     <tr>
       <td>rentas_respuestas</td>
@@ -3112,6 +3730,7 @@
       <td>referential_rule</td>
       <td>Sin observaciones</td>
       <td>Valores de rentas_respuestas.SEC_EJEC que no existen en rentas_entidad_estado.SEC_EJEC.</td>
+      <td>[]</td>
     </tr>
   </tbody>
 </table>

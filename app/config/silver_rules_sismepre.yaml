@@ -1,0 +1,471 @@
+source_system: "SISMEPRE"
+
+silver_defaults:
+  bronze_base_path: "data/bronze/sismepre"
+  silver_base_path: "data/silver/sismepre"
+  reports_base_path: "reports/silver/sismepre"
+  audit_base_path: "data/audit/silver"
+
+  add_technical_columns: true
+
+  technical_columns:
+    source_system:
+      value: "SISMEPRE"
+      description: "Sistema de origen de los datos."
+    source_dataset:
+      description: "Nombre del dataset de origen."
+    silver_processed_at:
+      description: "Fecha y hora en que el registro fue procesado hacia Silver."
+    record_hash:
+      description: "Huella del registro para trazabilidad y detección de cambios."
+    anio_periodo_key:
+      description: "Clave derivada de ANO_APLICACION y PERIODO para integración y análisis temporal."
+
+  null_handling:
+    convert_missing_tokens_to_null: true
+    missing_tokens:
+      - ""
+      - " "
+      - "NULL"
+      - "null"
+      - "None"
+      - "none"
+      - "NaN"
+      - "nan"
+      - "N/A"
+      - "n/a"
+
+  row_policy:
+    drop_empty_rows: true
+    drop_duplicate_rows: false
+    impute_missing_values: false
+
+  keep_original_column_names: true
+
+
+datasets:
+
+  rentas_ano_aplicacion:
+    integer_columns:
+      - PERIODO
+      - ANO_APLICACION
+      - ANO_APLICACION_INICIO
+      - ANO_APLICACION_FIN
+
+    decimal_columns: []
+
+    datetime_columns:
+      - FECHA_CIERRE
+      - FECHA_INI_CIERRE
+      - FECHA_ING
+      - FECHA_PRES_OFICIO
+
+    string_columns:
+      - ESTADO
+
+    drop_columns: []
+
+    documented_null_columns:
+      FECHA_INI_CIERRE:
+        reason: "Columna parcialmente vacía; los vacíos reales se convierten a null."
+      FECHA_ING:
+        reason: "Columna parcialmente vacía; los vacíos reales se convierten a null."
+      FECHA_PRES_OFICIO:
+        reason: "Columna parcialmente vacía; los vacíos reales se convierten a null."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all
+
+
+  rentas_formulario:
+    integer_columns:
+      - ANO_APLICACION
+      - PERIODO
+      - FORMULARIO_ID
+
+    decimal_columns: []
+
+    datetime_columns: []
+
+    string_columns:
+      - ABREVIATURA
+      - CLASIFICACION
+      - ESTADO_REGISTRO
+      - ORDEN_FORMULARIO
+      - SUB_TITULO
+      - TIPO_FORMULARIO
+      - TITULO
+
+    drop_columns: []
+
+    documented_null_columns:
+      ESTADO_REGISTRO:
+        reason: "Columna 100% vacía en Bronze; se conserva como string nullable por trazabilidad con el diccionario oficial."
+      SUB_TITULO:
+        reason: "Columna parcialmente vacía; se conservan los valores disponibles y los vacíos se convierten a null."
+
+    preserve_as_string:
+      ORDEN_FORMULARIO:
+        reason: "Se conserva como texto para no perder ceros a la izquierda ni formato de orden del formulario."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all
+
+
+  rentas_preguntas:
+    integer_columns:
+      - ANO_APLICACION
+      - PERIODO
+      - FORMULARIO_ID
+      - PREGUNTA_ID
+      - PREGUNTA_PADRE_ID
+      - TIPO_CUESTIONARIO_ID
+      - OBJETO_ACTIVO
+
+    decimal_columns: []
+
+    datetime_columns: []
+
+    string_columns:
+      - ESTADO_REGISTRO
+      - DESCRIPCION
+      - ORDEN_PREGUNTA
+      - RANGO_INI
+      - RANGO_FIN
+      - RESPUESTA
+      - TEXTO_LECTURA
+      - TEXTO_APOYO
+
+    drop_columns: []
+
+    documented_null_columns:
+      RANGO_INI:
+        reason: "Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta."
+      RANGO_FIN:
+        reason: "Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta."
+      RESPUESTA:
+        reason: "Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta."
+      TEXTO_LECTURA:
+        reason: "Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica."
+      TEXTO_APOYO:
+        reason: "Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica."
+
+    preserve_as_string:
+      ORDEN_PREGUNTA:
+        reason: "Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos."
+      RANGO_INI:
+        reason: "Contiene mezcla de números, fechas y valores especiales; se conserva como texto."
+      RANGO_FIN:
+        reason: "Contiene mezcla de números, fechas y valores especiales; se conserva como texto."
+      RESPUESTA:
+        reason: "Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all
+
+
+  rentas_estadistica:
+    integer_columns:
+      - FORMULARIO_ID
+      - PERIODO
+      - MES_ESTADISTICA
+      - ANO_APLICACION
+      - ANO_ESTADISTICA
+
+    decimal_columns: []
+
+    datetime_columns: []
+
+    string_columns:
+      - ANO_ESTADISTICA_DESC
+      - ESTADO_REGISTRO
+
+    drop_columns: []
+
+    documented_null_columns:
+      ANO_ESTADISTICA_DESC:
+        reason: "Columna parcialmente vacía; se conserva como descripción textual del año o periodo estadístico."
+
+    preserve_as_string:
+      ANO_ESTADISTICA_DESC:
+        reason: "Puede contener valores compuestos como 2024-I o 2024-II; no debe convertirse a entero."
+
+    special_values:
+      MES_ESTADISTICA:
+        value: 13
+        treatment: "preserve"
+        reason: "Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all
+
+
+  rentas_respuestas:
+    integer_columns:
+      - ANO_APLICACION
+      - PERIODO
+      - SEC_EJEC
+      - FORMULARIO_ID
+      - PREGUNTA_ID
+      - RESPUESTA_ID
+      - RESPUESTA_ENTERO
+
+    decimal_columns:
+      - RESPUESTA_DECIMAL
+
+    datetime_columns:
+      - RESPUESTA_FECHA
+
+    string_columns:
+      - RESPUESTA_TEXTO
+      - ESTADO_REGISTRO
+
+    drop_columns: []
+
+    documented_null_columns:
+      RESPUESTA_FECHA:
+        reason: "Columna parcialmente vacía; solo aplica cuando la respuesta corresponde a una fecha."
+      RESPUESTA_TEXTO:
+        reason: "Columna parcialmente vacía; puede no aplicar cuando la respuesta está representada como entero, decimal o fecha."
+
+    preserve_zero_values:
+      RESPUESTA_DECIMAL:
+        reason: "El valor 0 puede representar una respuesta válida; no se convierte a null."
+      RESPUESTA_ENTERO:
+        reason: "El valor 0 puede representar una respuesta válida; no se convierte a null."
+
+    preserve_as_string:
+      RESPUESTA_TEXTO:
+        reason: "Puede contener texto libre, respuestas S/N, códigos o números expresados como texto."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all
+
+
+  rentas_entidad_estado:
+    integer_columns:
+      - TIPO_META
+      - PERIODO
+      - ANO_APLICACION
+      - ORIGEN_INFORMACION
+      - SEC_EJEC
+      - USUARIO_ENVIO_ID
+
+    decimal_columns: []
+
+    datetime_columns:
+      - USUARIO_CREACION_FECHA
+      - FECHA_RESOL_ALCAL_ADJUNTO
+      - USUARIO_FECHA_ENVIO
+
+    string_columns:
+      - ESTADO
+      - IND_RESOL_ALCAL_ADJUNTO
+      - CLASIFICACION
+      - CORREO
+
+    drop_columns:
+      SEC_EJE:
+        reason: "Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local."
+
+    special_values_to_null:
+      FECHA_RESOL_ALCAL_ADJUNTO:
+        values:
+          - "0"
+        reason: "El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime."
+
+    documented_null_columns:
+      USUARIO_FECHA_ENVIO:
+        reason: "Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío."
+      CORREO:
+        reason: "Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto."
+      FECHA_RESOL_ALCAL_ADJUNTO:
+        reason: "Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas."
+
+    preserve_zero_values:
+      USUARIO_ENVIO_ID:
+        reason: "El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all
+
+
+  rentas_esat_estadistica_atm:
+    integer_columns:
+      - ANO_APLICACION
+      - ANO_ESTADISTICA
+      - PERIODO
+      - MES_ESTADISTICA
+      - FORMULARIO_ID
+      - SEC_EJEC
+      - NUM_CONTRIBADULTOMAYOR
+      - NUM_CONTRIPREDIO
+      - NUM_EMISIONPREDIAL_AFECTO
+      - NUM_EMISIONPREDIAL_CASA
+      - NUM_EMISIONPREDIAL_EXON
+      - NUM_EMISIONPREDIAL_OTROS
+      - NUM_INAFECTOS
+      - NUM_PREDIOOTROUSO
+      - NUM_PREDIOTOTAL
+      - NUM_PREDIOUSOCH
+
+    decimal_columns:
+      - MON_AUTOAVALUO_INAFECTO
+      - MON_BASEIMPONIBLE_AFECTO
+      - MON_BASEIMPONIBLE_EXON
+      - MON_EMISIONPREDIAL_AFECTO
+      - MON_EMISIONPREDIAL_EXON
+      - MON_EMISIONPREDIAL_INSO
+      - MON_INICIALADULTOMAYOR
+      - MON_PREDIALADULTOMAYOR
+      - MON_RECAUDACTUAL_COAC
+      - MON_RECAUDACTUAL_ORDIN
+      - MON_RECAUDANTER_COAC
+      - MON_RECAUDANTER_ORDI
+      - MON_RECUADADULTOMAYOR
+      - MON_SALDOPREDIAL_COAC
+      - MON_SALDOPREDIAL_ORD
+
+    datetime_columns: []
+
+    string_columns:
+      - TIPO_META
+      - DEPARTAMENTO
+      - PROVINCIA
+      - DISTRITO
+      - UBIGEO
+      - DEPARTAMENTO_NOMBRE
+      - PROVINCIA_NOMBRE
+      - DISTRITO_NOMBRE
+      - MUNICIPALIDAD_NOMBRE
+      - FLAG_EMILIQUIDA
+      - FLAG_EMISION_INICIAL
+
+    drop_columns: []
+
+    documented_null_columns:
+      TIPO_META:
+        reason: "Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente."
+      FLAG_EMILIQUIDA:
+        reason: "Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica."
+      FLAG_EMISION_INICIAL:
+        reason: "Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica."
+
+    preserve_zero_values:
+      FORMULARIO_ID:
+        reason: "El valor 0 se conserva como valor observado de la fuente; no se convierte a null."
+      MON_AUTOAVALUO_INAFECTO:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_BASEIMPONIBLE_AFECTO:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_BASEIMPONIBLE_EXON:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_EMISIONPREDIAL_AFECTO:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_EMISIONPREDIAL_EXON:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_EMISIONPREDIAL_INSO:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_INICIALADULTOMAYOR:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_PREDIALADULTOMAYOR:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_RECAUDACTUAL_COAC:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_RECAUDACTUAL_ORDIN:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_RECAUDANTER_COAC:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_RECAUDANTER_ORDI:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_RECUADADULTOMAYOR:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_SALDOPREDIAL_COAC:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      MON_SALDOPREDIAL_ORD:
+        reason: "El valor 0 puede representar un monto válido; no se convierte a null."
+      NUM_CONTRIBADULTOMAYOR:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_CONTRIPREDIO:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_EMISIONPREDIAL_AFECTO:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_EMISIONPREDIAL_CASA:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_EMISIONPREDIAL_EXON:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_EMISIONPREDIAL_OTROS:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_INAFECTOS:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_PREDIOOTROUSO:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_PREDIOTOTAL:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+      NUM_PREDIOUSOCH:
+        reason: "El valor 0 puede representar una cantidad válida; no se convierte a null."
+
+    preserve_as_string:
+      DEPARTAMENTO:
+        reason: "Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda."
+      PROVINCIA:
+        reason: "Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda."
+      DISTRITO:
+        reason: "Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda."
+      UBIGEO:
+        reason: "Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda."
+
+    special_values:
+      MES_ESTADISTICA:
+        value: 13
+        treatment: "preserve"
+        reason: "Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual."
+      FORMULARIO_ID:
+        value: 0
+        treatment: "preserve"
+        reason: "Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior."
+
+    derived_columns:
+      anio_periodo_key:
+        enabled: true
+        source_columns:
+          - ANO_APLICACION
+          - PERIODO
+
+    keep_columns: all

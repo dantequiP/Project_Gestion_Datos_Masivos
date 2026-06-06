@@ -1,0 +1,41 @@
+﻿dataset,rule_id,dimension,column_name,row_index,expected_value,SEC_EJE,USUARIO_FECHA_ENVIO,CORREO,FORMULARIO_ID
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,0,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,1,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,2,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,3,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,4,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,5,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,6,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,7,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,8,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.SEC_EJE.observed_empty,Completitud,SEC_EJE,9,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,0,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,1,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,2,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,3,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,4,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,5,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,6,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,7,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,8,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.USUARIO_FECHA_ENVIO.observed_empty,Completitud,USUARIO_FECHA_ENVIO,9,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,0,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,1,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,2,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,3,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,4,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,5,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,6,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,7,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,8,revisar ausencia,,,,
+rentas_entidad_estado,rentas_entidad_estado.CORREO.observed_empty,Completitud,CORREO,9,revisar ausencia,,,,
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,0,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,1,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,2,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,3,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,4,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,5,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,6,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,7,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,8,rentas_formulario.FORMULARIO_ID,,,,0
+rentas_esat_estadistica_atm,rentas_esat_estadistica_atm.FORMULARIO_ID.ref_integrity,Integridad,FORMULARIO_ID,9,rentas_formulario.FORMULARIO_ID,,,,0

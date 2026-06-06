@@ -1,0 +1,109 @@
+﻿dataset,column_name,bronze_type,silver_type,transformation,nulls_before,nulls_after,conversion_errors,special_values_handled,status,reason
+rentas_ano_aplicacion,ESTADO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_ano_aplicacion,FECHA_INI_CIERRE,str,datetime64[us],cast_to_datetime_nullable,6,6.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.
+rentas_ano_aplicacion,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_ano_aplicacion,ANO_APLICACION_FIN,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_ano_aplicacion,ANO_APLICACION_INICIO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_ano_aplicacion,FECHA_ING,str,datetime64[us],cast_to_datetime_nullable,10,10.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.
+rentas_ano_aplicacion,FECHA_PRES_OFICIO,str,datetime64[us],cast_to_datetime_nullable,6,6.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; los vacíos reales se convierten a null.
+rentas_ano_aplicacion,FECHA_CIERRE,str,datetime64[us],cast_to_datetime_nullable,0,0.0,0,0,OK,
+rentas_ano_aplicacion,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_formulario,ORDEN_FORMULARIO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni formato de orden del formulario.
+rentas_formulario,ESTADO_REGISTRO,str,string,cast_to_string_nullable,94,94.0,0,0,OK,documented_null_columns: Columna 100% vacía en Bronze; se conserva como string nullable por trazabilidad con el diccionario oficial.
+rentas_formulario,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_formulario,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_formulario,TIPO_FORMULARIO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_formulario,FORMULARIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_formulario,TITULO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_formulario,SUB_TITULO,str,string,cast_to_string_nullable,88,88.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; se conservan los valores disponibles y los vacíos se convierten a null.
+rentas_formulario,CLASIFICACION,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_formulario,ABREVIATURA,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_preguntas,ESTADO_REGISTRO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_preguntas,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,PREGUNTA_PADRE_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,RANGO_FIN,str,string,cast_to_string_nullable,458,458.0,0,0,OK,"documented_null_columns: Columna parcialmente vacía; representa rango final condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto."
+rentas_preguntas,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,RESPUESTA,str,string,cast_to_string_nullable,445,445.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; puede contener respuestas o códigos esperados según la pregunta. | preserve_as_string: Puede contener valores alfanuméricos como S/N o códigos numéricos; se conserva como texto.
+rentas_preguntas,ORDEN_PREGUNTA,str,string,cast_to_string_nullable,0,0.0,0,0,OK,preserve_as_string: Se conserva como texto para no perder ceros a la izquierda ni códigos jerárquicos.
+rentas_preguntas,TEXTO_LECTURA,str,string,cast_to_string_nullable,398,398.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; contiene instrucciones adicionales solo cuando aplica.
+rentas_preguntas,TEXTO_APOYO,str,string,cast_to_string_nullable,405,405.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; contiene placeholder o texto de apoyo solo cuando aplica.
+rentas_preguntas,OBJETO_ACTIVO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,TIPO_CUESTIONARIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,FORMULARIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,DESCRIPCION,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_preguntas,PREGUNTA_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_preguntas,RANGO_INI,str,string,cast_to_string_nullable,458,458.0,0,0,OK,"documented_null_columns: Columna parcialmente vacía; representa rango inicial condicionado por tipo de pregunta. | preserve_as_string: Contiene mezcla de números, fechas y valores especiales; se conserva como texto."
+rentas_estadistica,ANO_ESTADISTICA_DESC,str,string,cast_to_string_nullable,46,46.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; se conserva como descripción textual del año o periodo estadístico. | preserve_as_string: Puede contener valores compuestos como 2024-I o 2024-II; no debe convertirse a entero.
+rentas_estadistica,FORMULARIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_estadistica,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_estadistica,MES_ESTADISTICA,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,"special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual."
+rentas_estadistica,ESTADO_REGISTRO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_estadistica,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_estadistica,ANO_ESTADISTICA,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,RESPUESTA_TEXTO,str,string,cast_to_string_nullable,2,2.0,0,0,OK,"documented_null_columns: Columna parcialmente vacía; puede no aplicar cuando la respuesta está representada como entero, decimal o fecha. | preserve_as_string: Puede contener texto libre, respuestas S/N, códigos o números expresados como texto."
+rentas_respuestas,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,PREGUNTA_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,SEC_EJEC,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,RESPUESTA_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,RESPUESTA_DECIMAL,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.
+rentas_respuestas,RESPUESTA_ENTERO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una respuesta válida; no se convierte a null.
+rentas_respuestas,FORMULARIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_respuestas,ESTADO_REGISTRO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_respuestas,RESPUESTA_FECHA,str,datetime64[us],cast_to_datetime_nullable,170108,170108.0,0,0,OK,documented_null_columns: Columna parcialmente vacía; solo aplica cuando la respuesta corresponde a una fecha.
+rentas_entidad_estado,SEC_EJE,object,dropped,drop_column,19037,,0,0,DROPPED,Columna 100% vacía en Bronze. No participa en relaciones internas ni aporta valor analítico. Se conserva SEC_EJEC como identificador válido del gobierno local.
+rentas_entidad_estado,TIPO_META,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,ESTADO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,IND_RESOL_ALCAL_ADJUNTO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,USUARIO_CREACION_FECHA,str,datetime64[us],cast_to_datetime_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,FECHA_RESOL_ALCAL_ADJUNTO,str,datetime64[us],cast_to_datetime_nullable,17021,17021.0,0,17021,OK,documented_null_columns: Contiene 0 como valor especial de ausencia. En Silver se normaliza 0 a null y se conservan fechas válidas. | special_values_to_null: El valor 0 representa ausencia de fecha/no aplica cuando la resolución no está adjunta o está pendiente. Las fechas válidas se conservan como datetime.
+rentas_entidad_estado,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,USUARIO_FECHA_ENVIO,str,datetime64[s],cast_to_datetime_nullable,19037,19037.0,0,0,OK,"documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como campo potencial de trazabilidad operativa del envío."
+rentas_entidad_estado,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,CLASIFICACION,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,ORIGEN_INFORMACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,SEC_EJEC,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_entidad_estado,CORREO,str,string,cast_to_string_nullable,19037,19037.0,0,0,OK,"documented_null_columns: Columna 100% vacía en Bronze, pero se conserva por posible utilidad futura como dato de contacto."
+rentas_entidad_estado,USUARIO_ENVIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,"preserve_zero_values: El valor 0 puede representar usuario sistema, valor por defecto o ausencia operativa no confirmada. Se conserva como valor original."
+rentas_esat_estadistica_atm,MON_SALDOPREDIAL_COAC,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,MON_RECAUDANTER_COAC,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,PERIODO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,MON_RECAUDACTUAL_ORDIN,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,MUNICIPALIDAD_NOMBRE,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,MES_ESTADISTICA,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,"special_values: Se conserva como periodo especial observado, probablemente asociado a acumulado o consolidado anual."
+rentas_esat_estadistica_atm,MON_INICIALADULTOMAYOR,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_PREDIOOTROUSO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_CONTRIPREDIO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,MON_AUTOAVALUO_INAFECTO,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,MON_EMISIONPREDIAL_EXON,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_EMISIONPREDIAL_EXON,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,PROVINCIA_NOMBRE,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,MON_SALDOPREDIAL_ORD,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,ANO_APLICACION,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,MON_RECUADADULTOMAYOR,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_PREDIOTOTAL,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,MON_RECAUDANTER_ORDI,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,MON_BASEIMPONIBLE_EXON,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,PROVINCIA,str,string,cast_to_string_nullable,0,0.0,0,0,OK,preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.
+rentas_esat_estadistica_atm,ANO_ESTADISTICA,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,DISTRITO_NOMBRE,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,MON_EMISIONPREDIAL_AFECTO,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,MON_BASEIMPONIBLE_AFECTO,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,DISTRITO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.
+rentas_esat_estadistica_atm,TIPO_META,str,string,cast_to_string_nullable,133298,133298.0,0,0,OK,"documented_null_columns: Columna 100% vacía en Bronze, pero se conserva como string nullable por posible utilidad futura o llenado posterior de la fuente."
+rentas_esat_estadistica_atm,MON_EMISIONPREDIAL_INSO,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,MON_RECAUDACTUAL_COAC,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,DEPARTAMENTO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,preserve_as_string: Código territorial de 2 dígitos; se conserva como texto para no perder ceros a la izquierda.
+rentas_esat_estadistica_atm,UBIGEO,str,string,cast_to_string_nullable,0,0.0,0,0,OK,preserve_as_string: Código territorial de 6 dígitos; se conserva como texto según diccionario y para no perder ceros a la izquierda.
+rentas_esat_estadistica_atm,FORMULARIO_ID,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 se conserva como valor observado de la fuente; no se convierte a null. | special_values: Valor no referenciado en rentas_formulario; se conserva como valor observado de la fuente para análisis posterior.
+rentas_esat_estadistica_atm,FLAG_EMILIQUIDA,str,string,cast_to_string_nullable,132983,132983.0,0,0,OK,documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.
+rentas_esat_estadistica_atm,FLAG_EMISION_INICIAL,str,string,cast_to_string_nullable,118682,118682.0,0,0,OK,documented_null_columns: Columna mayormente vacía; se conserva porque representa un indicador tributario cuando aplica.
+rentas_esat_estadistica_atm,NUM_PREDIOUSOCH,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_EMISIONPREDIAL_CASA,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_CONTRIBADULTOMAYOR,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,MON_PREDIALADULTOMAYOR,str,Float64,cast_to_decimal_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar un monto válido; no se convierte a null.
+rentas_esat_estadistica_atm,SEC_EJEC,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,NUM_EMISIONPREDIAL_OTROS,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,NUM_EMISIONPREDIAL_AFECTO,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
+rentas_esat_estadistica_atm,DEPARTAMENTO_NOMBRE,str,string,cast_to_string_nullable,0,0.0,0,0,OK,
+rentas_esat_estadistica_atm,NUM_INAFECTOS,str,Int64,cast_to_integer_nullable,0,0.0,0,0,OK,preserve_zero_values: El valor 0 puede representar una cantidad válida; no se convierte a null.
