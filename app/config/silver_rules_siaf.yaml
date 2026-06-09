@@ -17,14 +17,13 @@
 #
 # Base documental:
 #   - Diccionario oficial de variables SIAF (MEF)
-#   - silver_rules_sismepre.yaml (referencia de estructura)
 #   - Muestra de datos 2026 proporcionada por el equipo
 # ============================================================
 
 source_system: "SIAF"
 
 silver_defaults:
-  bronze_base_path: "data/bronze/siaf/ingresos"
+  bronze_base_path: "data/bronze/siaf"
   silver_base_path: "data/silver/siaf"
   reports_base_path: "reports/silver/siaf"
   audit_base_path: "data/audit/silver"
@@ -148,21 +147,6 @@ datasets:
     # SIAF no tiene columnas redundantes o técnicas en Bronze
     # que deban eliminarse. Se mantienen todas.
     drop_columns: []
-
-    # ── Nulos documentados ────────────────────────────────────
-    # Columnas que pueden tener nulos por razón de negocio
-    # conocida. Silver los convierte a null y los documenta.
-    documented_null_columns:
-      SECTOR_NOMBRE:
-        reason: >
-          Puede venir vacío para entidades del nivel local
-          cuyo sector no está asignado en el catálogo del MEF.
-          Se conserva el campo; los vacíos se convierten a null.
-      PLIEGO_NOMBRE:
-        reason: >
-          Puede venir vacío para pliegues en proceso de
-          registro. Se conserva como null para no perder la
-          trazabilidad del código PLIEGO.
 
     # ── Columnas que se preservan como string ────────────────
     # Aunque parecen numéricas, estos campos son códigos con

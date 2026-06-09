@@ -13,12 +13,11 @@
 #   - Muestra de datos 2026 proporcionada por el equipo
 #
 # Nota: SIAF es una fuente de dataset único (ingresos).
-#       No hay múltiples sub-datasets como en SISMEPRE.
 # ============================================================
 
 settings:
   source: siaf
-  bronze_root: data/bronze/siaf/ingresos
+  bronze_root: data/bronze/siaf
   reports_root: reports/schema_validation/siaf
   audit_root: data/audit/schema_validation
   dataset_name: ingresos
@@ -78,7 +77,7 @@ column_types:
   # Clasificadores institucionales — llegan como string aunque parezcan numéricos
   NIVEL_GOBIERNO:       {logical_type: string,   nullable: false, source: dictionary_csv}
   NIVEL_GOBIERNO_NOMBRE:{logical_type: string,   nullable: false, source: dictionary_csv}
-  SECTOR:               {logical_type: string,   nullable: false, source: dictionary_csv}
+  SECTOR:               {logical_type: integer,   nullable: false, source: dictionary_csv}
   SECTOR_NOMBRE:        {logical_type: string,   nullable: false, source: dictionary_csv}
   PLIEGO:               {logical_type: string,   nullable: false, source: dictionary_csv}
   PLIEGO_NOMBRE:        {logical_type: string,   nullable: false, source: dictionary_csv}
@@ -108,11 +107,11 @@ column_types:
   SUBGENERICA:          {logical_type: integer,  nullable: false, source: dictionary_csv}
   SUBGENERICA_NOMBRE:   {logical_type: string,   nullable: false, source: dictionary_csv}
   SUBGENERICA_DET:      {logical_type: integer,  nullable: false, source: dictionary_csv}
-  SUBGENERICA_DET_NOMBRE:{logical_type: string,  nullable: false, source: dictionary_csv}
+  SUBGENERICA_DET_NOMBRE: {logical_type: string,  nullable: false, source: dictionary_csv}
   ESPECIFICA:           {logical_type: integer,  nullable: false, source: dictionary_csv}
   ESPECIFICA_NOMBRE:    {logical_type: string,   nullable: false, source: dictionary_csv}
   ESPECIFICA_DET:       {logical_type: integer,  nullable: false, source: dictionary_csv}
-  ESPECIFICA_DET_NOMBRE:{logical_type: string,   nullable: false, source: dictionary_csv}
+  ESPECIFICA_DET_NOMBRE: {logical_type: string,   nullable: false, source: dictionary_csv}
 
   # Montos presupuestales
   MONTO_PIA:            {logical_type: decimal,  nullable: false, source: dictionary_csv}

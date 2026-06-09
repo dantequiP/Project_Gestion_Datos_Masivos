@@ -25,7 +25,7 @@
 
 settings:
   source: siaf
-  bronze_root: data/bronze/siaf/ingresos
+  bronze_root: data/bronze/siaf
   reports_root: reports/quality/siaf
   data_quality_root: data/quality/siaf
   audit_root: data/audit/quality
@@ -199,24 +199,8 @@ datasets:
     # El PIM es el PIA ajustado con modificaciones. En teoría
     # PIM >= PIA. Puede haber excepciones por recortes.
     consistency_rules:
-      pim_gte_pia:
-        enabled: true
-        dimension: Exactitud
-        severity: Media
-        source: business_rule
-        rule_type: column_comparison
-        left_column: MONTO_PIM
-        operator: ">="
-        right_column: MONTO_PIA
-        description: >
-          El PIM (Presupuesto Institucional Modificado) debe
-          ser >= PIA (Presupuesto Institucional de Apertura).
-          Casos donde PIM < PIA pueden ocurrir por recortes
-          presupuestales; se registran como advertencia, no
-          como error bloqueante.
-
-      # Nivel de gobierno y nombre deben ser coherentes entre sí.
-      nivel_gobierno_nombre_coherente:
+      
+      nivel_gobierno_nombre_coherente_local:
         enabled: true
         dimension: Consistencia
         severity: Alta
@@ -226,10 +210,28 @@ datasets:
         condition_value: "M"
         expected_column: NIVEL_GOBIERNO_NOMBRE
         expected_value: "GOBIERNOS LOCALES"
-        description: >
-          Si NIVEL_GOBIERNO = M, entonces NIVEL_GOBIERNO_NOMBRE
-          debe ser "GOBIERNOS LOCALES". Incoherencia entre código
-          y descripción indica error en la fuente.
+
+      nivel_gobierno_nombre_coherente_regional:
+        enabled: true
+        dimension: Consistencia
+        severity: Alta
+        source: dictionary_csv
+        rule_type: conditional_value
+        condition_column: NIVEL_GOBIERNO
+        condition_value: "R"
+        expected_column: NIVEL_GOBIERNO_NOMBRE
+        expected_value: "GOBIERNOS REGIONALES"
+
+      nivel_gobierno_nombre_coherente_nacional:
+        enabled: true
+        dimension: Consistencia
+        severity: Alta
+        source: dictionary_csv
+        rule_type: conditional_value
+        condition_column: NIVEL_GOBIERNO
+        condition_value: "E"
+        expected_column: NIVEL_GOBIERNO_NOMBRE
+        expected_value: "GOBIERNO NACIONAL"
 
       # RUBRO debe tener exactamente 2 caracteres (patrón observado
       # en muestra: "09", "13", etc.)
