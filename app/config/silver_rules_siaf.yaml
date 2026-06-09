@@ -1,0 +1,244 @@
+# ============================================================
+# REGLAS DE TRANSFORMACIÓN SILVER - SIAF INGRESOS
+# ============================================================
+# Define las transformaciones que se aplican al pasar de
+# Bronze a Silver para la fuente SIAF.
+#
+# Filosofía:
+#   Bronze conserva → Silver estandariza → Gold modela
+#
+# Silver NO limpia agresivamente. No elimina registros válidos
+# ni altera el significado de negocio. Solo:
+#   - Convierte tipos de datos
+#   - Normaliza textos (trim)
+#   - Convierte tokens vacíos a null
+#   - Genera columnas técnicas de auditoría
+#   - Documenta decisiones tomadas
+#
+# Base documental:
+#   - Diccionario oficial de variables SIAF (MEF)
+#   - silver_rules_sismepre.yaml (referencia de estructura)
+#   - Muestra de datos 2026 proporcionada por el equipo
+# ============================================================
+
+source_system: "SIAF"
+
+silver_defaults:
+  bronze_base_path: "data/bronze/siaf/ingresos"
+  silver_base_path: "data/silver/siaf"
+  reports_base_path: "reports/silver/siaf"
+  audit_base_path: "data/audit/silver"
+
+  add_technical_columns: true
+
+  # ── Columnas técnicas añadidas en Silver ─────────────────
+  # Estas columnas no existen en Bronze y son inyectadas por
+  # el pipeline para trazabilidad y auditoría.
+  technical_columns:
+    source_system:
+      value: "SIAF"
+      description: "Sistema de origen de los datos (SIAF Ingresos MEF)."
+    source_dataset:
+      description: "Nombre del archivo/recurso de origen en Bronze."
+    silver_processed_at:
+      description: "Timestamp en que el registro fue procesado hacia Silver."
+    record_hash:
+      description: >
+        Hash SHA-256 del registro completo para trazabilidad,
+        detección de cambios y reconciliación entre capas.
+    anio_mes_key:
+      description: >
+        Clave derivada de ANO_DOC y MES_DOC (formato YYYY-MM)
+        para facilitar filtros temporales en Gold y Power BI.
+
+  # ── Manejo de valores nulos y vacíos ─────────────────────
+  null_handling:
+    convert_missing_tokens_to_null: true
+    missing_tokens:
+      - ""
+      - " "
+      - "NULL"
+      - "null"
+      - "None"
+      - "none"
+      - "NaN"
+      - "nan"
+      - "N/A"
+      - "n/a"
+
+  # ── Política de filas ─────────────────────────────────────
+  row_policy:
+    drop_empty_rows: true          # filas completamente vacías
+    drop_duplicate_rows: false     # los duplicados se reportan pero no se eliminan en Silver
+    impute_missing_values: false   # Silver no imputa; Gold puede hacerlo si el modelo lo requiere
+
+  # ── Normalización de textos ───────────────────────────────
+  text_normalization:
+    apply_trim: true               # elimina espacios laterales en todas las columnas string
+    apply_upper: false             # el MEF ya entrega los nombres en mayúsculas; no forzar
+
+  keep_original_column_names: true
+
+# ============================================================
+# REGLAS POR DATASET
+# SIAF tiene un único dataset: ingresos
+# ============================================================
+datasets:
+
+  ingresos:
+
+    # ── Columnas enteras ──────────────────────────────────────
+    # El diccionario las declara Numérico. Se convierten a
+    # IntegerType (o LongType en Spark si el volumen lo exige).
+    integer_columns:
+      - ANO_DOC
+      - MES_DOC
+      - GENERICA
+      - SUBGENERICA
+      - SUBGENERICA_DET
+      - ESPECIFICA
+      - ESPECIFICA_DET
+
+    # ── Columnas decimales ────────────────────────────────────
+    # Montos presupuestales: DoubleType en Spark / float64 en pandas.
+    # Se usa double y no decimal fijo porque los CSV del MEF
+    # no garantizan precisión fija en todos los años.
+    decimal_columns:
+      - MONTO_PIA
+      - MONTO_PIM
+      - MONTO_RECAUDADO
+
+    # ── Sin columnas de fecha en esta fuente ─────────────────
+    # SIAF no entrega fechas ISO; la temporalidad viene de
+    # ANO_DOC y MES_DOC que se convierten a enteros.
+    datetime_columns: []
+
+    # ── Columnas string ───────────────────────────────────────
+    # Todos los campos de tipo Carácter del diccionario.
+    # Se aplica trim() a todos.
+    string_columns:
+      - NIVEL_GOBIERNO
+      - NIVEL_GOBIERNO_NOMBRE
+      - SECTOR
+      - SECTOR_NOMBRE
+      - PLIEGO
+      - PLIEGO_NOMBRE
+      - SEC_EJEC
+      - EJECUTORA
+      - EJECUTORA_NOMBRE
+      - DEPARTAMENTO_EJECUTORA
+      - DEPARTAMENTO_EJECUTORA_NOMBRE
+      - PROVINCIA_EJECUTORA
+      - PROVINCIA_EJECUTORA_NOMBRE
+      - DISTRITO_EJECUTORA
+      - DISTRITO_EJECUTORA_NOMBRE
+      - FUENTE_FINANCIAMIENTO
+      - FUENTE_FINANCIAMIENTO_NOMBRE
+      - RUBRO
+      - RUBRO_NOMBRE
+      - TIPO_RECURSO
+      - TIPO_RECURSO_NOMBRE
+      - GENERICA_NOMBRE
+      - SUBGENERICA_NOMBRE
+      - SUBGENERICA_DET_NOMBRE
+      - ESPECIFICA_NOMBRE
+      - ESPECIFICA_DET_NOMBRE
+
+    # ── Columnas eliminadas ───────────────────────────────────
+    # SIAF no tiene columnas redundantes o técnicas en Bronze
+    # que deban eliminarse. Se mantienen todas.
+    drop_columns: []
+
+    # ── Nulos documentados ────────────────────────────────────
+    # Columnas que pueden tener nulos por razón de negocio
+    # conocida. Silver los convierte a null y los documenta.
+    documented_null_columns:
+      SECTOR_NOMBRE:
+        reason: >
+          Puede venir vacío para entidades del nivel local
+          cuyo sector no está asignado en el catálogo del MEF.
+          Se conserva el campo; los vacíos se convierten a null.
+      PLIEGO_NOMBRE:
+        reason: >
+          Puede venir vacío para pliegues en proceso de
+          registro. Se conserva como null para no perder la
+          trazabilidad del código PLIEGO.
+
+    # ── Columnas que se preservan como string ────────────────
+    # Aunque parecen numéricas, estos campos son códigos con
+    # posibles ceros a la izquierda o formato fijo del MEF.
+    preserve_as_string:
+      PLIEGO:
+        reason: >
+          El código de pliego puede tener ceros iniciales
+          (ej: "001"). Convertirlo a entero perdería ese
+          formato estándar del clasificador del MEF.
+      RUBRO:
+        reason: >
+          Código de rubro siempre de 2 dígitos con posible
+          cero inicial (ej: "09"). Se conserva como string.
+      FUENTE_FINANCIAMIENTO:
+        reason: >
+          Código de fuente de financiamiento: valor corto de
+          1–2 caracteres que actúa como clave de catálogo.
+          Se conserva como string por consistencia con el
+          clasificador del MEF.
+      TIPO_RECURSO:
+        reason: >
+          Código de tipo de recurso. Valor de 1 dígito que
+          actúa como clave de catálogo. Se conserva como
+          string para evitar pérdida de contexto semántico.
+      SEC_EJEC:
+        reason: >
+          Identificador de entidad de 6 dígitos. Aunque
+          llegan como numéricos, su uso es exclusivamente
+          como clave de lookup; no se opera aritméticamente.
+      EJECUTORA:
+        reason: >
+          Código institucional compuesto de la cadena
+          presupuestal. Formato variable según el año;
+          se conserva como string para compatibilidad
+          histórica entre años distintos.
+      DEPARTAMENTO_EJECUTORA:
+        reason: >
+          Código de departamento de 2 dígitos. Puede tener
+          cero inicial (ej: "01" para Lima). Se conserva
+          como string para mantener el formato UBIGEO.
+      PROVINCIA_EJECUTORA:
+        reason: >
+          Código de provincia de 2 dígitos. Mismo tratamiento
+          que DEPARTAMENTO_EJECUTORA.
+      DISTRITO_EJECUTORA:
+        reason: >
+          Código de distrito de 2 dígitos. Mismo tratamiento
+          que DEPARTAMENTO_EJECUTORA.
+
+    # ── Columnas derivadas ────────────────────────────────────
+    # Silver genera columnas adicionales que facilitarán el
+    # modelado en Gold y la navegación en Power BI.
+    derived_columns:
+
+      anio_mes_key:
+        enabled: true
+        source_columns:
+          - ANO_DOC
+          - MES_DOC
+        description: >
+          Clave temporal en formato YYYY-MM construida
+          concatenando ANO_DOC y MES_DOC con cero a la
+          izquierda para el mes (ej: 2026-01). Permite
+          filtros y joins temporales eficientes en Gold.
+
+      ubigeo_ejecutora:
+        enabled: true
+        source_columns:
+          - DEPARTAMENTO_EJECUTORA
+          - PROVINCIA_EJECUTORA
+          - DISTRITO_EJECUTORA
+        description: >
+          UBIGEO de 6 dígitos reconstruido concatenando
+          los tres códigos geográficos de la ejecutora.
+          Facilita el join con RENAMU en la capa Gold.
+
+    # ── Todas las columnas se conservan ──────────────────────
+    keep_columns: all

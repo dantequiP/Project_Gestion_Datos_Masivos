@@ -1,0 +1,396 @@
+# ============================================================
+# REGLAS DE CALIDAD DE DATOS - SIAF INGRESOS
+# ============================================================
+# Evalúa los 8 criterios de calidad sobre los Parquet Bronze
+# de SIAF. El pipeline NO modifica Bronze: solo evalúa,
+# reporta y genera auditoría.
+#
+# Criterios evaluados:
+#   1. Completitud   — campos obligatorios no deben ser nulos
+#   2. Validez       — valores dentro del dominio permitido
+#   3. Exactitud     — datos corresponden a la realidad conocida
+#   4. Consistencia  — coherencia interna entre columnas
+#   5. Unicidad      — no debe haber registros duplicados
+#   6. Integridad    — relaciones entre campos del clasificador
+#   7. Oportunidad   — temporalidad coherente
+#   8. Conformidad   — formatos y longitudes según diccionario
+#
+# Fuentes de las reglas:
+#   - dictionary_csv         : diccionario oficial MEF
+#   - naming_pattern         : regla por patrón del nombre de campo
+#   - profiling_based        : hallazgo del profiling de Bronze
+#   - inferred_business_key  : clave candidata inferida por negocio
+#   - business_rule          : regla presupuestaria conocida
+# ============================================================
+
+settings:
+  source: siaf
+  bronze_root: data/bronze/siaf/ingresos
+  reports_root: reports/quality/siaf
+  data_quality_root: data/quality/siaf
+  audit_root: data/audit/quality
+  max_failed_samples_per_rule: 10
+
+missing_tokens: ["", "nan", "NaN", "None", "none", "NULL", "null", "<NA>", "NaT"]
+
+dimensions:
+  - Completitud
+  - Validez
+  - Exactitud
+  - Consistencia
+  - Unicidad
+  - Integridad
+  - Oportunidad
+  - Conformidad
+
+# ============================================================
+# REGLAS GLOBALES
+# Se aplican a todo el dataset sin distinción de columna.
+# ============================================================
+global_rules:
+
+  # ── Unicidad ──────────────────────────────────────────────
+  duplicate_full_rows:
+    enabled: true
+    dimension: Unicidad
+    severity: Media
+    source: profiling_based
+    description: >
+      Filas completamente duplicadas. En SIAF cada registro
+      representa una combinación única de período, entidad y
+      clasificador. Duplicados exactos indican reprocesamiento
+      o error en la descarga.
+
+  # ── Exactitud: formato de año ─────────────────────────────
+  pattern_rules:
+    year_4_digits:
+      enabled: true
+      dimension: Exactitud
+      severity: Alta
+      source: naming_pattern
+      startswith: ["ANO_"]
+      min_year: 2000
+      max_year: 2100
+      description: >
+        El año debe ser un entero de 4 dígitos dentro de un
+        rango razonable. SIAF publica datos desde el año 2000
+        aproximadamente.
+
+    # ── Conformidad: montos no negativos ─────────────────────
+    monetary_non_negative:
+      enabled: true
+      dimension: Conformidad
+      severity: Alta
+      source: naming_pattern
+      startswith: ["MONTO_"]
+      description: >
+        Los montos presupuestales (PIA, PIM, RECAUDADO) no
+        pueden ser negativos. Un valor negativo indicaría un
+        error de carga o una reversión mal registrada.
+
+# ============================================================
+# REGLAS POR DATASET
+# SIAF tiene un único dataset: ingresos
+# ============================================================
+datasets:
+  ingresos:
+
+    # ── 1. COMPLETITUD ────────────────────────────────────────
+    # Columnas que jamás deberían llegar vacías según el
+    # diccionario oficial y la lógica presupuestal.
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: dictionary_csv
+      columns:
+        - ANO_DOC
+        - MES_DOC
+        - NIVEL_GOBIERNO
+        - NIVEL_GOBIERNO_NOMBRE
+        - SECTOR
+        - PLIEGO
+        - PLIEGO_NOMBRE
+        - SEC_EJEC
+        - EJECUTORA
+        - EJECUTORA_NOMBRE
+        - DEPARTAMENTO_EJECUTORA
+        - DEPARTAMENTO_EJECUTORA_NOMBRE
+        - PROVINCIA_EJECUTORA
+        - PROVINCIA_EJECUTORA_NOMBRE
+        - DISTRITO_EJECUTORA
+        - DISTRITO_EJECUTORA_NOMBRE
+        - FUENTE_FINANCIAMIENTO
+        - FUENTE_FINANCIAMIENTO_NOMBRE
+        - RUBRO
+        - RUBRO_NOMBRE
+        - TIPO_RECURSO
+        - TIPO_RECURSO_NOMBRE
+        - GENERICA
+        - GENERICA_NOMBRE
+        - SUBGENERICA
+        - SUBGENERICA_NOMBRE
+        - SUBGENERICA_DET
+        - SUBGENERICA_DET_NOMBRE
+        - ESPECIFICA
+        - ESPECIFICA_NOMBRE
+        - ESPECIFICA_DET
+        - ESPECIFICA_DET_NOMBRE
+        - MONTO_PIA
+        - MONTO_PIM
+        - MONTO_RECAUDADO
+
+    # ── 2. VALIDEZ ────────────────────────────────────────────
+    # Valores dentro del dominio documentado por el MEF.
+
+    allowed_values:
+      # El diccionario oficial declara exactamente tres niveles.
+      NIVEL_GOBIERNO:
+        values: ["E", "R", "M"]
+        dimension: Validez
+        severity: Alta
+        source: dictionary_csv
+        description: >
+          E = Nacional, R = Regional, M = Local (Municipal).
+          Cualquier otro valor no está definido por el MEF.
+
+      NIVEL_GOBIERNO_NOMBRE:
+        values: ["GOBIERNO NACIONAL", "GOBIERNOS REGIONALES", "GOBIERNOS LOCALES"]
+        dimension: Validez
+        severity: Media
+        source: dictionary_csv
+        description: >
+          Descripción del nivel de gobierno. Debe coincidir
+          con el código NIVEL_GOBIERNO (ver regla de
+          consistencia). La muestra muestra "GOBIERNOS
+          REGIONALES" para R.
+
+    # ── 3. VALIDEZ NUMÉRICA ───────────────────────────────────
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns:
+        - ANO_DOC
+        - MES_DOC
+        - GENERICA
+        - SUBGENERICA
+        - SUBGENERICA_DET
+        - ESPECIFICA
+        - ESPECIFICA_DET
+        - MONTO_PIA
+        - MONTO_PIM
+        - MONTO_RECAUDADO
+
+    # ── 4. VALIDEZ DE MONTOS ──────────────────────────────────
+    non_negative_columns:
+      dimension: Validez
+      severity: Alta
+      source: dictionary_csv
+      columns:
+        - MONTO_PIA
+        - MONTO_PIM
+        - MONTO_RECAUDADO
+      description: >
+        PIA, PIM y MONTO_RECAUDADO son saldos presupuestales
+        acumulados. Ninguno puede ser negativo en la fuente
+        SIAF. Si lo fueran indicaría corrupción en el CSV.
+
+    # ── 5. EXACTITUD — RELACIÓN PIM >= PIA ───────────────────
+    # El PIM es el PIA ajustado con modificaciones. En teoría
+    # PIM >= PIA. Puede haber excepciones por recortes.
+    consistency_rules:
+      pim_gte_pia:
+        enabled: true
+        dimension: Exactitud
+        severity: Media
+        source: business_rule
+        rule_type: column_comparison
+        left_column: MONTO_PIM
+        operator: ">="
+        right_column: MONTO_PIA
+        description: >
+          El PIM (Presupuesto Institucional Modificado) debe
+          ser >= PIA (Presupuesto Institucional de Apertura).
+          Casos donde PIM < PIA pueden ocurrir por recortes
+          presupuestales; se registran como advertencia, no
+          como error bloqueante.
+
+      # Nivel de gobierno y nombre deben ser coherentes entre sí.
+      nivel_gobierno_nombre_coherente:
+        enabled: true
+        dimension: Consistencia
+        severity: Alta
+        source: dictionary_csv
+        rule_type: conditional_value
+        condition_column: NIVEL_GOBIERNO
+        condition_value: "M"
+        expected_column: NIVEL_GOBIERNO_NOMBRE
+        expected_value: "GOBIERNOS LOCALES"
+        description: >
+          Si NIVEL_GOBIERNO = M, entonces NIVEL_GOBIERNO_NOMBRE
+          debe ser "GOBIERNOS LOCALES". Incoherencia entre código
+          y descripción indica error en la fuente.
+
+      # RUBRO debe tener exactamente 2 caracteres (patrón observado
+      # en muestra: "09", "13", etc.)
+      rubro_formato:
+        enabled: true
+        dimension: Conformidad
+        severity: Media
+        source: profiling_based
+        rule_type: regex
+        column: RUBRO
+        regex: "^\\d{2}$"
+        description: >
+          El código de RUBRO observado en la muestra 2026 siempre
+          tiene 2 dígitos con cero a la izquierda cuando corresponde
+          (ej: "09", "13"). Valores de longitud diferente indican
+          posible cambio de versión en el clasificador del MEF.
+
+      # SEC_EJEC: 6 dígitos según patrón observado en muestra
+      sec_ejec_formato:
+        enabled: true
+        dimension: Conformidad
+        severity: Media
+        source: profiling_based
+        rule_type: regex
+        column: SEC_EJEC
+        regex: "^\\d{6}$"
+        description: >
+          SEC_EJEC identifica a la unidad ejecutora. La muestra
+          2026 muestra valores de 6 dígitos (ej: 360001). La
+          longitud diferente indica posible código inválido.
+
+      # Códigos de departamento: exactamente 2 dígitos
+      departamento_formato:
+        enabled: true
+        dimension: Conformidad
+        severity: Media
+        source: naming_pattern
+        rule_type: regex
+        column: DEPARTAMENTO_EJECUTORA
+        regex: "^\\d{2}$"
+        description: >
+          El código UBIGEO de departamento en Perú siempre tiene
+          2 dígitos (01–25). Formato diferente indica error.
+
+      # Códigos de provincia: exactamente 2 dígitos
+      provincia_formato:
+        enabled: true
+        dimension: Conformidad
+        severity: Media
+        source: naming_pattern
+        rule_type: regex
+        column: PROVINCIA_EJECUTORA
+        regex: "^\\d{2}$"
+        description: >
+          El código de provincia en Perú siempre tiene 2 dígitos.
+
+      # Códigos de distrito: exactamente 2 dígitos
+      distrito_formato:
+        enabled: true
+        dimension: Conformidad
+        severity: Media
+        source: naming_pattern
+        rule_type: regex
+        column: DISTRITO_EJECUTORA
+        regex: "^\\d{2}$"
+        description: >
+          El código de distrito en Perú siempre tiene 2 dígitos.
+
+    # ── 6. UNICIDAD — CLAVE DE NEGOCIO ───────────────────────
+    # La granularidad de SIAF ingresos es la combinación de
+    # período + entidad ejecutora + clasificador completo.
+    unique_keys:
+      - columns:
+          - ANO_DOC
+          - MES_DOC
+          - NIVEL_GOBIERNO
+          - SEC_EJEC
+          - EJECUTORA
+          - FUENTE_FINANCIAMIENTO
+          - RUBRO
+          - TIPO_RECURSO
+          - GENERICA
+          - SUBGENERICA
+          - SUBGENERICA_DET
+          - ESPECIFICA
+          - ESPECIFICA_DET
+        dimension: Unicidad
+        severity: Alta
+        source: inferred_business_key
+        description: >
+          Clave candidata inferida: la combinación del período
+          (año+mes), la entidad ejecutora y el clasificador
+          completo de ingreso debe identificar unívocamente
+          un registro. Duplicados en esta clave indican filas
+          redundantes o error de paginación en la descarga.
+
+    # ── 7. OPORTUNIDAD ───────────────────────────────────────
+    timeliness_rules:
+      # El año no debe ser posterior al año de ejecución del pipeline.
+      - rule_type: year_not_future
+        columns: [ANO_DOC]
+        dimension: Oportunidad
+        severity: Media
+        source: dictionary_csv
+        description: >
+          Un ANO_DOC posterior al año actual indica un dato
+          proyectado o un error en la fuente. Se acepta el año
+          en curso pero no años futuros.
+
+      # El mes debe estar entre 1 y 12.
+      - rule_type: month_between
+        columns: [MES_DOC]
+        min_value: 1
+        max_value: 12
+        dimension: Oportunidad
+        severity: Alta
+        source: dictionary_csv
+        description: >
+          MES_DOC debe ser un mes calendario válido (1–12).
+          SIAF no usa períodos especiales fuera del rango
+          mensual, a diferencia de SISMEPRE.
+
+    # ── 8. INTEGRIDAD REFERENCIAL INTERNA ────────────────────
+    # La jerarquía del clasificador de ingreso debe ser
+    # coherente: GENERICA → SUBGENERICA → SUBGENERICA_DET →
+    # ESPECIFICA → ESPECIFICA_DET
+    referential_rules:
+      generica_not_zero_when_subgenerica_nonzero:
+        enabled: true
+        dimension: Integridad
+        severity: Media
+        source: business_rule
+        rule_type: parent_not_zero_if_child_nonzero
+        parent_column: GENERICA
+        child_column: SUBGENERICA
+        description: >
+          Si SUBGENERICA tiene un valor distinto de 0, el
+          nivel padre GENERICA también debe tenerlo. Un
+          clasificador sin padre en la jerarquía indica un
+          registro incoherente con el catálogo del MEF.
+
+      subgenerica_not_zero_when_subgenerica_det_nonzero:
+        enabled: true
+        dimension: Integridad
+        severity: Media
+        source: business_rule
+        rule_type: parent_not_zero_if_child_nonzero
+        parent_column: SUBGENERICA
+        child_column: SUBGENERICA_DET
+        description: >
+          Si SUBGENERICA_DET tiene valor distinto de 0,
+          SUBGENERICA también debe tenerlo.
+
+      especifica_not_zero_when_especifica_det_nonzero:
+        enabled: true
+        dimension: Integridad
+        severity: Media
+        source: business_rule
+        rule_type: parent_not_zero_if_child_nonzero
+        parent_column: ESPECIFICA
+        child_column: ESPECIFICA_DET
+        description: >
+          Si ESPECIFICA_DET tiene valor distinto de 0,
+          ESPECIFICA también debe tenerlo.

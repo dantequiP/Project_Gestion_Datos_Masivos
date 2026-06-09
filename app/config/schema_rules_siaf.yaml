@@ -1,0 +1,152 @@
+# ============================================================
+# REGLAS DE SCHEMA - SIAF INGRESOS
+# ============================================================
+# Define el contrato de schema esperado para los archivos CSV
+# de la fuente SIAF (Presupuesto y Ejecución de Ingresos).
+#
+# El pipeline de schema validation lee este archivo para
+# verificar que Bronze cumpla la estructura declarada antes
+# de pasar a profiling, quality y silver.
+#
+# Base documental:
+#   - Diccionario oficial de variables SIAF (MEF, datos abiertos)
+#   - Muestra de datos 2026 proporcionada por el equipo
+#
+# Nota: SIAF es una fuente de dataset único (ingresos).
+#       No hay múltiples sub-datasets como en SISMEPRE.
+# ============================================================
+
+settings:
+  source: siaf
+  bronze_root: data/bronze/siaf/ingresos
+  reports_root: reports/schema_validation/siaf
+  audit_root: data/audit/schema_validation
+  dataset_name: ingresos
+
+# ============================================================
+# COLUMNAS ESPERADAS
+# Orden y nombres tal como los entrega el MEF en los CSV.
+# ============================================================
+expected_columns:
+  - ANO_DOC
+  - MES_DOC
+  - NIVEL_GOBIERNO
+  - NIVEL_GOBIERNO_NOMBRE
+  - SECTOR
+  - SECTOR_NOMBRE
+  - PLIEGO
+  - PLIEGO_NOMBRE
+  - SEC_EJEC
+  - EJECUTORA
+  - EJECUTORA_NOMBRE
+  - DEPARTAMENTO_EJECUTORA
+  - DEPARTAMENTO_EJECUTORA_NOMBRE
+  - PROVINCIA_EJECUTORA
+  - PROVINCIA_EJECUTORA_NOMBRE
+  - DISTRITO_EJECUTORA
+  - DISTRITO_EJECUTORA_NOMBRE
+  - FUENTE_FINANCIAMIENTO
+  - FUENTE_FINANCIAMIENTO_NOMBRE
+  - RUBRO
+  - RUBRO_NOMBRE
+  - TIPO_RECURSO
+  - TIPO_RECURSO_NOMBRE
+  - GENERICA
+  - GENERICA_NOMBRE
+  - SUBGENERICA
+  - SUBGENERICA_NOMBRE
+  - SUBGENERICA_DET
+  - SUBGENERICA_DET_NOMBRE
+  - ESPECIFICA
+  - ESPECIFICA_NOMBRE
+  - ESPECIFICA_DET
+  - ESPECIFICA_DET_NOMBRE
+  - MONTO_PIA
+  - MONTO_PIM
+  - MONTO_RECAUDADO
+
+# ============================================================
+# TIPOS ESPERADOS (antes de la conversión Silver)
+# En Bronze todo llega como string/object desde CSV.
+# Se declara el tipo lógico según el diccionario oficial.
+# ============================================================
+column_types:
+  # Temporales
+  ANO_DOC:              {logical_type: integer,  nullable: false, source: dictionary_csv}
+  MES_DOC:              {logical_type: integer,  nullable: false, source: dictionary_csv}
+
+  # Clasificadores institucionales — llegan como string aunque parezcan numéricos
+  NIVEL_GOBIERNO:       {logical_type: string,   nullable: false, source: dictionary_csv}
+  NIVEL_GOBIERNO_NOMBRE:{logical_type: string,   nullable: false, source: dictionary_csv}
+  SECTOR:               {logical_type: string,   nullable: false, source: dictionary_csv}
+  SECTOR_NOMBRE:        {logical_type: string,   nullable: false, source: dictionary_csv}
+  PLIEGO:               {logical_type: string,   nullable: false, source: dictionary_csv}
+  PLIEGO_NOMBRE:        {logical_type: string,   nullable: false, source: dictionary_csv}
+  SEC_EJEC:             {logical_type: string,   nullable: false, source: dictionary_csv}
+  EJECUTORA:            {logical_type: string,   nullable: false, source: dictionary_csv}
+  EJECUTORA_NOMBRE:     {logical_type: string,   nullable: false, source: dictionary_csv}
+
+  # Geográficos
+  DEPARTAMENTO_EJECUTORA:       {logical_type: string, nullable: false, source: dictionary_csv}
+  DEPARTAMENTO_EJECUTORA_NOMBRE:{logical_type: string, nullable: false, source: dictionary_csv}
+  PROVINCIA_EJECUTORA:          {logical_type: string, nullable: false, source: dictionary_csv}
+  PROVINCIA_EJECUTORA_NOMBRE:   {logical_type: string, nullable: false, source: dictionary_csv}
+  DISTRITO_EJECUTORA:           {logical_type: string, nullable: false, source: dictionary_csv}
+  DISTRITO_EJECUTORA_NOMBRE:    {logical_type: string, nullable: false, source: dictionary_csv}
+
+  # Clasificadores presupuestarios
+  FUENTE_FINANCIAMIENTO:        {logical_type: string, nullable: false, source: dictionary_csv}
+  FUENTE_FINANCIAMIENTO_NOMBRE: {logical_type: string, nullable: false, source: dictionary_csv}
+  RUBRO:                        {logical_type: string, nullable: false, source: dictionary_csv}
+  RUBRO_NOMBRE:                 {logical_type: string, nullable: false, source: dictionary_csv}
+  TIPO_RECURSO:                 {logical_type: string, nullable: false, source: dictionary_csv}
+  TIPO_RECURSO_NOMBRE:          {logical_type: string, nullable: false, source: dictionary_csv}
+
+  # Cadena del clasificador de ingreso (jerárquico)
+  GENERICA:             {logical_type: integer,  nullable: false, source: dictionary_csv}
+  GENERICA_NOMBRE:      {logical_type: string,   nullable: false, source: dictionary_csv}
+  SUBGENERICA:          {logical_type: integer,  nullable: false, source: dictionary_csv}
+  SUBGENERICA_NOMBRE:   {logical_type: string,   nullable: false, source: dictionary_csv}
+  SUBGENERICA_DET:      {logical_type: integer,  nullable: false, source: dictionary_csv}
+  SUBGENERICA_DET_NOMBRE:{logical_type: string,  nullable: false, source: dictionary_csv}
+  ESPECIFICA:           {logical_type: integer,  nullable: false, source: dictionary_csv}
+  ESPECIFICA_NOMBRE:    {logical_type: string,   nullable: false, source: dictionary_csv}
+  ESPECIFICA_DET:       {logical_type: integer,  nullable: false, source: dictionary_csv}
+  ESPECIFICA_DET_NOMBRE:{logical_type: string,   nullable: false, source: dictionary_csv}
+
+  # Montos presupuestales
+  MONTO_PIA:            {logical_type: decimal,  nullable: false, source: dictionary_csv}
+  MONTO_PIM:            {logical_type: decimal,  nullable: false, source: dictionary_csv}
+  MONTO_RECAUDADO:      {logical_type: decimal,  nullable: false, source: dictionary_csv}
+
+# ============================================================
+# COLUMNAS CRÍTICAS (no pueden faltar en ningún archivo)
+# Si alguna está ausente, el pipeline debe cortar el proceso.
+# ============================================================
+critical_columns:
+  - ANO_DOC
+  - MES_DOC
+  - NIVEL_GOBIERNO
+  - PLIEGO
+  - SEC_EJEC
+  - EJECUTORA
+  - EJECUTORA_NOMBRE
+  - FUENTE_FINANCIAMIENTO
+  - RUBRO
+  - GENERICA
+  - SUBGENERICA
+  - SUBGENERICA_DET
+  - ESPECIFICA
+  - ESPECIFICA_DET
+  - MONTO_PIA
+  - MONTO_PIM
+  - MONTO_RECAUDADO
+
+# ============================================================
+# POLÍTICA DE COLUMNAS EXTRA
+# El MEF puede añadir campos en versiones futuras del CSV.
+# Se registran como advertencia, no como error bloqueante.
+# ============================================================
+extra_columns_policy:
+  action: warn           # warn | fail | ignore
+  severity: Baja
