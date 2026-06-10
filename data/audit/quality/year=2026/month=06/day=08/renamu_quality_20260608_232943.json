@@ -1,0 +1,21 @@
+{
+  "pipeline_name": "quality_renamu",
+  "status": "success",
+  "started_at": "2026-06-08T23:29:40.630471",
+  "finished_at": "2026-06-08T23:29:43.119433",
+  "duration_seconds": 2.488962,
+  "datasets_evaluated": 1,
+  "rules_evaluated": 202,
+  "rules_with_observations": 6,
+  "observations_total": 9802,
+  "failed_samples_total": 60,
+  "outputs": {
+    "summary_csv": "reports\\quality\\renamu\\renamu_quality_summary.csv",
+    "detail_csv": "reports\\quality\\renamu\\renamu_quality_detail.csv",
+    "failed_samples_csv": "reports\\quality\\renamu\\renamu_quality_failed_samples.csv",
+    "dashboard_html": "reports\\quality\\renamu\\renamu_quality_dashboard.html",
+    "summary_parquet": "data\\quality\\renamu\\renamu_quality_summary.parquet",
+    "detail_parquet": "data\\quality\\renamu\\renamu_quality_detail.parquet",
+    "failed_samples_parquet": "data\\quality\\renamu\\renamu_quality_failed_samples.parquet"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "pipeline_name": "schema_validation_renamu",
+  "status": "warning",
+  "started_at": "2026-06-08T21:44:04.815875",
+  "finished_at": "2026-06-08T21:44:13.601483",
+  "duration_seconds": 8.786,
+  "datasets_evaluated": 1,
+  "datasets_ok": 0,
+  "datasets_review": 1,
+  "columns_evaluated": 1369,
+  "missing_columns_total": 1,
+  "extra_columns_total": 0,
+  "matched_columns_total": 1368,
+  "local_rows_parquet": 1874,
+  "outputs": {
+    "summary_csv": "reports\\schema_validation\\renamu\\renamu_schema_validation_summary.csv",
+    "detail_csv": "reports\\schema_validation\\renamu\\renamu_schema_validation_detail.csv",
+    "html": "reports\\schema_validation\\renamu\\renamu_schema_validation.html"
+  }
+}

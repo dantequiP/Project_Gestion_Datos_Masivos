@@ -1,0 +1,268 @@
+# ============================================================
+# REGLAS DE CALIDAD DE DATOS - RENAMU 2022
+# ============================================================
+settings:
+  source: renamu
+  bronze_root: data/bronze
+  bronze_subfolder: 2022_municipalidades__Base_RENAMU_2022_f
+  reports_root: reports/quality/renamu
+  data_quality_root: data/quality/renamu
+  audit_root: data/audit/quality
+  max_failed_samples_per_rule: 10
+
+missing_tokens: ["", "nan", "NaN", "None", "none", "NULL", "null", "<NA>", "NaT"]
+
+dimensions:
+  - Completitud
+  - Exactitud
+  - Consistencia
+  - Integridad
+  - Razonabilidad
+  - Oportunidad
+  - Unicidad
+  - Validez
+
+global_rules:
+  duplicate_full_rows:
+    enabled: true
+    dimension: Unicidad
+    severity: Media
+    source: profiling_based
+
+  pattern_rules:
+    # Razonabilidad: columnas P19 contienen conteos de personal
+    # con sufijos _T, _NM, _NH, _CM, _CH, _LM, _LH, _VM, _VH.
+    # Deben ser enteros no negativos. Profiling confirmó ausencia de negativos.
+    count_non_negative_integer:
+      enabled: true
+      dimension: Razonabilidad
+      severity: Alta
+      source: naming_pattern
+      startswith: ["P19", "P20", "P21", "P22"]
+      skip_contains: ["_O", "VFI"]
+
+    # Validez: Ubigeo debe tener exactamente 6 dígitos numéricos.
+    ubigeo_6_digits:
+      enabled: true
+      dimension: Exactitud
+      severity: Alta
+      source: naming_pattern
+      exact_columns: ["Ubigeo"]
+      regex: "^\\d{6}$"
+
+    # Validez: ccdd debe tener exactamente 2 dígitos.
+    territorial_code_2_digits:
+      enabled: true
+      dimension: Exactitud
+      severity: Media
+      source: naming_pattern
+      exact_columns: ["ccdd"]
+      regex: "^\\d{2}$"
+
+    # Validez: ccpp debe tener exactamente 2 dígitos.
+    provincial_code_2_digits:
+      enabled: true
+      dimension: Exactitud
+      severity: Media
+      source: naming_pattern
+      exact_columns: ["ccpp"]
+      regex: "^\\d{2}$"
+
+    # Validez: ccdi debe tener exactamente 2 dígitos.
+    district_code_2_digits:
+      enabled: true
+      dimension: Exactitud
+      severity: Media
+      source: naming_pattern
+      exact_columns: ["ccdi"]
+      regex: "^\\d{2}$"
+
+datasets:
+  municipalidades_2022:
+
+    # ----------------------------------------------------------
+    # COMPLETITUD
+    # Columnas de identificación geográfica e institucional.
+    # Profiling: 0% vacíos en columnas Geo/ID.
+    # ----------------------------------------------------------
+    required_columns:
+      dimension: Completitud
+      severity: Alta
+      source: local_csv
+      columns:
+        - "Año"
+        - "idmunici"
+        - "ccdd"
+        - "ccpp"
+        - "ccdi"
+        - "Ubigeo"
+        - "Departamento"
+        - "Provincia"
+        - "Distrito"
+        - "Tipomuni"
+
+    # Completitud exploratoria: columnas _O con alta ausencia estructural.
+    # Nombres exactos verificados contra el Parquet.
+    observed_empty_columns:
+      dimension: Completitud
+      severity: Baja
+      source: profiling_based
+      columns:
+        - "P11A_10_O"
+        - "P11B_18_O"
+        - "P13A_9_O"
+        - "P15A_6_O"
+        - "P16_9_O"
+        - "P17_13_O"
+
+    # ----------------------------------------------------------
+    # VALIDEZ — valores permitidos
+    # P11A_1 a P11A_10: preguntas Si/No sobre bienes municipales.
+    # Valores permitidos: 1=Sí, 2=No.
+    # ----------------------------------------------------------
+    allowed_values:
+      Tipomuni:
+        values: ["1", "2", "3"]
+        dimension: Validez
+        severity: Alta
+        source: local_csv
+      Año:
+        values: ["2022"]
+        dimension: Validez
+        severity: Alta
+        source: local_csv
+      P11A_1:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_2:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_3:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_4:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_5:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_6:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_7:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_8:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_9:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+      P11A_10:
+        values: ["1", "2"]
+        dimension: Validez
+        severity: Media
+        source: local_csv
+
+    # ----------------------------------------------------------
+    # VALIDEZ — columnas numéricas
+    # ----------------------------------------------------------
+    numeric_columns:
+      dimension: Validez
+      severity: Alta
+      source: local_csv
+      columns:
+        - "idmunici"
+        - "ccdd"
+        - "ccpp"
+        - "ccdi"
+
+    # ----------------------------------------------------------
+    # UNICIDAD
+    # idmunici y Ubigeo son claves candidatas únicas.
+    # Profiling confirmó 0 duplicados.
+    # ----------------------------------------------------------
+    unique_keys:
+      - columns: ["idmunici"]
+        dimension: Unicidad
+        severity: Alta
+        source: inferred_business_key
+      - columns: ["Ubigeo"]
+        dimension: Unicidad
+        severity: Alta
+        source: inferred_business_key
+
+    # ----------------------------------------------------------
+    # CONSISTENCIA
+    # NM (nombrado mujer) + NH (nombrado hombre) <= T (total)
+    # para las categorías de personal más representativas.
+    # Nombres verificados contra diccionario y Parquet.
+    # ----------------------------------------------------------
+    consistency_rules:
+      - rule_type: less_or_equal
+        left_column: "P19D_NM"
+        right_column: "P19D_T"
+        dimension: Consistencia
+        severity: Alta
+        source: business_rule
+      - rule_type: less_or_equal
+        left_column: "P19D_NH"
+        right_column: "P19D_T"
+        dimension: Consistencia
+        severity: Alta
+        source: business_rule
+      - rule_type: less_or_equal
+        left_column: "P19_1_NM"
+        right_column: "P19_1_T"
+        dimension: Consistencia
+        severity: Alta
+        source: business_rule
+      - rule_type: less_or_equal
+        left_column: "P19_1_NH"
+        right_column: "P19_1_T"
+        dimension: Consistencia
+        severity: Alta
+        source: business_rule
+      - rule_type: less_or_equal
+        left_column: "P19_2_NM"
+        right_column: "P19_2_T"
+        dimension: Consistencia
+        severity: Alta
+        source: business_rule
+      - rule_type: less_or_equal
+        left_column: "P19_2_NH"
+        right_column: "P19_2_T"
+        dimension: Consistencia
+        severity: Alta
+        source: business_rule
+
+    # ----------------------------------------------------------
+    # OPORTUNIDAD
+    # Dataset cubre exclusivamente el año 2022.
+    # ----------------------------------------------------------
+    timeliness_rules:
+      - rule_type: year_not_future
+        columns: ["Año"]
+        dimension: Oportunidad
+        severity: Media
+        source: local_csv
+
+referential_integrity: []
