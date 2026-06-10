@@ -1,0 +1,17 @@
+{
+  "pipeline_name": "profiling_renamu",
+  "status": "success",
+  "started_at": "2026-06-08T22:30:43.871153",
+  "finished_at": "2026-06-08T22:31:35.106237",
+  "duration_seconds": 51.235,
+  "datasets_profiled": 1,
+  "total_rows_profiled": 1874,
+  "total_columns_profiled": 1368,
+  "total_duplicate_rows": 0,
+  "outputs": {
+    "summary_csv": "reports\\profiling\\renamu\\renamu_profile_summary.csv",
+    "detail_csv": "reports\\profiling\\renamu\\renamu_profile_detail.csv",
+    "dataset_html": "reports\\profiling\\renamu\\renamu_profile.html",
+    "dashboard_html": "reports\\profiling\\renamu\\renamu_profile_dashboard.html"
+  }
+}

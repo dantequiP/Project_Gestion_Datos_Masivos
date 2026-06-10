@@ -1,0 +1,2 @@
+﻿dataset,rules_evaluated,rules_with_observations,observations_total,evaluated_rows_total,score_completitud,score_exactitud,score_consistencia,score_integridad,score_razonabilidad,score_oportunidad,score_unicidad,score_validez,score_general,estado_descriptivo
+municipalidades_2022,202,6,9802,356690,67.3092,100.0,100.0,,100.0,100.0,100.0,100.0,95.3299,Con observaciones

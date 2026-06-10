@@ -1,0 +1,6667 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Dashboard Silver SISMEPRE</title>
+
+<style>
+  body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; background: #f9fafb; }
+  h1, h2, h3 { color: #111827; }
+  .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .metric { background: #ffffff; border-left: 5px solid #64748b; border-radius: 8px; padding: 12px; }
+  .metric .label { color: #64748b; font-size: 12px; text-transform: uppercase; }
+  .metric .value { color: #111827; font-size: 24px; font-weight: bold; margin-top: 4px; }
+  table { border-collapse: collapse; width: 100%; background: white; font-size: 13px; }
+  th, td { border: 1px solid #e5e7eb; padding: 8px; vertical-align: top; }
+  th { background: #f3f4f6; text-align: left; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .ok { color: #166534; font-weight: bold; }
+  .warn { color: #92400e; font-weight: bold; }
+  .err { color: #991b1b; font-weight: bold; }
+  .small { font-size: 12px; color: #6b7280; }
+  code { background: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+</style>
+
+</head>
+<body>
+<h1>Dashboard Silver — SISMEPRE</h1>
+<p class="small">Reporte generado automáticamente por el pipeline Silver.</p>
+
+<div class="grid">
+  <div class="metric"><div class="label">Datasets procesados</div><div class="value">1</div></div>
+  <div class="metric"><div class="label">Filas Bronze</div><div class="value">1,874</div></div>
+  <div class="metric"><div class="label">Filas Silver</div><div class="value">1,874</div></div>
+  <div class="metric"><div class="label">Errores de conversión</div><div class="value">137</div></div>
+  <div class="metric"><div class="label">Columnas eliminadas</div><div class="value">94</div></div>
+</div>
+
+<div class="card">
+<h2>Resumen ejecutivo</h2>
+<p>La capa Silver estandariza tipos de datos, normaliza vacíos reales a <code>null</code>, conserva valores cero cuando representan datos válidos, agrega columnas técnicas de trazabilidad y aplica reglas específicas documentadas por dataset.</p>
+</div>
+
+<div class="card">
+<h2>Resumen por dataset</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>bronze_rows</th>
+<th>silver_rows</th>
+<th>bronze_columns</th>
+<th>silver_columns</th>
+<th>columns_converted</th>
+<th>date_columns_converted</th>
+<th>numeric_columns_converted</th>
+<th>technical_columns_added</th>
+<th>columns_dropped</th>
+<th>dropped_columns</th>
+<th>conversion_errors</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>status</th>
+<th>notes</th>
+<th>silver_path</th>
+</tr></thead><tbody>
+<tr>
+<td>municipalidades_2022</td>
+<td>1874</td>
+<td>1874</td>
+<td>1368</td>
+<td>1278</td>
+<td>1051</td>
+<td>0</td>
+<td>1048</td>
+<td>5</td>
+<td>94</td>
+<td>VFI, VFI_C96, VFI_C97, VFI_P100, VFI_P101, VFI_P102, VFI_P11A, VFI_P11B, VFI_P12, VFI_P13, VFI_P14, VFI_P15, VFI_P16, VFI_P17, VFI_P18, VFI_P19, VFI_P19A, VFI_P20, VFI_P21, VFI_P22, VFI_P23, VFI_P24, VFI_P25, VFI_P26, VFI_P26A, VFI_P27, VFI_P28, VFI_P29, VFI_P30, VFI_P31, VFI_P32, VFI_P33, VFI_P34, VFI_P35, VFI_P36, VFI_P37, VFI_P38, VFI_P39B, VFI_P40, VFI_P41, VFI_P42, VFI_P43, VFI_P44, VFI_P46, VFI_P47, VFI_P48, VFI_P48B, VFI_P49, VFI_P50, VFI_P51, VFI_P52, VFI_P53, VFI_P54, VFI_P55, VFI_P56, VFI_P57, VFI_P58, VFI_P59, VFI_P60A, VFI_P60B, VFI_P61, VFI_P62, VFI_P63, VFI_P64, VFI_P66, VFI_P67, VFI_P68, VFI_P69, VFI_P70, VFI_P71, VFI_P72A, VFI_P72B, VFI_P73, VFI_P74, VFI_P75, VFI_P76, VFI_P77, VFI_P78, VFI_P79, VFI_P80, VFI_P84A, VFI_P85, VFI_P86, VFI_P87, VFI_P87A, VFI_P88, VFI_P89, VFI_P90, VFI_P94, VFI_P95, VFI_P96, VFI_P97, VFI_P98, VFI_P99</td>
+<td>137</td>
+<td>0</td>
+<td>819774</td>
+<td class='err'>WITH_CONVERSION_ERRORS</td>
+<td></td>
+<td>data\silver\renamu\municipalidades_2022\municipalidades_2022_silver.parquet</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Glosario técnico</h2>
+<table>
+<thead><tr>
+<th>concepto</th>
+<th>explicacion</th>
+</tr></thead><tbody>
+<tr>
+<td>source_system</td>
+<td>Sistema de origen de los datos. Para este proceso: SISMEPRE.</td>
+</tr>
+<tr>
+<td>source_dataset</td>
+<td>Dataset Bronze del cual proviene cada registro.</td>
+</tr>
+<tr>
+<td>silver_processed_at</td>
+<td>Fecha y hora en que se procesó el registro hacia Silver.</td>
+</tr>
+<tr>
+<td>record_hash</td>
+<td>Huella SHA-256 para trazabilidad y detección de cambios.</td>
+</tr>
+<tr>
+<td>anio_periodo_key</td>
+<td>Clave derivada de ANO_APLICACION y PERIODO, útil para integración temporal.</td>
+</tr>
+<tr>
+<td>0 preservado</td>
+<td>El valor 0 se mantiene cuando puede representar una respuesta, monto o cantidad válida.</td>
+</tr>
+<tr>
+<td>null</td>
+<td>Representa ausencia real de dato después de normalizar vacíos.</td>
+</tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>Detalle de transformaciones por columna</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation</th>
+<th>nulls_before</th>
+<th>nulls_after</th>
+<th>conversion_errors</th>
+<th>special_values_handled</th>
+<th>status</th>
+<th>reason</th>
+</tr></thead><tbody>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); toda municipalidad respondió. Sin valor analítico diferenciador.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_C96</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_C97</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P100</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P101</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P102</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P11A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P11B</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P12</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P13</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P14</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P15</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P16</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P17</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P18</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P19</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P19A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P20</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P21</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P22</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P23</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P24</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P25</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P26</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P26A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P27</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P28</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P29</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P30</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P31</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P32</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P33</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P34</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P35</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P36</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P37</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P38</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P39B</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P40</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P41</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P42</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P43</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P44</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P46</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P47</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P48</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P48B</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P49</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P50</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P51</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P52</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P53</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P54</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P55</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P56</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P57</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P58</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P59</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P60A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P60B</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P61</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P62</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P63</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P64</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P66</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P67</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P68</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P69</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P70</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P71</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P72A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P72B</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P73</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P74</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P75</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P76</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P77</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P78</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P79</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P80</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P84A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P85</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P86</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P87</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P87A</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P88</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P89</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P90</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P94</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P95</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P96</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P97</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P98</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P99</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+<td class='warn'>DROPPED</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Año</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>idmunici</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>ccdd</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código de departamento; se conserva como texto por convención INEI (formato &#x27;01&#x27;-&#x27;25&#x27;).</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>ccpp</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código de provincia; se conserva como texto por convención INEI.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>ccdi</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código de distrito; se conserva como texto por convención INEI.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Ubigeo</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: CRÍTICO: min numérico=10101 implica pérdida del cero inicial (&#x27;010101&#x27;→10101). Debe ser string.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Departamento</td>
+<td>object</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Provincia</td>
+<td>object</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Distrito</td>
+<td>object</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Tipomuni</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>preserve_as_string: Código categórico (1=Provincial, 2=Distrital, 3=Centro Poblado); texto para integración con diccionario.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_2</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_3</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>87</td>
+<td>87.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_4</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1597</td>
+<td>1597.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_5</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1605</td>
+<td>1605.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_6</td>
+<td>object</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>1751</td>
+<td>1751.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_CC</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1283</td>
+<td>1283.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>871</td>
+<td>871.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1419</td>
+<td>1419.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P06_CC</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P06</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>151</td>
+<td>151.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P07</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>698</td>
+<td>698.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P08</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>102</td>
+<td>102.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P09</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1137</td>
+<td>1137.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_1</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_2</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_3</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_1_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>355</td>
+<td>355.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_1_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>355</td>
+<td>355.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_2_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>345</td>
+<td>345.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_2_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>345</td>
+<td>345.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_3_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1599</td>
+<td>1599.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_3_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1599</td>
+<td>1599.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_4_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>571</td>
+<td>571.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_4_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>571</td>
+<td>571.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_5_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>999</td>
+<td>999.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_5_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>999</td>
+<td>999.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_6_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1439</td>
+<td>1439.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_6_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1439</td>
+<td>1439.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_7</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_7_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1252</td>
+<td>1252.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_7_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1252</td>
+<td>1252.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_8</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_8_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1384</td>
+<td>1384.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_8_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1384</td>
+<td>1384.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_9</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_9_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1772</td>
+<td>1772.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_9_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1772</td>
+<td>1772.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1278</td>
+<td>1278.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1278</td>
+<td>1278.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10_O</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1278</td>
+<td>1278.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Texto libre &#x27;Otro tipo de acceso a internet&#x27;; solo aplica cuando P11A_10=1. Quality: 1,278 vacíos (68.2%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_11</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_11_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1555</td>
+<td>1555.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_11_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1555</td>
+<td>1555.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_12</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_12_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1193</td>
+<td>1193.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_12_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1193</td>
+<td>1193.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_13</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_13_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1304</td>
+<td>1304.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_13_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1304</td>
+<td>1304.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_14</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_14_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>980</td>
+<td>980.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_14_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>980</td>
+<td>980.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_15</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_15_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1189</td>
+<td>1189.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_15_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1189</td>
+<td>1189.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_16</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_16_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1410</td>
+<td>1410.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_16_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1410</td>
+<td>1410.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_17</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_17_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1487</td>
+<td>1487.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_17_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1487</td>
+<td>1487.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1702</td>
+<td>1702.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1702</td>
+<td>1702.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18_O</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1702</td>
+<td>1702.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Texto libre &#x27;Otro equipo tecnológico&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,702 vacíos (90.8%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12A_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1264</td>
+<td>1264.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12A_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>813</td>
+<td>813.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1272</td>
+<td>1272.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1437</td>
+<td>1437.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1168</td>
+<td>1168.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1477</td>
+<td>1477.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>419</td>
+<td>419.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>367</td>
+<td>367.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_7</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_7</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>581</td>
+<td>581.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_8</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_8</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1350</td>
+<td>1350.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_9</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_9</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1623</td>
+<td>1623.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_9_O</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1623</td>
+<td>1623.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Texto libre &#x27;Otro software&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,623 vacíos (86.6%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P14</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P14A_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>76</td>
+<td>76.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P14A_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>76</td>
+<td>76.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_1</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>596</td>
+<td>596.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1216</td>
+<td>1216.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>586</td>
+<td>586.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>98</td>
+<td>98.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>413</td>
+<td>413.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>1632</td>
+<td>1632.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_6_O</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1632</td>
+<td>1632.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Texto libre &#x27;Otra fuente de energía&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,632 vacíos (87.1%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_1</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_7</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_8</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_9</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_9_O</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1757</td>
+<td>1757.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Texto libre &#x27;Otro servicio de agua&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,757 vacíos (93.8%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_1</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_2</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_3</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_4</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_5</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_6</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_7</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_8</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_9</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_10</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_11</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_12</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_13</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_13_O</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1810</td>
+<td>1810.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td>documented_null_columns: Texto libre &#x27;Otro tipo de residuo&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,810 vacíos (96.6%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_14</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P18</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P18_Portal</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>1156</td>
+<td>1156.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_T</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_NM</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_NH</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_CM</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_CH</td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>0</td>
+<td>0.0</td>
+<td>0</td>
+<td>0</td>
+<td class='ok'>OK</td>
+<td></td>
+</tr>
+</tbody></table>
+<p class='small'>Mostrando 250 de 1368 filas.</p>
+</div>
+
+<div class="card">
+<h2>Diccionario Silver</h2>
+<table>
+<thead><tr>
+<th>dataset</th>
+<th>column_name</th>
+<th>business_name</th>
+<th>description</th>
+<th>bronze_type</th>
+<th>silver_type</th>
+<th>transformation_applied</th>
+<th>nullable</th>
+<th>is_technical_column</th>
+<th>source</th>
+<th>notes</th>
+</tr></thead><tbody>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI</td>
+<td>VFI</td>
+<td>VFI constante (100% = &#x27;1&#x27;); toda municipalidad respondió. Sin valor analítico diferenciador.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); toda municipalidad respondió. Sin valor analítico diferenciador.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_C96</td>
+<td>VFI_C96</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_C97</td>
+<td>VFI_C97</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P100</td>
+<td>VFI_P100</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P101</td>
+<td>VFI_P101</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P102</td>
+<td>VFI_P102</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P11A</td>
+<td>VFI_P11A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P11B</td>
+<td>VFI_P11B</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P12</td>
+<td>VFI_P12</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P13</td>
+<td>VFI_P13</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P14</td>
+<td>VFI_P14</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P15</td>
+<td>VFI_P15</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P16</td>
+<td>VFI_P16</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P17</td>
+<td>VFI_P17</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P18</td>
+<td>VFI_P18</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P19</td>
+<td>VFI_P19</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P19A</td>
+<td>VFI_P19A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P20</td>
+<td>VFI_P20</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P21</td>
+<td>VFI_P21</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P22</td>
+<td>VFI_P22</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P23</td>
+<td>VFI_P23</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P24</td>
+<td>VFI_P24</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P25</td>
+<td>VFI_P25</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P26</td>
+<td>VFI_P26</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P26A</td>
+<td>VFI_P26A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P27</td>
+<td>VFI_P27</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P28</td>
+<td>VFI_P28</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P29</td>
+<td>VFI_P29</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P30</td>
+<td>VFI_P30</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P31</td>
+<td>VFI_P31</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P32</td>
+<td>VFI_P32</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P33</td>
+<td>VFI_P33</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P34</td>
+<td>VFI_P34</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P35</td>
+<td>VFI_P35</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P36</td>
+<td>VFI_P36</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P37</td>
+<td>VFI_P37</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P38</td>
+<td>VFI_P38</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P39B</td>
+<td>VFI_P39B</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P40</td>
+<td>VFI_P40</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P41</td>
+<td>VFI_P41</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P42</td>
+<td>VFI_P42</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P43</td>
+<td>VFI_P43</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P44</td>
+<td>VFI_P44</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P46</td>
+<td>VFI_P46</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P47</td>
+<td>VFI_P47</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P48</td>
+<td>VFI_P48</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P48B</td>
+<td>VFI_P48B</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P49</td>
+<td>VFI_P49</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P50</td>
+<td>VFI_P50</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P51</td>
+<td>VFI_P51</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P52</td>
+<td>VFI_P52</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P53</td>
+<td>VFI_P53</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P54</td>
+<td>VFI_P54</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P55</td>
+<td>VFI_P55</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P56</td>
+<td>VFI_P56</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P57</td>
+<td>VFI_P57</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P58</td>
+<td>VFI_P58</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P59</td>
+<td>VFI_P59</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P60A</td>
+<td>VFI_P60A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P60B</td>
+<td>VFI_P60B</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P61</td>
+<td>VFI_P61</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P62</td>
+<td>VFI_P62</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P63</td>
+<td>VFI_P63</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P64</td>
+<td>VFI_P64</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P66</td>
+<td>VFI_P66</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P67</td>
+<td>VFI_P67</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P68</td>
+<td>VFI_P68</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P69</td>
+<td>VFI_P69</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P70</td>
+<td>VFI_P70</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P71</td>
+<td>VFI_P71</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P72A</td>
+<td>VFI_P72A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P72B</td>
+<td>VFI_P72B</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P73</td>
+<td>VFI_P73</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P74</td>
+<td>VFI_P74</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P75</td>
+<td>VFI_P75</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P76</td>
+<td>VFI_P76</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P77</td>
+<td>VFI_P77</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P78</td>
+<td>VFI_P78</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P79</td>
+<td>VFI_P79</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P80</td>
+<td>VFI_P80</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P84A</td>
+<td>VFI_P84A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P85</td>
+<td>VFI_P85</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P86</td>
+<td>VFI_P86</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P87</td>
+<td>VFI_P87</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P87A</td>
+<td>VFI_P87A</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P88</td>
+<td>VFI_P88</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P89</td>
+<td>VFI_P89</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P90</td>
+<td>VFI_P90</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P94</td>
+<td>VFI_P94</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P95</td>
+<td>VFI_P95</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P96</td>
+<td>VFI_P96</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P97</td>
+<td>VFI_P97</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P98</td>
+<td>VFI_P98</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>VFI_P99</td>
+<td>VFI_P99</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+<td>object</td>
+<td>dropped</td>
+<td>drop_column</td>
+<td></td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>VFI constante (100% = &#x27;1&#x27;); sin variación.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Año</td>
+<td>Año</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>idmunici</td>
+<td>idmunici</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>ccdd</td>
+<td>ccdd</td>
+<td>preserve_as_string: Código de departamento; se conserva como texto por convención INEI (formato &#x27;01&#x27;-&#x27;25&#x27;).</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código de departamento; se conserva como texto por convención INEI (formato &#x27;01&#x27;-&#x27;25&#x27;).</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>ccpp</td>
+<td>ccpp</td>
+<td>preserve_as_string: Código de provincia; se conserva como texto por convención INEI.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código de provincia; se conserva como texto por convención INEI.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>ccdi</td>
+<td>ccdi</td>
+<td>preserve_as_string: Código de distrito; se conserva como texto por convención INEI.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código de distrito; se conserva como texto por convención INEI.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Ubigeo</td>
+<td>Ubigeo</td>
+<td>preserve_as_string: CRÍTICO: min numérico=10101 implica pérdida del cero inicial (&#x27;010101&#x27;→10101). Debe ser string.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: CRÍTICO: min numérico=10101 implica pérdida del cero inicial (&#x27;010101&#x27;→10101). Debe ser string.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Departamento</td>
+<td>Departamento</td>
+<td></td>
+<td>object</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Provincia</td>
+<td>Provincia</td>
+<td></td>
+<td>object</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Distrito</td>
+<td>Distrito</td>
+<td></td>
+<td>object</td>
+<td>string</td>
+<td>cast_to_string_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>Tipomuni</td>
+<td>Tipomuni</td>
+<td>preserve_as_string: Código categórico (1=Provincial, 2=Distrital, 3=Centro Poblado); texto para integración con diccionario.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>preserve_as_string: Código categórico (1=Provincial, 2=Distrital, 3=Centro Poblado); texto para integración con diccionario.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_1</td>
+<td>P04_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_2</td>
+<td>P04_2</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_3</td>
+<td>P04_3</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_4</td>
+<td>P04_4</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_5</td>
+<td>P04_5</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P04_6</td>
+<td>P04_6</td>
+<td></td>
+<td>object</td>
+<td>Float64</td>
+<td>cast_to_decimal_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_CC</td>
+<td>P05_CC</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_1</td>
+<td>P05_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_2</td>
+<td>P05_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P05_3</td>
+<td>P05_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P06_CC</td>
+<td>P06_CC</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P06</td>
+<td>P06</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P07</td>
+<td>P07</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P08</td>
+<td>P08</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P09</td>
+<td>P09</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_1</td>
+<td>P10_1</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_2</td>
+<td>P10_2</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_3</td>
+<td>P10_3</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P10_4</td>
+<td>P10_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_1</td>
+<td>P11A_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_1_1</td>
+<td>P11A_1_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_1_2</td>
+<td>P11A_1_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_2</td>
+<td>P11A_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_2_1</td>
+<td>P11A_2_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_2_2</td>
+<td>P11A_2_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_3</td>
+<td>P11A_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_3_1</td>
+<td>P11A_3_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_3_2</td>
+<td>P11A_3_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_4</td>
+<td>P11A_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_4_1</td>
+<td>P11A_4_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_4_2</td>
+<td>P11A_4_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_5</td>
+<td>P11A_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_5_1</td>
+<td>P11A_5_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_5_2</td>
+<td>P11A_5_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_6</td>
+<td>P11A_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_6_1</td>
+<td>P11A_6_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_6_2</td>
+<td>P11A_6_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_7</td>
+<td>P11A_7</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_7_1</td>
+<td>P11A_7_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_7_2</td>
+<td>P11A_7_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_8</td>
+<td>P11A_8</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_8_1</td>
+<td>P11A_8_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_8_2</td>
+<td>P11A_8_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_9</td>
+<td>P11A_9</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_9_1</td>
+<td>P11A_9_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_9_2</td>
+<td>P11A_9_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10</td>
+<td>P11A_10</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10_1</td>
+<td>P11A_10_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10_2</td>
+<td>P11A_10_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11A_10_O</td>
+<td>P11A_10_O</td>
+<td>documented_null_columns: Texto libre &#x27;Otro tipo de acceso a internet&#x27;; solo aplica cuando P11A_10=1. Quality: 1,278 vacíos (68.2%). Vacío estructural documentado.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Texto libre &#x27;Otro tipo de acceso a internet&#x27;; solo aplica cuando P11A_10=1. Quality: 1,278 vacíos (68.2%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_11</td>
+<td>P11B_11</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_11_1</td>
+<td>P11B_11_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_11_2</td>
+<td>P11B_11_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_12</td>
+<td>P11B_12</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_12_1</td>
+<td>P11B_12_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_12_2</td>
+<td>P11B_12_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_13</td>
+<td>P11B_13</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_13_1</td>
+<td>P11B_13_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_13_2</td>
+<td>P11B_13_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_14</td>
+<td>P11B_14</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_14_1</td>
+<td>P11B_14_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_14_2</td>
+<td>P11B_14_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_15</td>
+<td>P11B_15</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_15_1</td>
+<td>P11B_15_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_15_2</td>
+<td>P11B_15_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_16</td>
+<td>P11B_16</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_16_1</td>
+<td>P11B_16_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_16_2</td>
+<td>P11B_16_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_17</td>
+<td>P11B_17</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_17_1</td>
+<td>P11B_17_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_17_2</td>
+<td>P11B_17_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18</td>
+<td>P11B_18</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18_1</td>
+<td>P11B_18_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18_2</td>
+<td>P11B_18_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P11B_18_O</td>
+<td>P11B_18_O</td>
+<td>documented_null_columns: Texto libre &#x27;Otro equipo tecnológico&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,702 vacíos (90.8%). Vacío estructural documentado.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Texto libre &#x27;Otro equipo tecnológico&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,702 vacíos (90.8%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12_1</td>
+<td>P12_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12A_1</td>
+<td>P12A_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12_2</td>
+<td>P12_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P12A_2</td>
+<td>P12A_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_1</td>
+<td>P13_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_1</td>
+<td>P13A_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_2</td>
+<td>P13_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_2</td>
+<td>P13A_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_3</td>
+<td>P13_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_3</td>
+<td>P13A_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_4</td>
+<td>P13_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_4</td>
+<td>P13A_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_5</td>
+<td>P13_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_5</td>
+<td>P13A_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_6</td>
+<td>P13_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_6</td>
+<td>P13A_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_7</td>
+<td>P13_7</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_7</td>
+<td>P13A_7</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_8</td>
+<td>P13_8</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_8</td>
+<td>P13A_8</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13_9</td>
+<td>P13_9</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_9</td>
+<td>P13A_9</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P13A_9_O</td>
+<td>P13A_9_O</td>
+<td>documented_null_columns: Texto libre &#x27;Otro software&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,623 vacíos (86.6%). Vacío estructural documentado.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Texto libre &#x27;Otro software&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,623 vacíos (86.6%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P14</td>
+<td>P14</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P14A_1</td>
+<td>P14A_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P14A_2</td>
+<td>P14A_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_1</td>
+<td>P15_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_1</td>
+<td>P15A_1</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_2</td>
+<td>P15_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_2</td>
+<td>P15A_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_3</td>
+<td>P15_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_3</td>
+<td>P15A_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_4</td>
+<td>P15_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_4</td>
+<td>P15A_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_5</td>
+<td>P15_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_5</td>
+<td>P15A_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15_6</td>
+<td>P15_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_6</td>
+<td>P15A_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P15A_6_O</td>
+<td>P15A_6_O</td>
+<td>documented_null_columns: Texto libre &#x27;Otra fuente de energía&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,632 vacíos (87.1%). Vacío estructural documentado.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Texto libre &#x27;Otra fuente de energía&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,632 vacíos (87.1%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_1</td>
+<td>P16_1</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_2</td>
+<td>P16_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_3</td>
+<td>P16_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_4</td>
+<td>P16_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_5</td>
+<td>P16_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_6</td>
+<td>P16_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_7</td>
+<td>P16_7</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_8</td>
+<td>P16_8</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_9</td>
+<td>P16_9</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P16_9_O</td>
+<td>P16_9_O</td>
+<td>documented_null_columns: Texto libre &#x27;Otro servicio de agua&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,757 vacíos (93.8%). Vacío estructural documentado.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Texto libre &#x27;Otro servicio de agua&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,757 vacíos (93.8%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_1</td>
+<td>P17_1</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_2</td>
+<td>P17_2</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_3</td>
+<td>P17_3</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_4</td>
+<td>P17_4</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_5</td>
+<td>P17_5</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_6</td>
+<td>P17_6</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_7</td>
+<td>P17_7</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_8</td>
+<td>P17_8</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_9</td>
+<td>P17_9</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_10</td>
+<td>P17_10</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_11</td>
+<td>P17_11</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_12</td>
+<td>P17_12</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_13</td>
+<td>P17_13</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_13_O</td>
+<td>P17_13_O</td>
+<td>documented_null_columns: Texto libre &#x27;Otro tipo de residuo&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,810 vacíos (96.6%). Vacío estructural documentado.</td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td>documented_null_columns: Texto libre &#x27;Otro tipo de residuo&#x27;; solo aplica al elegir opción &#x27;Otro&#x27;. Quality: 1,810 vacíos (96.6%). Vacío estructural documentado.</td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P17_14</td>
+<td>P17_14</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P18</td>
+<td>P18</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P18_Portal</td>
+<td>P18_Portal</td>
+<td></td>
+<td>object</td>
+<td>object</td>
+<td>kept_without_explicit_rule</td>
+<td>True</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_T</td>
+<td>P19D_T</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_NM</td>
+<td>P19D_NM</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_NH</td>
+<td>P19D_NH</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_CM</td>
+<td>P19D_CM</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+<tr>
+<td>municipalidades_2022</td>
+<td>P19D_CH</td>
+<td>P19D_CH</td>
+<td></td>
+<td>object</td>
+<td>Int64</td>
+<td>cast_to_integer_nullable</td>
+<td>False</td>
+<td>False</td>
+<td>Bronze SISMEPRE + silver_rules_sismepre.yaml</td>
+<td></td>
+</tr>
+</tbody></table>
+<p class='small'>Mostrando 250 de 1373 filas.</p>
+</div>
+</body>
+</html>
