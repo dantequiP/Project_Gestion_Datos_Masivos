@@ -1,21 +1,36 @@
 """
 siaf_silver_transformer.py
-
 Transformador Bronze → Silver para SIAF Ingresos.
 
-Aplica exclusivamente las transformaciones definidas en silver_rules_siaf.yaml:
-- Convierte tipos de datos (integer, decimal, string, datetime).
-- Normaliza tokens vacíos a null.
-- Aplica trim() a columnas de texto.
-- Genera columna derivada anio_mes_key (YYYY-MM).
-- Genera columna derivada ubigeo_ejecutora (6 dígitos).
-- Agrega columnas técnicas de trazabilidad.
-- Guarda Parquet Silver por año/dataset.
+Lee las reglas desde silver_rules_siaf.yaml (secciones:
+filtering, cleaning, imputations, derived_columns,
+audit_columns, deduplication).
 
-Silver NO limpia agresivamente.
-Silver NO elimina registros válidos.
-Silver NO altera el significado de negocio.
-Bronze conserva → Silver estandariza → Gold modela.
+Orden de ejecución:
+  1. Lectura de Parquet Bronze (excluye rutas "_diario")
+  2. filtering       — NIVEL_GOBIERNO = 'M'
+  3. cleaning        — null_tokens, global_trim, lpad_codes
+  4. imputations     — rellena vacíos estructurales post-filtro
+  5. derived_columns — ubigeo_ejecutora, sk_tiempo_mensual,
+                       nombre_municipalidad_normalizado,
+                       anio_mes_key, ano_particion,
+                       flag_tipo_transaccion,
+                       flag_monto_pia_activo
+  6. audit_columns   — source_system, source_dataset,
+                       silver_processed_at, _audit_loaded_at,
+                       record_hash (sha2-256)
+  7. deduplication   — row_number() por clave de negocio
+  8. Escritura Parquet Silver particionado por ano_particion
+
+Filosofía:
+  Bronze conserva → Silver estandariza → Gold modela.
+  Silver NO elimina registros válidos ni altera significado
+  de negocio.  Los negativos en montos son válidos (SIAF).
+
+Entorno:
+  Docker con PySpark. bind-mount en /app.
+  Ejecución:
+    docker exec -it gdm_pyspark_siaf python run_siaf_silver.py
 """
 
 from __future__ import annotations
@@ -29,639 +44,739 @@ from typing import Any
 import pandas as pd
 import yaml
 
-from app.utils.logger import get_logger
+try:
+    from pyspark.sql import SparkSession, DataFrame as SparkDF
+    from pyspark.sql import functions as F
+    from pyspark.sql import Window
+    from pyspark.sql.types import (
+        IntegerType, LongType, DoubleType, StringType,
+        BooleanType, TimestampType,
+    )
+    PYSPARK_AVAILABLE = True
+except ImportError:
+    PYSPARK_AVAILABLE = False
+
+try:
+    from app.utils.logger import get_logger
+    logger = get_logger(__name__, log_dir=Path("logs"))
+except Exception:
+    import logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+    )
+    logger = logging.getLogger(__name__)
 
 
-logger = get_logger(__name__, log_dir=Path("logs"))
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Estructuras de datos
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
+# Estructuras de datos de resultado
+# ─────────────────────────────────────────────────────────────
 
 @dataclass
-class DatasetSilverResult:
-    """Resultado de transformación Silver para un dataset SIAF."""
+class SiafSilverResult:
+    """Resultado de la transformación Silver SIAF."""
+
     dataset: str
-    bronze_path: Path
+    bronze_paths: list[Path]
     silver_path: Path
     bronze_rows: int
-    silver_rows: int
+    filtered_rows: int       # tras filtro NIVEL_GOBIERNO=M
+    silver_rows: int         # tras dedup
     bronze_columns: int
     silver_columns: int
     detail_rows: list[dict[str, Any]]
-    dropped_columns: list[str]
     conversion_errors: int
+    duplicates_removed: int
     nulls_before: int
     nulls_after: int
     status: str
     notes: list[str] = field(default_factory=list)
 
 
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
 # Carga de configuración
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
 
 def load_silver_rules(path: Path) -> dict[str, Any]:
-    """Carga el archivo YAML con reglas Silver."""
+    """Carga silver_rules_siaf.yaml con yaml.safe_load."""
     if not path.exists():
-        raise FileNotFoundError(f"No existe el archivo de reglas Silver: {path}")
-    with path.open("r", encoding="utf-8") as file:
-        config = yaml.safe_load(file)
+        raise FileNotFoundError(f"No existe el YAML de reglas Silver: {path}")
+    with path.open("r", encoding="utf-8") as fh:
+        config = yaml.safe_load(fh)
     if not isinstance(config, dict):
-        raise ValueError("El archivo YAML de reglas Silver no tiene estructura válida.")
+        raise ValueError("El YAML de reglas Silver no tiene estructura válida.")
     return config
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Utilidades de conversión (idénticas a SISMEPRE)
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
+# Utilidades internas
+# ─────────────────────────────────────────────────────────────
 
-def _as_list(value: Any) -> list[str]:
-    """Convierte listas/diccionarios/valores simples a lista de nombres de columnas."""
-    if value is None:
+def _discover_bronze_files(bronze_base: Path) -> list[Path]:
+    """
+    Descubre todos los Parquet bajo bronze_base_path.
+    CRÍTICO: omite cualquier ruta que contenga '_diario'
+    para evitar duplicar millones de registros.
+    """
+    if not bronze_base.exists():
+        logger.warning("Ruta Bronze no encontrada: %s", bronze_base)
         return []
-    if isinstance(value, list):
-        return value
-    if isinstance(value, dict):
-        return list(value.keys())
-    if isinstance(value, str):
-        return [value]
-    return list(value)
+
+    all_parquets = sorted(bronze_base.rglob("*.parquet"))
+    filtered = [p for p in all_parquets if "_diario" not in str(p).lower()]
+
+    skipped = len(all_parquets) - len(filtered)
+    if skipped:
+        logger.warning(
+            "Omitidos %d Parquet con '_diario' para evitar duplicados.", skipped
+        )
+
+    logger.info("Parquet Bronze encontrados: %d archivos.", len(filtered))
+    for p in filtered:
+        logger.info("  → %s", p)
+    return filtered
 
 
-def _reason_from_mapping(mapping: Any, column: str) -> str:
-    """Obtiene la razón documentada para una columna dentro de una regla YAML."""
-    if isinstance(mapping, dict) and column in mapping:
-        value = mapping[column]
-        if isinstance(value, dict):
-            return str(value.get("reason", ""))
-        return str(value)
-    return ""
+def _build_spark(app_name: str = "SIAF Silver Pipeline") -> "SparkSession":
+    """Obtiene o crea la SparkSession."""
+    spark = (
+        SparkSession.builder
+        .appName(app_name)
+        .config("spark.sql.parquet.enableVectorizedReader", "false")
+        .getOrCreate()
+    )
+    spark.sparkContext.setLogLevel("WARN")
+    return spark
 
 
-def _normalize_missing_tokens(df: pd.DataFrame, missing_tokens: list[str]) -> pd.DataFrame:
+def _spark_to_pandas_summary(df: "SparkDF") -> pd.DataFrame:
     """
-    Convierte tokens vacíos o textuales a valores nulos.
-    Solo opera sobre columnas object/string para no alterar valores numéricos válidos como 0.
+    Convierte el DataFrame Spark de resumen a Pandas.
+    Regla de arquitectura: el resultado final siempre es Pandas
+    para compatibilidad con los generadores de reportes HTML.
     """
-    tokens = set(missing_tokens or [])
-    result = df.copy()
-
-    for column in result.columns:
-        if pd.api.types.is_object_dtype(result[column]) or pd.api.types.is_string_dtype(result[column]):
-            series = result[column]
-            stripped = series.astype("string").str.strip()
-            mask = stripped.isin(tokens)
-            result.loc[mask, column] = pd.NA
-
-    return result
+    return df.toPandas()
 
 
-def _convert_to_string(series: pd.Series) -> pd.Series:
-    """Convierte una columna a string nullable de pandas, conservando nulos."""
-    return series.astype("string")
+# ─────────────────────────────────────────────────────────────
+# Pasos del pipeline (cada uno es una función pura)
+# ─────────────────────────────────────────────────────────────
+
+def step_read_bronze(spark: "SparkSession", paths: list[Path]) -> "SparkDF":
+    """Lee y combina todos los Parquet Bronze en un único DataFrame Spark."""
+    str_paths = [str(p) for p in paths]
+    df = spark.read.parquet(*str_paths)
+    logger.info("Bronze leído: %d filas, %d columnas.", df.count(), len(df.columns))
+    return df
 
 
-def _convert_to_integer(series: pd.Series) -> tuple[pd.Series, int]:
-    """Convierte una columna a entero nullable y cuenta errores reales de conversión."""
-    before_not_null = series.notna()
-    converted = pd.to_numeric(series, errors="coerce")
-    errors = int((before_not_null & converted.isna()).sum())
-    return converted.astype("Int64"), errors
+def step_filtering(df: "SparkDF", cfg: dict[str, Any]) -> "SparkDF":
+    """
+    Aplica el filtro maestro definido en filtering.master_filter.
+    Por defecto: NIVEL_GOBIERNO = 'M'.
+    """
+    master = cfg.get("filtering", {}).get("master_filter", {})
+    column = master.get("column", "NIVEL_GOBIERNO")
+    value = master.get("value", "M")
+
+    before = df.count()
+    df = df.filter(F.col(column) == value)
+    after = df.count()
+
+    logger.info(
+        "Filtro %s='%s': %d → %d filas (-%d).",
+        column, value, before, after, before - after,
+    )
+    return df
 
 
-def _convert_to_decimal(series: pd.Series) -> tuple[pd.Series, int]:
-    """Convierte una columna a decimal/float y cuenta errores reales de conversión."""
-    before_not_null = series.notna()
-    converted = pd.to_numeric(series, errors="coerce")
-    errors = int((before_not_null & converted.isna()).sum())
-    return converted.astype("Float64"), errors
+def step_cleaning(df: "SparkDF", cfg: dict[str, Any]) -> "SparkDF":
+    """
+    Cleaning:
+      1. Convierte null_tokens a null (solo columnas string)
+      2. global_trim en todas las columnas StringType
+      3. lpad en campos de código definidos en lpad_codes
+    """
+    cleaning_cfg = cfg.get("cleaning", {})
 
+    # ── 1. Null tokens ────────────────────────────────────────
+    null_tokens_cfg = cleaning_cfg.get("null_tokens", {})
+    tokens: list[str] = null_tokens_cfg.get("tokens", [])
+    if null_tokens_cfg.get("convert_to_null", True) and tokens:
+        string_cols = [
+            f.name for f in df.schema.fields
+            if isinstance(f.dataType, StringType)
+        ]
+        for col_name in string_cols:
+            df = df.withColumn(
+                col_name,
+                F.when(
+                    F.trim(F.col(col_name)).isin(tokens),
+                    F.lit(None).cast(StringType()),
+                ).otherwise(F.col(col_name)),
+            )
+        logger.info("Null tokens convertidos a null en %d columnas string.", len(string_cols))
 
-def _convert_to_datetime(series: pd.Series) -> tuple[pd.Series, int]:
-    """Convierte una columna a datetime nullable (dayfirst para fuentes MEF)."""
-    before_not_null = series.notna()
-    converted = pd.to_datetime(series, errors="coerce", dayfirst=True)
-    errors = int((before_not_null & converted.isna()).sum())
-    return converted, errors
+    # ── 2. Global trim ────────────────────────────────────────
+    global_trim_cfg = cleaning_cfg.get("global_trim", {})
+    if global_trim_cfg.get("apply", True):
+        string_cols = [
+            f.name for f in df.schema.fields
+            if isinstance(f.dataType, StringType)
+        ]
+        for col_name in string_cols:
+            df = df.withColumn(col_name, F.trim(F.col(col_name)))
+        logger.info("trim() aplicado a %d columnas string.", len(string_cols))
 
-
-def _format_key_value(value: Any) -> str:
-    """Formatea valores para claves derivadas, evitando .0 en enteros nullable."""
-    if pd.isna(value):
-        return ""
-    if isinstance(value, float) and value.is_integer():
-        return str(int(value))
-    return str(value)
-
-
-def _get_column_target_type(dataset_rules: dict[str, Any], column: str) -> str:
-    """Devuelve el tipo objetivo definido en el YAML para una columna."""
-    if column in _as_list(dataset_rules.get("integer_columns")):
-        return "integer"
-    if column in _as_list(dataset_rules.get("decimal_columns")):
-        return "decimal"
-    if column in _as_list(dataset_rules.get("datetime_columns")):
-        return "datetime"
-    if column in _as_list(dataset_rules.get("string_columns")):
-        return "string"
-    return "unchanged"
-
-
-def _hash_row(row: pd.Series, columns: list[str]) -> str:
-    """Genera SHA-256 estable para una fila usando las columnas indicadas."""
-    parts = []
-    for column in columns:
-        value = row[column]
-        if pd.isna(value):
-            value_text = "<NULL>"
-        elif isinstance(value, pd.Timestamp):
-            value_text = value.isoformat()
+    # ── 3. lpad en códigos ────────────────────────────────────
+    lpad_rules: list[dict] = cleaning_cfg.get("lpad_codes", [])
+    for rule in lpad_rules:
+        col_name: str = rule["column"]
+        length: int = rule["length"]
+        fill: str = rule.get("fill_char", "0")
+        if col_name in df.columns:
+            df = df.withColumn(
+                col_name,
+                F.lpad(F.trim(F.col(col_name).cast(StringType())), length, fill),
+            )
+            logger.info(
+                "lpad('%s', %d, '%s') aplicado.", col_name, length, fill
+            )
         else:
-            value_text = str(value)
-        parts.append(f"{column}={value_text}")
-    raw = "|".join(parts)
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+            logger.warning("lpad_codes: columna '%s' no existe en el DataFrame.", col_name)
 
-
-def _add_technical_columns(
-    df: pd.DataFrame,
-    dataset: str,
-    source_system: str,
-    processed_at: datetime,
-) -> pd.DataFrame:
-    """Agrega columnas técnicas de trazabilidad."""
-    result = df.copy()
-    result["source_system"] = source_system
-    result["source_dataset"] = dataset
-    result["silver_processed_at"] = processed_at
-
-    hash_columns = [
-        column
-        for column in result.columns
-        if column not in {"source_system", "source_dataset", "silver_processed_at", "record_hash"}
-    ]
-    result["record_hash"] = result.apply(lambda row: _hash_row(row, hash_columns), axis=1)
-    return result
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Columnas derivadas específicas de SIAF
-# ──────────────────────────────────────────────────────────────────────────────
-
-def _add_anio_mes_key(df: pd.DataFrame, dataset_rules: dict[str, Any]) -> pd.DataFrame:
-    """
-    Genera anio_mes_key en formato YYYY-MM a partir de ANO_DOC y MES_DOC.
-
-    Ejemplo: ANO_DOC=2026, MES_DOC=1 → "2026-01"
-    """
-    derived = dataset_rules.get("derived_columns", {}) or {}
-    key_rule = derived.get("anio_mes_key", {}) or {}
-    if not key_rule.get("enabled", False):
-        return df
-
-    source_cols = key_rule.get("source_columns", ["ANO_DOC", "MES_DOC"])
-    if not all(c in df.columns for c in source_cols):
-        df["anio_mes_key"] = pd.NA
-        return df
-
-    ano_col, mes_col = source_cols[0], source_cols[1]
-
-    def _build_key(row: pd.Series) -> Any:
-        if pd.notna(row[ano_col]) and pd.notna(row[mes_col]):
-            try:
-                ano = int(float(str(row[ano_col]).replace(".0", "")))
-                mes = int(float(str(row[mes_col]).replace(".0", "")))
-                return f"{ano:04d}-{mes:02d}"
-            except (ValueError, TypeError):
-                return pd.NA
-        return pd.NA
-
-    df["anio_mes_key"] = df.apply(_build_key, axis=1).astype("string")
     return df
 
 
-def _add_ubigeo_ejecutora(df: pd.DataFrame, dataset_rules: dict[str, Any]) -> pd.DataFrame:
+def step_imputations(df: "SparkDF", cfg: dict[str, Any]) -> "SparkDF":
     """
-    Genera ubigeo_ejecutora de 6 dígitos concatenando los tres códigos geográficos.
+    Imputa vacíos estructurales post-filtro NIVEL_GOBIERNO=M.
 
-    Ejemplo: DPTO=15, PROV=01, DIST=31 → "150131"
-    Esto facilita el join con RENAMU en la capa Gold.
+    Secciones leídas del YAML:
+      void_codes        → SECTOR, PLIEGO = "00"
+      void_names        → SECTOR_NOMBRE, PLIEGO_NOMBRE = "SIN DATO"
+      geo_residual_nulls → códigos/nombres geográficos con 0.014% nulos
     """
-    derived = dataset_rules.get("derived_columns", {}) or {}
-    key_rule = derived.get("ubigeo_ejecutora", {}) or {}
-    if not key_rule.get("enabled", False):
-        return df
+    imp_cfg = cfg.get("imputations", {})
 
-    source_cols = key_rule.get("source_columns", ["DEPARTAMENTO_EJECUTORA", "PROVINCIA_EJECUTORA", "DISTRITO_EJECUTORA"])
-    if not all(c in df.columns for c in source_cols):
-        df["ubigeo_ejecutora"] = pd.NA
-        return df
+    # void_codes
+    void_codes = imp_cfg.get("void_codes", {})
+    code_value: str = void_codes.get("impute_value", "00")
+    for col_name in (void_codes.get("columns") or []):
+        if col_name in df.columns:
+            df = df.withColumn(
+                col_name,
+                F.coalesce(F.col(col_name), F.lit(code_value)),
+            )
+            logger.info("Imputado '%s' → '%s'", col_name, code_value)
 
-    dpto_col, prov_col, dist_col = source_cols[0], source_cols[1], source_cols[2]
+    # void_names
+    void_names = imp_cfg.get("void_names", {})
+    name_value: str = void_names.get("impute_value", "SIN DATO")
+    for col_name in (void_names.get("columns") or []):
+        if col_name in df.columns:
+            df = df.withColumn(
+                col_name,
+                F.coalesce(F.col(col_name), F.lit(name_value)),
+            )
+            logger.info("Imputado '%s' → '%s'", col_name, name_value)
 
-    def _build_ubigeo(row: pd.Series) -> Any:
+    # geo_residual_nulls
+    geo_cfg = imp_cfg.get("geo_residual_nulls", {})
+    geo_code_val: str = geo_cfg.get("void_codes_geo", {}).get("impute_value", "00")
+    for col_name in (geo_cfg.get("void_codes_geo", {}).get("columns") or []):
+        if col_name in df.columns:
+            df = df.withColumn(
+                col_name,
+                F.coalesce(F.col(col_name), F.lit(geo_code_val)),
+            )
+
+    geo_name_val: str = geo_cfg.get("void_names_geo", {}).get("impute_value", "SIN DATO")
+    for col_name in (geo_cfg.get("void_names_geo", {}).get("columns") or []):
+        if col_name in df.columns:
+            df = df.withColumn(
+                col_name,
+                F.coalesce(F.col(col_name), F.lit(geo_name_val)),
+            )
+
+    logger.info("Imputaciones aplicadas.")
+    return df
+
+
+def step_type_casting(df: "SparkDF", cfg: dict[str, Any]) -> tuple["SparkDF", int, list[dict]]:
+    """
+    Convierte tipos de datos según output_schema del YAML.
+    Retorna (df_convertido, total_errores, detail_rows).
+
+    La conversión de tipos se hace DESPUÉS de cleaning e imputations
+    para que los valores ya estén limpios.
+    """
+    schema_cols: list[dict] = cfg.get("output_schema", {}).get("columns", [])
+    # Construimos mapa col → tipo para las columnas originales
+    type_map = {
+        item["name"]: item["type"]
+        for item in schema_cols
+        if "name" in item and "type" in item
+    }
+
+    conversion_errors = 0
+    detail_rows: list[dict] = []
+
+    for col_name, target_type in type_map.items():
+        if col_name not in df.columns:
+            continue
+
+        bronze_type = str(dict(df.dtypes).get(col_name, "unknown"))
+        errors = 0
+
         try:
-            dpto = str(row[dpto_col]).strip().replace(".0", "").zfill(2)
-            prov = str(row[prov_col]).strip().replace(".0", "").zfill(2)
-            dist = str(row[dist_col]).strip().replace(".0", "").zfill(2)
-            if dpto and prov and dist and dpto != "nan" and prov != "nan" and dist != "nan":
-                return f"{dpto}{prov}{dist}"
-        except (ValueError, TypeError):
-            pass
-        return pd.NA
+            if target_type == "integer":
+                df = df.withColumn(col_name, F.col(col_name).cast(IntegerType()))
+                transformation = "cast_to_integer"
+            elif target_type == "double":
+                df = df.withColumn(col_name, F.col(col_name).cast(DoubleType()))
+                transformation = "cast_to_double"
+            elif target_type == "boolean":
+                # Se construye en derived_columns, no aquí
+                transformation = "built_in_derived"
+            elif target_type == "string":
+                df = df.withColumn(col_name, F.col(col_name).cast(StringType()))
+                transformation = "cast_to_string"
+            elif target_type == "timestamp":
+                # Las columnas timestamp se agregan en audit_columns
+                transformation = "built_in_audit"
+            else:
+                transformation = "unchanged"
+        except Exception as exc:
+            logger.warning("Error convirtiendo '%s' a %s: %s", col_name, target_type, exc)
+            errors += 1
+            transformation = "conversion_failed"
 
-    df["ubigeo_ejecutora"] = df.apply(_build_ubigeo, axis=1).astype("string")
+        conversion_errors += errors
+        detail_rows.append({
+            "dataset": "ingresos",
+            "column_name": col_name,
+            "bronze_type": bronze_type,
+            "silver_type": target_type,
+            "transformation": transformation,
+            "conversion_errors": errors,
+            "status": "OK" if errors == 0 else "CONVERSION_ERRORS",
+            "reason": "",
+        })
+
+    logger.info(
+        "Conversión de tipos: %d columnas procesadas, %d errores.",
+        len(type_map), conversion_errors,
+    )
+    return df, conversion_errors, detail_rows
+
+
+def step_derived_columns(df: "SparkDF", cfg: dict[str, Any]) -> "SparkDF":
+    """
+    Genera las columnas derivadas definidas en derived_columns.
+
+    Columnas creadas (en orden):
+      ubigeo_ejecutora              — lpad(concat(DPTO,PROV,DIST),6,'0')
+      nombre_municipalidad_normalizado — upper(trim(regexp_replace(...)))
+      sk_tiempo_mensual             — ANO_DOC*100 + MES_DOC
+      anio_mes_key                  — YYYY-MM
+      ano_particion                 — ANO_DOC (para particionado)
+      flag_tipo_transaccion         — NORMAL / REVERSION
+      flag_monto_pia_activo         — boolean MONTO_PIA > 0
+    """
+    # ── ubigeo_ejecutora ──────────────────────────────────────
+    df = df.withColumn(
+        "ubigeo_ejecutora",
+        F.lpad(
+            F.concat(
+                F.col("DEPARTAMENTO_EJECUTORA"),
+                F.col("PROVINCIA_EJECUTORA"),
+                F.col("DISTRITO_EJECUTORA"),
+            ),
+            6, "0",
+        ),
+    )
+
+    # ── nombre_municipalidad_normalizado ──────────────────────
+    df = df.withColumn(
+        "nombre_municipalidad_normalizado",
+        F.upper(
+            F.trim(
+                F.regexp_replace(F.col("EJECUTORA_NOMBRE"), r"\s+", " ")
+            )
+        ),
+    )
+
+    # ── sk_tiempo_mensual ─────────────────────────────────────
+    df = df.withColumn(
+        "sk_tiempo_mensual",
+        (F.col("ANO_DOC").cast(IntegerType()) * 100
+         + F.col("MES_DOC").cast(IntegerType())).cast(IntegerType()),
+    )
+
+    # ── anio_mes_key  (YYYY-MM) ───────────────────────────────
+    df = df.withColumn(
+        "anio_mes_key",
+        F.concat(
+            F.col("ANO_DOC").cast(StringType()),
+            F.lit("-"),
+            F.lpad(F.col("MES_DOC").cast(StringType()), 2, "0"),
+        ),
+    )
+
+    # ── ano_particion ─────────────────────────────────────────
+    df = df.withColumn(
+        "ano_particion",
+        F.col("ANO_DOC").cast(IntegerType()),
+    )
+
+    # ── flag_tipo_transaccion ─────────────────────────────────
+    df = df.withColumn(
+        "flag_tipo_transaccion",
+        F.when(F.col("MONTO_RECAUDADO") >= 0, F.lit("NORMAL"))
+         .otherwise(F.lit("REVERSION")),
+    )
+
+    # ── flag_monto_pia_activo ─────────────────────────────────
+    df = df.withColumn(
+        "flag_monto_pia_activo",
+        F.col("MONTO_PIA").cast(DoubleType()) > 0,
+    )
+
+    logger.info("Columnas derivadas generadas: 7.")
     return df
 
 
-# ──────────────────────────────────────────────────────────────────────────────
+def step_audit_columns(
+    df: "SparkDF",
+    cfg: dict[str, Any],
+    processed_at: datetime,
+) -> "SparkDF":
+    """
+    Agrega columnas técnicas de trazabilidad.
+
+    Columnas creadas:
+      source_system         — literal "siaf"
+      source_dataset        — literal "ingresos"
+      silver_processed_at   — timestamp UTC del proceso
+      _audit_loaded_at      — alias para compatibilidad con silver_audit.py
+      record_hash           — sha2(concat_ws('|', ...cols originales...), 256)
+    """
+    audit_cfg = cfg.get("audit_columns", {})
+
+    # source_system
+    sys_value = audit_cfg.get("source_system", {}).get("value", "siaf")
+    df = df.withColumn("source_system", F.lit(sys_value))
+
+    # source_dataset
+    ds_value = audit_cfg.get("source_dataset", {}).get("value", "ingresos")
+    df = df.withColumn("source_dataset", F.lit(ds_value))
+
+    # silver_processed_at y _audit_loaded_at
+    ts_lit = F.lit(processed_at.isoformat()).cast(TimestampType())
+    df = df.withColumn("silver_processed_at", ts_lit)
+    df = df.withColumn("_audit_loaded_at", ts_lit)
+
+    # record_hash — sobre las 36 columnas originales de Bronze
+    # (excluye derivadas y técnicas para que represente el dato origen)
+    _ORIGINAL_COLS = [
+        "ANO_DOC", "MES_DOC", "NIVEL_GOBIERNO", "NIVEL_GOBIERNO_NOMBRE",
+        "SECTOR", "SECTOR_NOMBRE", "PLIEGO", "PLIEGO_NOMBRE",
+        "SEC_EJEC", "EJECUTORA", "EJECUTORA_NOMBRE",
+        "DEPARTAMENTO_EJECUTORA", "DEPARTAMENTO_EJECUTORA_NOMBRE",
+        "PROVINCIA_EJECUTORA", "PROVINCIA_EJECUTORA_NOMBRE",
+        "DISTRITO_EJECUTORA", "DISTRITO_EJECUTORA_NOMBRE",
+        "FUENTE_FINANCIAMIENTO", "FUENTE_FINANCIAMIENTO_NOMBRE",
+        "RUBRO", "RUBRO_NOMBRE", "TIPO_RECURSO", "TIPO_RECURSO_NOMBRE",
+        "GENERICA", "GENERICA_NOMBRE",
+        "SUBGENERICA", "SUBGENERICA_NOMBRE",
+        "SUBGENERICA_DET", "SUBGENERICA_DET_NOMBRE",
+        "ESPECIFICA", "ESPECIFICA_NOMBRE",
+        "ESPECIFICA_DET", "ESPECIFICA_DET_NOMBRE",
+        "MONTO_PIA", "MONTO_PIM", "MONTO_RECAUDADO",
+    ]
+    hash_cols = [
+        F.coalesce(F.col(c).cast(StringType()), F.lit("<NULL>"))
+        for c in _ORIGINAL_COLS
+        if c in df.columns
+    ]
+    df = df.withColumn(
+        "record_hash",
+        F.sha2(F.concat_ws("|", *hash_cols), 256),
+    )
+
+    logger.info("Columnas de auditoría agregadas: 5.")
+    return df
+
+
+def step_deduplication(df: "SparkDF", cfg: dict[str, Any]) -> tuple["SparkDF", int]:
+    """
+    Deduplicación por clave de negocio (13 columnas).
+    Estrategia keep_first ordenando por ANO_DOC DESC, MES_DOC DESC.
+    Retorna (df_deduplicado, filas_eliminadas).
+    """
+    dedup_cfg = cfg.get("deduplication", {})
+
+    if not dedup_cfg.get("enabled", True):
+        logger.info("Deduplicación deshabilitada en YAML.")
+        return df, 0
+
+    key_cols: list[str] = dedup_cfg.get("key_columns", [])
+    if not key_cols:
+        logger.warning("deduplication.key_columns vacío — omitiendo dedup.")
+        return df, 0
+
+    window_order_cfg: list[dict] = dedup_cfg.get("window_order", [
+        {"column": "ANO_DOC", "direction": "desc"},
+        {"column": "MES_DOC", "direction": "desc"},
+    ])
+    order_exprs = []
+    for item in window_order_cfg:
+        col_expr = F.col(item["column"])
+        order_exprs.append(
+            col_expr.desc() if item.get("direction", "asc") == "desc"
+            else col_expr.asc()
+        )
+
+    # Solo incluir en la partition las key_cols que existen
+    existing_keys = [c for c in key_cols if c in df.columns]
+    missing_keys = [c for c in key_cols if c not in df.columns]
+    if missing_keys:
+        logger.warning("Columnas clave de dedup no encontradas: %s", missing_keys)
+
+    window = Window.partitionBy(*existing_keys).orderBy(*order_exprs)
+    before = df.count()
+
+    df = (
+        df.withColumn("_rn", F.row_number().over(window))
+          .filter(F.col("_rn") == 1)
+          .drop("_rn")
+    )
+
+    after = df.count()
+    removed = before - after
+    logger.info(
+        "Deduplicación: %d → %d filas. Eliminadas: %d duplicados.",
+        before, after, removed,
+    )
+    return df, removed
+
+
+def step_write_silver(
+    df: "SparkDF",
+    silver_path: Path,
+    partition_cols: list[str],
+) -> None:
+    """
+    Escribe el Parquet Silver particionado por ano_particion.
+    Modo overwrite para soportar re-ejecuciones idempotentes.
+    """
+    silver_path.mkdir(parents=True, exist_ok=True)
+    (
+        df.write
+          .mode("overwrite")
+          .partitionBy(*partition_cols)
+          .parquet(str(silver_path))
+    )
+    logger.info("Parquet Silver escrito en: %s", silver_path)
+
+
+# ─────────────────────────────────────────────────────────────
 # Transformer principal
-# ──────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
 
 class SiafSilverTransformer:
     """
-    Transformador Bronze → Silver para SIAF Ingresos.
-    Lee reglas exclusivamente desde silver_rules_siaf.yaml.
-    No hardcodea ninguna transformación.
+    Orquesta todos los pasos Bronze → Silver para SIAF Ingresos.
+    Lee las reglas exclusivamente desde silver_rules_siaf.yaml.
+    Usa PySpark para el procesamiento masivo.
+    El resultado final (resúmenes) se convierte a Pandas para
+    compatibilidad con los reportes HTML.
     """
 
     def __init__(self, config: dict[str, Any]):
         self.config = config
-        self.defaults = config.get("silver_defaults", {})
-        self.datasets = config.get("datasets", {})
         self.source_system = config.get("source_system", "SIAF")
-        self.bronze_base_path = Path(self.defaults.get("bronze_base_path", "data/bronze/siaf"))
-        self.silver_base_path = Path(self.defaults.get("silver_base_path", "data/silver/siaf"))
-        self.null_settings = self.defaults.get("null_handling", {}) or {}
-        self.row_policy = self.defaults.get("row_policy", {}) or {}
-        self.text_norm = self.defaults.get("text_normalization", {}) or {}
+        self.bronze_base = Path(config.get("bronze_base_path", "data/bronze/siaf"))
+        self.silver_base = Path(config.get("silver_base_path", "data/silver/siaf"))
+        self.audit_base = Path(config.get("audit_base_path", "data/audit/silver"))
+        self.reports_base = Path(config.get("reports_base_path", "reports/silver/siaf"))
 
-    def _discover_bronze_files(self) -> dict[str, Path]:
+    def run(
+        self,
+        spark: "SparkSession",
+        processed_at: datetime | None = None,
+    ) -> tuple[SiafSilverResult, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """
-        Descubre todos los Parquet Bronze disponibles en bronze_base_path.
-
-        Retorna un dict {nombre_dataset: ruta_parquet}.
-        """
-        discovered: dict[str, Path] = {}
-        if not self.bronze_base_path.exists():
-            logger.warning("No existe la ruta Bronze SIAF: %s", self.bronze_base_path)
-            return discovered
-
-        for subdir in sorted(self.bronze_base_path.iterdir()):
-            if not subdir.is_dir():
-                continue
-            candidates = [
-                subdir / f"{subdir.name}.parquet",
-                subdir / f"{subdir.name}_raw.parquet",
-            ] + sorted(subdir.glob("*.parquet"))
-            for candidate in candidates:
-                if candidate.exists() and candidate.is_file():
-                    discovered[subdir.name] = candidate
-                    break
-
-        return discovered
-
-    def run(self, processed_at: datetime | None = None) -> tuple[list[DatasetSilverResult], pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-        """
-        Ejecuta la transformación Silver para todos los datasets configurados.
-
-        Para SIAF, el dataset configurado en el YAML es 'ingresos', lo que combina
-        todos los Parquets Bronze disponibles en una única capa Silver consolidada.
+        Ejecuta el pipeline completo.
+        Retorna (result, summary_df, detail_df, dictionary_df) en Pandas.
         """
         processed_at = processed_at or datetime.now()
-        results: list[DatasetSilverResult] = []
+        notes: list[str] = []
 
-        # Si el YAML configura 'ingresos', lo procesamos como dataset combinado.
-        # Esto permite cargas incrementales: cada año nuevo llega como Parquet separado
-        # pero Silver los unifica.
-        for dataset, dataset_rules in self.datasets.items():
-            result = self.transform_dataset(dataset, dataset_rules, processed_at)
-            results.append(result)
-
-        summary_df = self.build_summary(results)
-        detail_df = self.build_detail(results)
-        dictionary_df = self.build_data_dictionary(results)
-        return results, summary_df, detail_df, dictionary_df
-
-    def transform_dataset(
-        self,
-        dataset: str,
-        dataset_rules: dict[str, Any],
-        processed_at: datetime,
-    ) -> DatasetSilverResult:
-        """
-        Transforma el dataset indicado y guarda el Parquet Silver.
-
-        Para 'ingresos' combina todos los Parquets Bronze disponibles.
-        """
-        # ── Carga de Bronze ───────────────────────────────────────────────────
-        bronze_files = self._discover_bronze_files()
-
+        # ── 1. Descubrir y leer Bronze ────────────────────────
+        bronze_files = _discover_bronze_files(self.bronze_base)
         if not bronze_files:
             raise FileNotFoundError(
-                f"No se encontraron Parquet Bronze bajo {self.bronze_base_path}"
+                f"No se encontraron Parquet Bronze en {self.bronze_base}"
             )
 
-        logger.info("Cargando Bronze SIAF: %d archivos encontrados.", len(bronze_files))
+        df = step_read_bronze(spark, bronze_files)
+        bronze_rows = df.count()
+        bronze_cols = len(df.columns)
 
-        frames = []
-        for name, path in bronze_files.items():
-            try:
-                df_part = pd.read_parquet(path)
-                frames.append(df_part)
-                logger.info("  Cargado: %s (%d filas)", path.name, len(df_part))
-            except Exception as exc:
-                logger.warning("  Error leyendo %s: %s", path, exc)
+        # Conteo de nulos antes (sobre muestra para no bloquear)
+        nulls_before = df.select(
+            [F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in df.columns]
+        ).collect()[0].asDict()
+        total_nulls_before = sum(nulls_before.values())
 
-        if not frames:
-            raise RuntimeError("No se pudo leer ningún Parquet Bronze SIAF.")
+        # ── 2. Filtering ─────────────────────────────────────
+        df = step_filtering(df, self.config)
+        filtered_rows = df.count()
 
-        bronze_df = pd.concat(frames, ignore_index=True)
-        logger.info("Bronze combinado: %d filas totales.", len(bronze_df))
+        # ── 3. Cleaning ───────────────────────────────────────
+        df = step_cleaning(df, self.config)
 
-        bronze_rows = int(len(bronze_df))
-        bronze_columns = int(len(bronze_df.columns))
-        nulls_before = int(bronze_df.isna().sum().sum())
-        original_dtypes = {col: str(dtype) for col, dtype in bronze_df.dtypes.items()}
+        # ── 4. Imputations ────────────────────────────────────
+        df = step_imputations(df, self.config)
 
-        # ── Uso del primer archivo como referencia para bronze_path ───────────
-        bronze_path_ref = next(iter(bronze_files.values()))
+        # ── 5. Type casting ───────────────────────────────────
+        df, conversion_errors, detail_rows = step_type_casting(df, self.config)
 
-        df = bronze_df.copy()
-        notes: list[str] = []
-        detail_rows: list[dict[str, Any]] = []
+        # ── 6. Derived columns ────────────────────────────────
+        df = step_derived_columns(df, self.config)
 
-        # ── 1. Normalización de tokens vacíos a null ──────────────────────────
-        if self.null_settings.get("convert_missing_tokens_to_null", True):
-            df = _normalize_missing_tokens(df, self.null_settings.get("missing_tokens", []))
+        # ── 7. Audit columns ──────────────────────────────────
+        df = step_audit_columns(df, self.config, processed_at)
 
-        # ── 2. Eliminar columnas declaradas en drop_columns ───────────────────
-        dropped_columns: list[str] = []
-        for column in _as_list(dataset_rules.get("drop_columns")):
-            if column in df.columns:
-                dropped_columns.append(column)
-                detail_rows.append({
-                    "dataset": dataset,
-                    "column_name": column,
-                    "bronze_type": original_dtypes.get(column, "unknown"),
-                    "silver_type": "dropped",
-                    "transformation": "drop_column",
-                    "nulls_before": int(bronze_df[column].isna().sum()),
-                    "nulls_after": None,
-                    "conversion_errors": 0,
-                    "special_values_handled": 0,
-                    "status": "DROPPED",
-                    "reason": _reason_from_mapping(dataset_rules.get("drop_columns"), column),
-                })
-                df = df.drop(columns=[column])
+        # ── 8. Deduplication ──────────────────────────────────
+        df, duplicates_removed = step_deduplication(df, self.config)
+        silver_rows = df.count()
+        silver_cols = len(df.columns)
 
-        # ── 3. Eliminar filas completamente vacías ────────────────────────────
-        if self.row_policy.get("drop_empty_rows", True):
-            before = len(df)
-            df = df.dropna(how="all")
-            dropped_empty = before - len(df)
-            if dropped_empty > 0:
-                notes.append(f"Filas completamente vacías eliminadas: {dropped_empty}")
-                logger.info("Filas completamente vacías eliminadas: %d", dropped_empty)
+        # Nulos después
+        nulls_after_dict = df.select(
+            [F.count(F.when(F.col(c).isNull(), c)).alias(c) for c in df.columns]
+        ).collect()[0].asDict()
+        total_nulls_after = sum(nulls_after_dict.values())
 
-        # ── 4. Eliminar filas duplicadas si la política lo indica ─────────────
-        if self.row_policy.get("drop_duplicate_rows", False):
-            before = len(df)
-            df = df.drop_duplicates()
-            dropped_dupes = before - len(df)
-            if dropped_dupes > 0:
-                notes.append(f"Filas duplicadas eliminadas: {dropped_dupes}")
-
-        # ── 5. Normalización de texto (trim) ──────────────────────────────────
-        apply_trim = self.text_norm.get("apply_trim", True)
-        apply_upper = self.text_norm.get("apply_upper", False)
-
-        if apply_trim or apply_upper:
-            for column in df.columns:
-                if pd.api.types.is_object_dtype(df[column]) or pd.api.types.is_string_dtype(df[column]):
-                    if apply_trim:
-                        df[column] = df[column].astype("string").str.strip()
-                    if apply_upper:
-                        df[column] = df[column].astype("string").str.upper()
-
-        # ── 6. Conversión de tipos ─────────────────────────────────────────────
-        conversion_errors_total = 0
-        preserve_as_string = dataset_rules.get("preserve_as_string", {}) or {}
-        all_configured_columns = set(
-            _as_list(dataset_rules.get("integer_columns"))
-            + _as_list(dataset_rules.get("decimal_columns"))
-            + _as_list(dataset_rules.get("datetime_columns"))
-            + _as_list(dataset_rules.get("string_columns"))
+        # ── 9. Escritura Parquet Silver ───────────────────────
+        partition_cols: list[str] = (
+            self.config.get("output_schema", {})
+            .get("partition_by", ["ano_particion"])
         )
+        step_write_silver(df, self.silver_base, partition_cols)
 
-        for column in df.columns:
-            if column in {"source_system", "source_dataset", "silver_processed_at", "record_hash",
-                          "anio_mes_key", "ubigeo_ejecutora"}:
-                continue
+        status = "OK" if conversion_errors == 0 else "WITH_CONVERSION_ERRORS"
 
-            # Columnas en preserve_as_string se tratan como string aunque estén
-            # en integer_columns del YAML (esto no aplica aquí ya que el YAML
-            # las declara como string; el check es por seguridad extra).
-            if column in preserve_as_string:
-                target_type = "string"
-            else:
-                target_type = _get_column_target_type(dataset_rules, column)
-
-            bronze_type = original_dtypes.get(column, str(df[column].dtype))
-            nulls_col_before = int(df[column].isna().sum())
-            errors = 0
-            transformation = "unchanged"
-
-            if target_type == "integer":
-                df[column], errors = _convert_to_integer(df[column])
-                transformation = "cast_to_integer_nullable"
-            elif target_type == "decimal":
-                df[column], errors = _convert_to_decimal(df[column])
-                transformation = "cast_to_decimal_nullable"
-            elif target_type == "datetime":
-                df[column], errors = _convert_to_datetime(df[column])
-                transformation = "cast_to_datetime_nullable"
-            elif target_type == "string":
-                df[column] = _convert_to_string(df[column])
-                transformation = "cast_to_string_nullable"
-            else:
-                transformation = "kept_without_explicit_rule"
-
-            conversion_errors_total += errors
-            nulls_col_after = int(df[column].isna().sum())
-            status = "OK" if errors == 0 else "CONVERSION_ERRORS"
-
-            reason_parts = []
-            for section_name in ["documented_null_columns", "preserve_as_string"]:
-                reason = _reason_from_mapping(dataset_rules.get(section_name), column)
-                if reason:
-                    reason_parts.append(f"{section_name}: {reason}")
-
-            detail_rows.append({
-                "dataset": dataset,
-                "column_name": column,
-                "bronze_type": bronze_type,
-                "silver_type": str(df[column].dtype),
-                "transformation": transformation,
-                "nulls_before": nulls_col_before,
-                "nulls_after": nulls_col_after,
-                "conversion_errors": errors,
-                "special_values_handled": 0,
-                "status": status,
-                "reason": " | ".join(reason_parts),
-            })
-
-        # ── 7. Advertir columnas configuradas que no existen en Bronze ─────────
-        missing_configured = sorted([
-            c for c in all_configured_columns
-            if c not in df.columns and c not in dropped_columns
-        ])
-        for column in missing_configured:
-            notes.append(f"Columna configurada no encontrada en Bronze: {column}")
-            detail_rows.append({
-                "dataset": dataset,
-                "column_name": column,
-                "bronze_type": "missing",
-                "silver_type": "missing",
-                "transformation": "configured_column_not_found",
-                "nulls_before": None,
-                "nulls_after": None,
-                "conversion_errors": 0,
-                "special_values_handled": 0,
-                "status": "WARNING",
-                "reason": "Columna declarada en YAML, pero no existe en el Parquet Bronze.",
-            })
-
-        # ── 8. Columnas derivadas específicas de SIAF ─────────────────────────
-        df = _add_anio_mes_key(df, dataset_rules)
-        df = _add_ubigeo_ejecutora(df, dataset_rules)
-
-        # ── 9. Columnas técnicas de trazabilidad ──────────────────────────────
-        if self.defaults.get("add_technical_columns", True):
-            df = _add_technical_columns(df, dataset, self.source_system, processed_at)
-
-        # ── Guardar Parquet Silver ────────────────────────────────────────────
-        silver_dir = self.silver_base_path
-        silver_dir.mkdir(parents=True, exist_ok=True)
-        silver_path = silver_dir / f"{dataset}_silver.parquet"
-
-        df.to_parquet(silver_path, index=False)
-        logger.info("Parquet Silver guardado: %s (%d filas)", silver_path, len(df))
-
-        nulls_after = int(df.isna().sum().sum())
-        silver_rows = int(len(df))
-        silver_columns = int(len(df.columns))
-        status_final = "OK" if conversion_errors_total == 0 else "WITH_CONVERSION_ERRORS"
-
-        return DatasetSilverResult(
-            dataset=dataset,
-            bronze_path=bronze_path_ref,
-            silver_path=silver_path,
+        result = SiafSilverResult(
+            dataset="ingresos",
+            bronze_paths=bronze_files,
+            silver_path=self.silver_base,
             bronze_rows=bronze_rows,
+            filtered_rows=filtered_rows,
             silver_rows=silver_rows,
-            bronze_columns=bronze_columns,
-            silver_columns=silver_columns,
+            bronze_columns=bronze_cols,
+            silver_columns=silver_cols,
             detail_rows=detail_rows,
-            dropped_columns=dropped_columns,
-            conversion_errors=conversion_errors_total,
-            nulls_before=nulls_before,
-            nulls_after=nulls_after,
-            status=status_final,
+            conversion_errors=conversion_errors,
+            duplicates_removed=duplicates_removed,
+            nulls_before=total_nulls_before,
+            nulls_after=total_nulls_after,
+            status=status,
             notes=notes,
         )
 
-    def build_summary(self, results: list[DatasetSilverResult]) -> pd.DataFrame:
-        """Construye resumen una fila por dataset."""
+        # ── Construir DataFrames de reporte (Pandas) ──────────
+        summary_df = self._build_summary(result)
+        detail_df = self._build_detail(result)
+        dictionary_df = self._build_data_dictionary(result, df)
+
+        return result, summary_df, detail_df, dictionary_df
+
+    # ── Constructores de reportes ─────────────────────────────
+
+    def _build_summary(self, result: SiafSilverResult) -> pd.DataFrame:
+        """Una fila de resumen ejecutivo del proceso."""
+        detail = pd.DataFrame(result.detail_rows)
+        converted = int(
+            detail[detail["transformation"].str.startswith("cast_to", na=False)].shape[0]
+        ) if not detail.empty else 0
+        numeric_conv = int(
+            detail[detail["transformation"].isin(
+                ["cast_to_integer", "cast_to_double"]
+            )].shape[0]
+        ) if not detail.empty else 0
+
+        row = {
+            "dataset":                   result.dataset,
+            "bronze_files":              len(result.bronze_paths),
+            "bronze_rows":               result.bronze_rows,
+            "filtered_rows":             result.filtered_rows,
+            "rows_filtered_out":         result.bronze_rows - result.filtered_rows,
+            "silver_rows":               result.silver_rows,
+            "duplicates_removed":        result.duplicates_removed,
+            "bronze_columns":            result.bronze_columns,
+            "silver_columns":            result.silver_columns,
+            "columns_converted":         converted,
+            "numeric_columns_converted": numeric_conv,
+            "technical_columns_added":   5,   # source_system,source_dataset,silver_processed_at,_audit_loaded_at,record_hash
+            "derived_columns_added":     7,   # ubigeo,nombre_norm,sk_tiempo,anio_mes,ano_part,flag_trans,flag_pia
+            "conversion_errors":         result.conversion_errors,
+            "nulls_before":              result.nulls_before,
+            "nulls_after":               result.nulls_after,
+            "status":                    result.status,
+            "notes":                     " | ".join(result.notes),
+            "silver_path":               str(result.silver_path),
+        }
+        return pd.DataFrame([row])
+
+    def _build_detail(self, result: SiafSilverResult) -> pd.DataFrame:
+        """Una fila por columna con el resultado de la transformación."""
+        return pd.DataFrame(result.detail_rows)
+
+    def _build_data_dictionary(
+        self,
+        result: SiafSilverResult,
+        df: "SparkDF",
+    ) -> pd.DataFrame:
+        """Diccionario Silver: una fila por columna con tipo y descripción."""
+        schema_cols: list[dict] = (
+            self.config.get("output_schema", {}).get("columns", [])
+        )
+        schema_map = {item["name"]: item for item in schema_cols if "name" in item}
+
         rows = []
-        for result in results:
-            detail = pd.DataFrame(result.detail_rows)
-            numeric_conversions = int(detail[detail["transformation"].isin(["cast_to_integer_nullable", "cast_to_decimal_nullable"])].shape[0]) if not detail.empty else 0
-            date_conversions = int(detail[detail["transformation"].eq("cast_to_datetime_nullable")].shape[0]) if not detail.empty else 0
-            converted = int(detail[detail["transformation"].str.startswith("cast_to", na=False)].shape[0]) if not detail.empty else 0
-            rows.append({
-                "dataset": result.dataset,
-                "bronze_rows": result.bronze_rows,
-                "silver_rows": result.silver_rows,
-                "bronze_columns": result.bronze_columns,
-                "silver_columns": result.silver_columns,
-                "columns_converted": converted,
-                "date_columns_converted": date_conversions,
-                "numeric_columns_converted": numeric_conversions,
-                "technical_columns_added": 6,  # source_system, source_dataset, silver_processed_at, record_hash, anio_mes_key, ubigeo_ejecutora
-                "columns_dropped": len(result.dropped_columns),
-                "dropped_columns": ", ".join(result.dropped_columns),
-                "conversion_errors": result.conversion_errors,
-                "nulls_before": result.nulls_before,
-                "nulls_after": result.nulls_after,
-                "status": result.status,
-                "notes": " | ".join(result.notes),
-                "silver_path": str(result.silver_path),
-            })
-        return pd.DataFrame(rows)
+        spark_dtypes = dict(df.dtypes)
 
-    def build_detail(self, results: list[DatasetSilverResult]) -> pd.DataFrame:
-        """Construye detalle una fila por columna."""
-        rows = []
-        for result in results:
-            rows.extend(result.detail_rows)
-        return pd.DataFrame(rows)
+        for col_name, spark_type in spark_dtypes.items():
+            schema_info = schema_map.get(col_name, {})
+            is_tech = col_name in {
+                "source_system", "source_dataset",
+                "silver_processed_at", "_audit_loaded_at", "record_hash",
+            }
+            is_derived = col_name in {
+                "ubigeo_ejecutora", "nombre_municipalidad_normalizado",
+                "sk_tiempo_mensual", "anio_mes_key", "ano_particion",
+                "flag_tipo_transaccion", "flag_monto_pia_activo",
+            }
 
-    def build_data_dictionary(self, results: list[DatasetSilverResult]) -> pd.DataFrame:
-        """Construye el diccionario de datos Silver basado en reglas y resultados."""
-        rows: list[dict[str, Any]] = []
-        detail_df = self.build_detail(results)
-
-        for _, row in detail_df.iterrows():
-            dataset = row["dataset"]
-            column = row["column_name"]
-            dataset_rules = self.datasets.get(dataset, {})
-            is_dropped = row["status"] == "DROPPED"
-            nullable = None if is_dropped else (row.get("nulls_after", 0) not in [0, "0", None])
-
-            # Descripción desde columnas técnicas o preserve_as_string
-            description = row.get("reason", "")
+            origin = "bronze_original"
+            if is_tech:
+                origin = "audit_column"
+            elif is_derived:
+                origin = "derived_column"
 
             rows.append({
-                "dataset": dataset,
-                "column_name": column,
-                "business_name": column,
-                "description": description,
-                "bronze_type": row.get("bronze_type", ""),
-                "silver_type": row.get("silver_type", ""),
-                "transformation_applied": row.get("transformation", ""),
-                "nullable": nullable,
-                "is_technical_column": False,
-                "source": "Bronze SIAF + silver_rules_siaf.yaml",
-                "notes": row.get("reason", ""),
+                "dataset":               result.dataset,
+                "column_name":           col_name,
+                "silver_type":           spark_type,
+                "nullable":              schema_info.get("nullable", True),
+                "origin":                origin,
+                "imputed_value":         schema_info.get("imputed_value", ""),
+                "note":                  schema_info.get("note", ""),
+                "source":                "Bronze SIAF + silver_rules_siaf.yaml",
             })
-            _ = dataset_rules  # referencia documentada; puede usarse en Gold
-
-        # Columnas técnicas
-        technical_descriptions = self.defaults.get("technical_columns", {}) or {}
-        for result in results:
-            for tech_col, default_desc in [
-                ("source_system", "Sistema de origen de los datos (SIAF Ingresos MEF)."),
-                ("source_dataset", "Dataset Bronze del cual proviene el registro."),
-                ("silver_processed_at", "Timestamp de procesamiento hacia Silver."),
-                ("record_hash", "Hash SHA-256 para trazabilidad y detección de cambios."),
-                ("anio_mes_key", "Clave temporal YYYY-MM derivada de ANO_DOC y MES_DOC."),
-                ("ubigeo_ejecutora", "UBIGEO de 6 dígitos reconstruido para join con RENAMU en Gold."),
-            ]:
-                desc = technical_descriptions.get(tech_col, {}).get("description", default_desc)
-                rows.append({
-                    "dataset": result.dataset,
-                    "column_name": tech_col,
-                    "business_name": tech_col,
-                    "description": desc,
-                    "bronze_type": "not_in_bronze",
-                    "silver_type": "technical",
-                    "transformation_applied": "added_technical_column",
-                    "nullable": False if tech_col not in {"anio_mes_key", "ubigeo_ejecutora"} else True,
-                    "is_technical_column": True,
-                    "source": "silver_pipeline_siaf",
-                    "notes": desc,
-                })
 
         return pd.DataFrame(rows)

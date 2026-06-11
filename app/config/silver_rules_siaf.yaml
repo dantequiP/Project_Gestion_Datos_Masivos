@@ -1,59 +1,134 @@
 # ============================================================
-# REGLAS DE TRANSFORMACIÓN SILVER - SIAF INGRESOS
+# siaf_silver_transformations.yaml
+# Transformaciones Bronze → Silver — SIAF Ingresos (NIVEL_GOBIERNO = M)
 # ============================================================
-# Define las transformaciones que se aplican al pasar de
-# Bronze a Silver para la fuente SIAF.
 #
-# Filosofía:
+# FILOSOFÍA:
 #   Bronze conserva → Silver estandariza → Gold modela
 #
-# Silver NO limpia agresivamente. No elimina registros válidos
-# ni altera el significado de negocio. Solo:
-#   - Convierte tipos de datos
-#   - Normaliza textos (trim)
-#   - Convierte tokens vacíos a null
-#   - Genera columnas técnicas de auditoría
-#   - Documenta decisiones tomadas
+# ORDEN DE EJECUCIÓN DEL PIPELINE:
+#   1. filtering       — filtro maestro NIVEL_GOBIERNO = M
+#   2. cleaning        — trim + lpad en códigos
+#   3. imputations     — relleno de vacíos estructurales post-filtro
+#   4. derived_columns — columnas nuevas (ubigeo, flags, claves)
+#   5. audit_columns   — trazabilidad técnica
+#   6. deduplication   — dedup por clave de negocio
 #
-# Base documental:
-#   - Diccionario oficial de variables SIAF (MEF)
-#   - Muestra de datos 2026 proporcionada por el equipo
+# NOTAS DE LECTURA:
+#   - Leído con yaml.safe_load() — sin sintaxis abreviada
+#   - Todas las listas usan formato expandido (un item por línea)
+#   - Compatible con PySpark DataFrame API
+#   - Regla de ingesta: omitir rutas con "_diario" al leer Parquet
+#     [r for r in rutas_raw if "_diario" not in r.lower()]
 # ============================================================
 
 source_system: "SIAF"
+source_dataset: "ingresos"
+bronze_base_path: "data/bronze/siaf"
+silver_base_path: "data/silver/siaf"
+audit_base_path: "data/audit/silver"
+reports_base_path: "reports/silver/siaf"
 
-silver_defaults:
-  bronze_base_path: "data/bronze/siaf"
-  silver_base_path: "data/silver/siaf"
-  reports_base_path: "reports/silver/siaf"
-  audit_base_path: "data/audit/silver"
 
-  add_technical_columns: true
+# ============================================================
+# 1. FILTERING
+# Filtro maestro aplicado al inicio para reducir el volumen
+# antes de cualquier transformación costosa.
+# ============================================================
+filtering:
 
-  # ── Columnas técnicas añadidas en Silver ─────────────────
-  # Estas columnas no existen en Bronze y son inyectadas por
-  # el pipeline para trazabilidad y auditoría.
-  technical_columns:
-    source_system:
-      value: "SIAF"
-      description: "Sistema de origen de los datos (SIAF Ingresos MEF)."
-    source_dataset:
-      description: "Nombre del archivo/recurso de origen en Bronze."
-    silver_processed_at:
-      description: "Timestamp en que el registro fue procesado hacia Silver."
-    record_hash:
-      description: >
-        Hash SHA-256 del registro completo para trazabilidad,
-        detección de cambios y reconciliación entre capas.
-    anio_mes_key:
-      description: >
-        Clave derivada de ANO_DOC y MES_DOC (formato YYYY-MM)
-        para facilitar filtros temporales en Gold y Power BI.
+  master_filter:
+    column: "NIVEL_GOBIERNO"
+    operator: "equals"
+    value: "M"
+    note: >
+      Conserva solo Gobiernos Locales (Municipalidades).
+      Reduce ~10.8M filas a ~8.88M (82.4% del total histórico).
+      Aplicar ANTES de joins, derivaciones y deduplicación
+      para minimizar el uso de recursos en el clúster Spark.
+      Evidencia profiling: NIVEL_GOBIERNO cardinalidad=3,
+      M=8,880,692 | R=1,189,584 | E=706,792.
 
-  # ── Manejo de valores nulos y vacíos ─────────────────────
-  null_handling:
-    convert_missing_tokens_to_null: true
-    missing_tokens:
+
+# ============================================================
+# 2. CLEANING
+# Normalización de códigos con trim() y lpad().
+# El profiling detectó espacios invisibles en campos de código
+# (ej: "0 " en lugar de "0" o "00").
+# Se aplica sobre el DataFrame ya filtrado.
+# ============================================================
+cleaning:
+
+  # Aplicar trim() a TODOS los campos string
+  global_trim:
+    apply: true
+    note: >
+      Elimina espacios laterales en todas las columnas StringType.
+      El MEF ya entrega nombres en mayúsculas; no se fuerza upper().
+
+  # Campos de código que requieren lpad adicional post-trim
+  # para garantizar el formato fijo del clasificador MEF
+  lpad_codes:
+    - column: "RUBRO"
+      length: 2
+      fill_char: "0"
+      example_before: "9"
+      example_after: "09"
+      note: "Código de rubro siempre 2 dígitos. Profiling: 8 únicos."
+
+    - column: "PLIEGO"
+      length: 3
+      fill_char: "0"
+      example_before: "1"
+      example_after: "001"
+      note: "Código de pliego siempre 3 dígitos."
+
+    - column: "FUENTE_FINANCIAMIENTO"
+      length: 1
+      fill_char: "0"
+      example_before: "2"
+      example_after: "2"
+      note: >
+        1 dígito. lpad solo estandariza por consistencia;
+        valores son 2,3,4,5 — no requieren relleno real.
+
+    - column: "DEPARTAMENTO_EJECUTORA"
+      length: 2
+      fill_char: "0"
+      example_before: "1"
+      example_after: "01"
+      note: >
+        Código UBIGEO departamento 2 dígitos. Quality rule 92:
+        106 filas con formato fuera de \\d{2}. lpad normaliza.
+
+    - column: "PROVINCIA_EJECUTORA"
+      length: 2
+      fill_char: "0"
+      example_before: "1"
+      example_after: "01"
+      note: "Código UBIGEO provincia 2 dígitos."
+
+    - column: "DISTRITO_EJECUTORA"
+      length: 2
+      fill_char: "0"
+      example_before: "1"
+      example_after: "01"
+      note: "Código UBIGEO distrito 2 dígitos."
+
+    - column: "SEC_EJEC"
+      length: 6
+      fill_char: "0"
+      example_before: "1234"
+      example_after: "001234"
+      note: >
+        Identificador de ejecutora 6 dígitos. Quality rule 91:
+        82.4% fuera de \\d{6} — lpad estandariza los casos
+        con dígitos insuficientes. Conservar como string.
+
+  # Conversión de tokens vacíos a null
+  null_tokens:
+    convert_to_null: true
+    tokens:
       - ""
       - " "
       - "NULL"
@@ -64,165 +139,498 @@ silver_defaults:
       - "nan"
       - "N/A"
       - "n/a"
+    apply_before_imputations: true
+    note: >
+      Ejecutar ANTES de imputations para que los campos vacíos
+      estructurales (SECTOR, PLIEGO, etc.) sean null limpios
+      antes de imputar el valor estándar.
 
-  # ── Política de filas ─────────────────────────────────────
-  row_policy:
-    drop_empty_rows: true          # filas completamente vacías
-    drop_duplicate_rows: false     # los duplicados se reportan pero no se eliminan en Silver
-    impute_missing_values: false   # Silver no imputa; Gold puede hacerlo si el modelo lo requiere
-
-  # ── Normalización de textos ───────────────────────────────
-  text_normalization:
-    apply_trim: true               # elimina espacios laterales en todas las columnas string
-    apply_upper: false             # el MEF ya entrega los nombres en mayúsculas; no forzar
-
-  keep_original_column_names: true
 
 # ============================================================
-# REGLAS POR DATASET
-# SIAF tiene un único dataset: ingresos
+# 3. IMPUTATIONS
+# Relleno de vacíos estructurales post-filtro NIVEL_GOBIERNO=M.
+# Tras el filtro, estos campos quedan 100% vacíos por diseño
+# del SIAF — no son errores de calidad.
 # ============================================================
-datasets:
+imputations:
 
-  ingresos:
+  # Campos de código con vacío estructural → imputar "00"
+  void_codes:
+    reason: >
+      Tras filtrar NIVEL_GOBIERNO=M, SECTOR y PLIEGO quedan 100%
+      vacíos. En SIAF, las municipalidades locales no pertenecen
+      a un sector del gobierno nacional ni a un pliego formal.
+      Se imputa "00" como código nulo canónico para evitar
+      nulls que rompan joins en Gold.
+    columns:
+      - "SECTOR"
+      - "PLIEGO"
+    impute_value: "00"
 
-    # ── Columnas enteras ──────────────────────────────────────
-    # El diccionario las declara Numérico. Se convierten a
-    # IntegerType (o LongType en Spark si el volumen lo exige).
-    integer_columns:
-      - ANO_DOC
-      - MES_DOC
-      - GENERICA
-      - SUBGENERICA
-      - SUBGENERICA_DET
-      - ESPECIFICA
-      - ESPECIFICA_DET
+  # Campos de nombre con vacío estructural → imputar "SIN DATO"
+  void_names:
+    reason: >
+      Equivalente descriptivo de la imputación de código.
+      "SIN DATO" es el valor estándar del proyecto para nombres
+      no aplicables por diseño de la fuente.
+    columns:
+      - "SECTOR_NOMBRE"
+      - "PLIEGO_NOMBRE"
+    impute_value: "SIN DATO"
 
-    # ── Columnas decimales ────────────────────────────────────
-    # Montos presupuestales: DoubleType en Spark / float64 en pandas.
-    # Se usa double y no decimal fijo porque los CSV del MEF
-    # no garantizan precisión fija en todos los años.
-    decimal_columns:
-      - MONTO_PIA
-      - MONTO_PIM
-      - MONTO_RECAUDADO
+  # Campos geográficos con nulos residuales (0.014%)
+  geo_residual_nulls:
+    reason: >
+      1,510 filas (0.014%) sin código geográfico. Dentro del umbral
+      de calidad aceptado (quality rules 26-31, score 100%).
+      Se imputa "00" en código y "SIN DATO" en nombre para que
+      ubigeo_ejecutora pueda construirse (resultará "000000").
+    void_codes_geo:
+      columns:
+        - "DEPARTAMENTO_EJECUTORA"
+        - "PROVINCIA_EJECUTORA"
+        - "DISTRITO_EJECUTORA"
+      impute_value: "00"
+    void_names_geo:
+      columns:
+        - "DEPARTAMENTO_EJECUTORA_NOMBRE"
+        - "PROVINCIA_EJECUTORA_NOMBRE"
+        - "DISTRITO_EJECUTORA_NOMBRE"
+      impute_value: "SIN DATO"
 
-    # ── Sin columnas de fecha en esta fuente ─────────────────
-    # SIAF no entrega fechas ISO; la temporalidad viene de
-    # ANO_DOC y MES_DOC que se convierten a enteros.
-    datetime_columns: []
 
-    # ── Columnas string ───────────────────────────────────────
-    # Todos los campos de tipo Carácter del diccionario.
-    # Se aplica trim() a todos.
-    string_columns:
-      - NIVEL_GOBIERNO
-      - NIVEL_GOBIERNO_NOMBRE
-      - SECTOR
-      - SECTOR_NOMBRE
-      - PLIEGO
-      - PLIEGO_NOMBRE
-      - SEC_EJEC
-      - EJECUTORA
-      - EJECUTORA_NOMBRE
-      - DEPARTAMENTO_EJECUTORA
-      - DEPARTAMENTO_EJECUTORA_NOMBRE
-      - PROVINCIA_EJECUTORA
-      - PROVINCIA_EJECUTORA_NOMBRE
-      - DISTRITO_EJECUTORA
-      - DISTRITO_EJECUTORA_NOMBRE
-      - FUENTE_FINANCIAMIENTO
-      - FUENTE_FINANCIAMIENTO_NOMBRE
-      - RUBRO
-      - RUBRO_NOMBRE
-      - TIPO_RECURSO
-      - TIPO_RECURSO_NOMBRE
-      - GENERICA_NOMBRE
-      - SUBGENERICA_NOMBRE
-      - SUBGENERICA_DET_NOMBRE
-      - ESPECIFICA_NOMBRE
-      - ESPECIFICA_DET_NOMBRE
+# ============================================================
+# 4. DERIVED_COLUMNS
+# Columnas nuevas construidas en Silver para facilitar Gold.
+# No existen en Bronze.
+# ============================================================
+derived_columns:
 
-    # ── Columnas eliminadas ───────────────────────────────────
-    # SIAF no tiene columnas redundantes o técnicas en Bronze
-    # que deban eliminarse. Se mantienen todas.
-    drop_columns: []
+  # -- Geografía --
+  ubigeo_ejecutora:
+    output_column: "ubigeo_ejecutora"
+    output_type: "string"
+    output_format: "CHAR(6)"
+    spark_expression: "lpad(concat(DEPARTAMENTO_EJECUTORA, PROVINCIA_EJECUTORA, DISTRITO_EJECUTORA), 6, '0')"
+    source_columns:
+      - "DEPARTAMENTO_EJECUTORA"
+      - "PROVINCIA_EJECUTORA"
+      - "DISTRITO_EJECUTORA"
+    example_input:
+      departamento: "01"
+      provincia: "01"
+      distrito: "01"
+    example_output: "010101"
+    null_policy: >
+      Tras imputar "00" en los campos geográficos residuales,
+      ubigeo_ejecutora resultará "000000" para las 1,510 filas
+      sin dato. Nunca será null. Clave natural de DIM_MUNICIPALIDAD.
+    gold_target: "DIM_MUNICIPALIDAD.ubigeo"
 
-    # ── Columnas que se preservan como string ────────────────
-    # Aunque parecen numéricas, estos campos son códigos con
-    # posibles ceros a la izquierda o formato fijo del MEF.
-    preserve_as_string:
-      PLIEGO:
-        reason: >
-          El código de pliego puede tener ceros iniciales
-          (ej: "001"). Convertirlo a entero perdería ese
-          formato estándar del clasificador del MEF.
-      RUBRO:
-        reason: >
-          Código de rubro siempre de 2 dígitos con posible
-          cero inicial (ej: "09"). Se conserva como string.
-      FUENTE_FINANCIAMIENTO:
-        reason: >
-          Código de fuente de financiamiento: valor corto de
-          1–2 caracteres que actúa como clave de catálogo.
-          Se conserva como string por consistencia con el
-          clasificador del MEF.
-      TIPO_RECURSO:
-        reason: >
-          Código de tipo de recurso. Valor de 1 dígito que
-          actúa como clave de catálogo. Se conserva como
-          string para evitar pérdida de contexto semántico.
-      SEC_EJEC:
-        reason: >
-          Identificador de entidad de 6 dígitos. Aunque
-          llegan como numéricos, su uso es exclusivamente
-          como clave de lookup; no se opera aritméticamente.
-      EJECUTORA:
-        reason: >
-          Código institucional compuesto de la cadena
-          presupuestal. Formato variable según el año;
-          se conserva como string para compatibilidad
-          histórica entre años distintos.
-      DEPARTAMENTO_EJECUTORA:
-        reason: >
-          Código de departamento de 2 dígitos. Puede tener
-          cero inicial (ej: "01" para Lima). Se conserva
-          como string para mantener el formato UBIGEO.
-      PROVINCIA_EJECUTORA:
-        reason: >
-          Código de provincia de 2 dígitos. Mismo tratamiento
-          que DEPARTAMENTO_EJECUTORA.
-      DISTRITO_EJECUTORA:
-        reason: >
-          Código de distrito de 2 dígitos. Mismo tratamiento
-          que DEPARTAMENTO_EJECUTORA.
+  # -- Normalización de nombre --
+  nombre_municipalidad_normalizado:
+    output_column: "nombre_municipalidad_normalizado"
+    output_type: "string"
+    spark_expression: "upper(trim(regexp_replace(EJECUTORA_NOMBRE, '\\\\s+', ' ')))"
+    source_columns:
+      - "EJECUTORA_NOMBRE"
+    description: >
+      Nombre de la ejecutora normalizado: espacios múltiples
+      colapsados a uno, trim lateral, todo en mayúsculas.
+      Profiling (consistencia): 128 códigos de EJECUTORA con
+      múltiples nombres históricos. Esta columna entrega siempre
+      el nombre del año más reciente con formato canónico.
+    gold_target: "DIM_MUNICIPALIDAD.nombre_municipalidad"
 
-    # ── Columnas derivadas ────────────────────────────────────
-    # Silver genera columnas adicionales que facilitarán el
-    # modelado en Gold y la navegación en Power BI.
-    derived_columns:
+  # -- Tiempo --
+  sk_tiempo_mensual:
+    output_column: "sk_tiempo_mensual"
+    output_type: "integer"
+    spark_expression: "(ANO_DOC * 100) + MES_DOC"
+    source_columns:
+      - "ANO_DOC"
+      - "MES_DOC"
+    example_input:
+      ano_doc: 2026
+      mes_doc: 4
+    example_output: 202604
+    description: >
+      Surrogate key de DIM_TIEMPO para la relación ACTIVA con
+      FACT_EJECUCION_SIAF. Elimina recalcular en Gold.
+    gold_target: "FACT_EJECUCION_SIAF.sk_tiempo_mensual_fk"
 
-      anio_mes_key:
-        enabled: true
-        source_columns:
-          - ANO_DOC
-          - MES_DOC
-        description: >
-          Clave temporal en formato YYYY-MM construida
-          concatenando ANO_DOC y MES_DOC con cero a la
-          izquierda para el mes (ej: 2026-01). Permite
-          filtros y joins temporales eficientes en Gold.
+  anio_mes_key:
+    output_column: "anio_mes_key"
+    output_type: "string"
+    spark_expression: "concat(cast(ANO_DOC as string), '-', lpad(cast(MES_DOC as string), 2, '0'))"
+    source_columns:
+      - "ANO_DOC"
+      - "MES_DOC"
+    example_input:
+      ano_doc: 2026
+      mes_doc: 4
+    example_output: "2026-04"
+    description: >
+      Clave temporal YYYY-MM legible para filtros en Power BI
+      y reportes HTML sin depender de columnas de fecha ISO.
 
-      ubigeo_ejecutora:
-        enabled: true
-        source_columns:
-          - DEPARTAMENTO_EJECUTORA
-          - PROVINCIA_EJECUTORA
-          - DISTRITO_EJECUTORA
-        description: >
-          UBIGEO de 6 dígitos reconstruido concatenando
-          los tres códigos geográficos de la ejecutora.
-          Facilita el join con RENAMU en la capa Gold.
+  # -- Particionado --
+  ano_particion:
+    output_column: "ano_particion"
+    output_type: "integer"
+    spark_expression: "ANO_DOC"
+    source_columns:
+      - "ANO_DOC"
+    description: >
+      Columna de particionado físico Parquet en Silver.
+      Soporta escritura incremental en Gold: solo se reescriben
+      las particiones de años nuevos. 15 particiones (2012-2026).
+    partition_by: true
+    gold_target: "FACT_EJECUCION_SIAF.ano_particion"
 
-    # ── Todas las columnas se conservan ──────────────────────
-    keep_columns: all
+  # -- Montos: flag de tipo de transacción --
+  flag_tipo_transaccion:
+    output_column: "flag_tipo_transaccion"
+    output_type: "string"
+    source_columns:
+      - "MONTO_RECAUDADO"
+    values:
+      normal: "NORMAL"
+      reversion: "REVERSION"
+    spark_expression: "when(MONTO_RECAUDADO >= 0, 'NORMAL').otherwise('REVERSION')"
+    description: >
+      Identifica reversiones presupuestales. Profiling (montos):
+      109,250 negativos en MONTO_RECAUDADO (1.01%) y 16,235 en
+      MONTO_PIM (0.15%). Los negativos son válidos por diseño SIAF
+      (devoluciones, ajustes). Este flag permite filtrar en Gold
+      sin eliminar registros.
+    counts:
+      normal_approx: 10667818
+      reversion_approx: 109250
+    gold_usage: >
+      En FACT_EJECUCION_SIAF puede usarse como filtro analítico.
+      Las sumas de monto_recaudado reflejan el neto real incluyendo
+      reversiones.
+
+  flag_monto_pia_activo:
+    output_column: "flag_monto_pia_activo"
+    output_type: "boolean"
+    source_columns:
+      - "MONTO_PIA"
+    spark_expression: "MONTO_PIA > 0"
+    description: >
+      True cuando existe presupuesto de apertura asignado.
+      Profiling (montos): 93.77% de MONTO_PIA = 0 en toda la
+      fuente (característica normal de ingresos SIAF: el PIA
+      solo se asigna a partidas con presupuesto inicial).
+      Facilita el filtro en la regla de consistencia
+      MONTO_PIM >= MONTO_PIA (quality rule 70).
+
+
+# ============================================================
+# 5. AUDIT_COLUMNS
+# Columnas técnicas de trazabilidad. Inyectadas en cada fila.
+# No existen en Bronze.
+# ============================================================
+audit_columns:
+
+  source_system:
+    output_column: "source_system"
+    output_type: "string"
+    value: "siaf"
+    description: "Sistema de origen de los datos."
+
+  source_dataset:
+    output_column: "source_dataset"
+    output_type: "string"
+    value: "ingresos"
+    description: "Nombre del dataset dentro del sistema de origen."
+
+  silver_processed_at:
+    output_column: "silver_processed_at"
+    output_type: "timestamp"
+    spark_expression: "current_timestamp()"
+    description: "Timestamp UTC del momento exacto de procesamiento Silver."
+
+  audit_loaded_at:
+    output_column: "_audit_loaded_at"
+    output_type: "timestamp"
+    spark_expression: "current_timestamp()"
+    description: >
+      Alias técnico de silver_processed_at para compatibilidad
+      con el sistema de auditoría del proyecto (silver_audit.py).
+
+  record_hash:
+    output_column: "record_hash"
+    output_type: "string"
+    algorithm: "sha2_256"
+    description: >
+      Hash SHA-256 del registro completo para trazabilidad,
+      detección de cambios y reconciliación entre capas.
+      Se calcula sobre todas las columnas originales de Bronze
+      (excluye las columnas derivadas y técnicas para que el hash
+      represente fielmente el dato de origen).
+    spark_expression: >
+      sha2(concat_ws('|',
+        cast(ANO_DOC as string),
+        cast(MES_DOC as string),
+        NIVEL_GOBIERNO,
+        NIVEL_GOBIERNO_NOMBRE,
+        SECTOR,
+        SECTOR_NOMBRE,
+        PLIEGO,
+        PLIEGO_NOMBRE,
+        SEC_EJEC,
+        EJECUTORA,
+        EJECUTORA_NOMBRE,
+        DEPARTAMENTO_EJECUTORA,
+        DEPARTAMENTO_EJECUTORA_NOMBRE,
+        PROVINCIA_EJECUTORA,
+        PROVINCIA_EJECUTORA_NOMBRE,
+        DISTRITO_EJECUTORA,
+        DISTRITO_EJECUTORA_NOMBRE,
+        FUENTE_FINANCIAMIENTO,
+        FUENTE_FINANCIAMIENTO_NOMBRE,
+        RUBRO,
+        RUBRO_NOMBRE,
+        TIPO_RECURSO,
+        TIPO_RECURSO_NOMBRE,
+        cast(GENERICA as string),
+        GENERICA_NOMBRE,
+        cast(SUBGENERICA as string),
+        SUBGENERICA_NOMBRE,
+        cast(SUBGENERICA_DET as string),
+        SUBGENERICA_DET_NOMBRE,
+        cast(ESPECIFICA as string),
+        ESPECIFICA_NOMBRE,
+        cast(ESPECIFICA_DET as string),
+        ESPECIFICA_DET_NOMBRE,
+        cast(MONTO_PIA as string),
+        cast(MONTO_PIM as string),
+        cast(MONTO_RECAUDADO as string)
+      ), 256)
+    separator: "|"
+    gold_target: "FACT_EJECUCION_SIAF.record_hash"
+
+
+# ============================================================
+# 6. DEDUPLICATION
+# Clave de negocio de 13 columnas.
+# Quality rule 74: 205 filas duplicadas (score 99.9981%).
+# Causa: solapamiento entre archivos anuales al consolidar.
+# Estrategia: keep_first ordenando por ANO_DOC DESC para
+# conservar el registro más reciente en caso de conflicto.
+# ============================================================
+deduplication:
+
+  enabled: true
+  strategy: "keep_first"
+  total_duplicates_detected: 205
+  quality_score_pct: 99.9981
+
+  window_order:
+    - column: "ANO_DOC"
+      direction: "desc"
+    - column: "MES_DOC"
+      direction: "desc"
+
+  key_columns:
+    - "ANO_DOC"
+    - "MES_DOC"
+    - "NIVEL_GOBIERNO"
+    - "SEC_EJEC"
+    - "EJECUTORA"
+    - "FUENTE_FINANCIAMIENTO"
+    - "RUBRO"
+    - "TIPO_RECURSO"
+    - "GENERICA"
+    - "SUBGENERICA"
+    - "SUBGENERICA_DET"
+    - "ESPECIFICA"
+    - "ESPECIFICA_DET"
+
+  note: >
+    Window function: row_number() OVER (
+      PARTITION BY key_columns
+      ORDER BY ANO_DOC DESC, MES_DOC DESC
+    ) — conservar solo rn = 1.
+    Los 205 duplicados eliminados se registran en el reporte
+    de auditoría Silver (silver_audit.py) para trazabilidad.
+
+
+# ============================================================
+# OUTPUT SCHEMA FINAL (Silver resultante)
+# Bronze (36) + derivadas (7) + auditoría (5) = 48 columnas
+# Particionado físico por: ano_particion
+# ============================================================
+output_schema:
+
+  partition_by:
+    - "ano_particion"
+
+  columns:
+    # -- Originales Bronze (tipos convertidos) --
+    - name: "ANO_DOC"
+      type: "integer"
+      nullable: false
+    - name: "MES_DOC"
+      type: "integer"
+      nullable: false
+    - name: "NIVEL_GOBIERNO"
+      type: "string"
+      nullable: false
+      expected_value: "M"
+    - name: "NIVEL_GOBIERNO_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "SECTOR"
+      type: "string"
+      nullable: false
+      imputed_value: "00"
+    - name: "SECTOR_NOMBRE"
+      type: "string"
+      nullable: false
+      imputed_value: "SIN DATO"
+    - name: "PLIEGO"
+      type: "string"
+      nullable: false
+      imputed_value: "00"
+    - name: "PLIEGO_NOMBRE"
+      type: "string"
+      nullable: false
+      imputed_value: "SIN DATO"
+    - name: "SEC_EJEC"
+      type: "string"
+      nullable: false
+    - name: "EJECUTORA"
+      type: "string"
+      nullable: false
+    - name: "EJECUTORA_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "DEPARTAMENTO_EJECUTORA"
+      type: "string"
+      nullable: false
+      imputed_value: "00"
+    - name: "DEPARTAMENTO_EJECUTORA_NOMBRE"
+      type: "string"
+      nullable: false
+      imputed_value: "SIN DATO"
+    - name: "PROVINCIA_EJECUTORA"
+      type: "string"
+      nullable: false
+      imputed_value: "00"
+    - name: "PROVINCIA_EJECUTORA_NOMBRE"
+      type: "string"
+      nullable: false
+      imputed_value: "SIN DATO"
+    - name: "DISTRITO_EJECUTORA"
+      type: "string"
+      nullable: false
+      imputed_value: "00"
+    - name: "DISTRITO_EJECUTORA_NOMBRE"
+      type: "string"
+      nullable: false
+      imputed_value: "SIN DATO"
+    - name: "FUENTE_FINANCIAMIENTO"
+      type: "string"
+      nullable: false
+    - name: "FUENTE_FINANCIAMIENTO_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "RUBRO"
+      type: "string"
+      nullable: false
+    - name: "RUBRO_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "TIPO_RECURSO"
+      type: "string"
+      nullable: false
+    - name: "TIPO_RECURSO_NOMBRE"
+      type: "string"
+      nullable: true
+    - name: "GENERICA"
+      type: "integer"
+      nullable: false
+    - name: "GENERICA_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "SUBGENERICA"
+      type: "integer"
+      nullable: false
+    - name: "SUBGENERICA_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "SUBGENERICA_DET"
+      type: "integer"
+      nullable: false
+    - name: "SUBGENERICA_DET_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "ESPECIFICA"
+      type: "integer"
+      nullable: false
+    - name: "ESPECIFICA_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "ESPECIFICA_DET"
+      type: "integer"
+      nullable: false
+    - name: "ESPECIFICA_DET_NOMBRE"
+      type: "string"
+      nullable: false
+    - name: "MONTO_PIA"
+      type: "double"
+      nullable: false
+      note: "93.77% ceros. 0 negativos. Máx 28.8B."
+    - name: "MONTO_PIM"
+      type: "double"
+      nullable: false
+      note: "16,235 negativos válidos (reversiones)."
+    - name: "MONTO_RECAUDADO"
+      type: "double"
+      nullable: false
+      note: "109,250 negativos válidos (devoluciones)."
+    # -- Derivadas --
+    - name: "ubigeo_ejecutora"
+      type: "string"
+      nullable: false
+      note: "CHAR(6). '000000' si datos geo ausentes."
+    - name: "nombre_municipalidad_normalizado"
+      type: "string"
+      nullable: false
+    - name: "sk_tiempo_mensual"
+      type: "integer"
+      nullable: false
+    - name: "anio_mes_key"
+      type: "string"
+      nullable: false
+    - name: "ano_particion"
+      type: "integer"
+      nullable: false
+    - name: "flag_tipo_transaccion"
+      type: "string"
+      nullable: false
+      values:
+        - "NORMAL"
+        - "REVERSION"
+    - name: "flag_monto_pia_activo"
+      type: "boolean"
+      nullable: false
+    # -- Auditoría --
+    - name: "source_system"
+      type: "string"
+      nullable: false
+    - name: "source_dataset"
+      type: "string"
+      nullable: false
+    - name: "silver_processed_at"
+      type: "timestamp"
+      nullable: false
+    - name: "_audit_loaded_at"
+      type: "timestamp"
+      nullable: false
+    - name: "record_hash"
+      type: "string"
+      nullable: false
