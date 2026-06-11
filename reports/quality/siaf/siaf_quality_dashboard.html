@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard Calidad SIAF Ingresos</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:25px} header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card,.qcard{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .qcard{min-height:180px}.qcard h3{margin:0 0 6px;font-size:15px}.desc{font-size:12px;color:#6b7280;min-height:34px}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}.value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .score-big{font-size:26px;font-weight:bold;color:#2f7d46;float:right}.small{font-size:12px;color:#6b7280}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}th{background:#111827;color:white}tr:nth-child(even){background:#fafafa}
+    .bar-wrap{width:100%;height:7px;background:#e5e7eb;border-radius:999px;margin:10px 0}.bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .inline-bar{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.inline-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px;white-space:nowrap}.sin{background:#d9eadf;color:#245c36}.con{background:#fff3cd;color:#7a5b00}.noeval{background:#e5e7eb;color:#374151}
+    .alert-card{background:white;border-left:4px solid #c24141;border-radius:10px;padding:12px 16px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .note{background:#eef2ff;border-left:4px solid #3b82f6;border-radius:10px;padding:14px 16px;margin-bottom:20px}
+    code{background:#eef2ff;padding:2px 4px;border-radius:4px}
+    </style>
+</head>
+<body>
+  <header>
+    <h1>Dashboard de Calidad de Datos — SIAF Ingresos (Bronze)</h1>
+    <p>8 dimensiones: Completitud · Validez · Exactitud · Consistencia ·
+       Unicidad · Integridad · Oportunidad · Conformidad</p>
+  </header>
+  <main>
+    <div class="note">
+      Evaluación sobre <b>10,777,068 filas</b> históricas (2012–2026) en
+      <b>15</b> archivo(s) Parquet Bronze. Se excluyen archivos <code>_diario</code>
+      para evitar duplicar montos. Base empírica: profiling de 10,777,068
+      filas ejecutado en 2026-05.
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="label">Total filas evaluadas</div>
+        <div class="value">10,777,068</div>
+      </div>
+      <div class="card">
+        <div class="label">Reglas evaluadas</div>
+        <div class="value">96</div>
+      </div>
+      <div class="card">
+        <div class="label">Reglas con observación</div>
+        <div class="value">10</div>
+      </div>
+      <div class="card">
+        <div class="label">Score general</div>
+        <div class="value">95.6%</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Resumen por dimensión de calidad</h2>
+    <div class="quality-grid">
+        <div class="qcard">
+          <h3>Completitud <span class="score-big">100.0%</span></h3>
+          <div class="desc">Campos obligatorios con datos disponibles.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>36</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Exactitud <span class="score-big">100.0%</span></h3>
+          <div class="desc">Valores con formato correcto según el tipo esperado.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>6</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Consistencia <span class="score-big">69.0%</span></h3>
+          <div class="desc">Coherencia entre columnas relacionadas dentro del dataset.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:68.97%"></div></div>
+          <div class="small">Reglas: <b>16</b> · Observaciones: <b>46,315,274</b></div>
+          <p><span class="badge con">Con observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Integridad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Relaciones válidas entre datasets internos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>12</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Razonabilidad <span class="score-big">N/E</span></h3>
+          <div class="desc">Valores lógicos para el dominio, como montos no negativos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div>
+          <div class="small">Reglas: <b>0</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge noeval">No evaluable</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Oportunidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Vigencia temporal del dato respecto al periodo de análisis.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>2</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Unicidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Ausencia de duplicados y claves candidatas únicas.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>2</b> · Observaciones: <b>205</b></div>
+          <p><span class="badge con">Con observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Validez <span class="score-big">100.0%</span></h3>
+          <div class="desc">Formatos, catálogos y tipos de datos permitidos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>15</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        </div>
+
+    <h2 class="section-title">Observaciones por severidad</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Severidad</th>
+      <th>Reglas con observación</th>
+      <th>Total de observaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Media</td>
+      <td>9</td>
+      <td>48211404</td>
+    </tr>
+    <tr>
+      <td>Alta</td>
+      <td>1</td>
+      <td>205</td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">Top 10 observaciones</h2>
+    <div class='alert-card'><b>Consistencia</b> — Consistencia código-nombre: ESPECIFICA → ESPECIFICA_NOMBRE<br>Columna: <code>ESPECIFICA,ESPECIFICA_NOMBRE</code> | Filas observadas: 10,776,522 | Cumplimiento: 0.0% | Severidad: Media</div><div class='alert-card'><b>Consistencia</b> — Consistencia código-nombre: SUBGENERICA → SUBGENERICA_NOMBRE<br>Columna: <code>SUBGENERICA,SUBGENERICA_NOMBRE</code> | Filas observadas: 10,769,224 | Cumplimiento: 0.1% | Severidad: Media</div><div class='alert-card'><b>Consistencia</b> — Consistencia código-nombre: TIPO_RECURSO → TIPO_RECURSO_NOMBRE<br>Columna: <code>TIPO_RECURSO,TIPO_RECURSO_NOMBRE</code> | Filas observadas: 10,764,337 | Cumplimiento: 0.1% | Severidad: Media</div><div class='alert-card'><b>Consistencia</b> — Consistencia código-nombre: ESPECIFICA_DET → ESPECIFICA_DET_NOMBRE<br>Columna: <code>ESPECIFICA_DET,ESPECIFICA_DET_NOMBRE</code> | Filas observadas: 10,325,947 | Cumplimiento: 4.2% | Severidad: Media</div><div class='alert-card'><b>Consistencia</b> — Consistencia código-nombre: EJECUTORA → EJECUTORA_NOMBRE<br>Columna: <code>EJECUTORA,EJECUTORA_NOMBRE</code> | Filas observadas: 2,190,074 | Cumplimiento: 79.7% | Severidad: Media</div><div class='alert-card'><b>Conformidad</b> — Formato regex: SEC_EJEC<br>Columna: <code>SEC_EJEC</code> | Filas observadas: 1,896,024 | Cumplimiento: 82.4% | Severidad: Media</div><div class='alert-card'><b>Consistencia</b> — Consistencia código-nombre: PLIEGO → PLIEGO_NOMBRE<br>Columna: <code>PLIEGO,PLIEGO_NOMBRE</code> | Filas observadas: 1,468,632 | Cumplimiento: 22.6% | Severidad: Media</div><div class='alert-card'><b>Consistencia</b> — Comparación: MONTO_PIM &gt;= MONTO_PIA<br>Columna: <code>MONTO_PIM,MONTO_PIA</code> | Filas observadas: 20,538 | Cumplimiento: 96.9% | Severidad: Media</div><div class='alert-card'><b>Unicidad</b> — Clave de negocio única (13 columnas clasificador completo)<br>Columna: <code>ANO_DOC,MES_DOC,NIVEL_GOBIERNO,SEC_EJEC,EJECUTORA,FUENTE_FINANCIAMIENTO,RUBRO,TIPO_RECURSO,GENERICA,SUBGENERICA,SUBGENERICA_DET,ESPECIFICA,ESPECIFICA_DET</code> | Filas observadas: 205 | Cumplimiento: 100.0% | Severidad: Alta</div><div class='alert-card'><b>Conformidad</b> — Formato regex: DEPARTAMENTO_EJECUTORA<br>Columna: <code>DEPARTAMENTO_EJECUTORA</code> | Filas observadas: 106 | Cumplimiento: 100.0% | Severidad: Media</div>
+
+    
+    <h2 class="section-title">Hallazgos documentados del profiling (base empírica)</h2>
+    <div class="note">
+      Estos hallazgos fueron identificados durante el profiling de 10,777,068 filas (2012–2026).
+      Son comportamientos esperados del sistema SIAF, <b>no errores de datos</b>.
+      Las reglas de calidad los tienen en cuenta y no los penalizan salvo que excedan los umbrales documentados.
+    </div>
+    
+        <div style="background:#d9eadf;border-radius:8px;padding:12px 16px;margin:8px 0;
+                    border-left:4px solid #6b7280;">
+          <b>sector_pliego_vacios_nivel_local</b>
+          <span style="float:right;color:#374151;font-size:12px">82.4036% · 8,880,692 filas</span>
+          <br><span style="font-size:12px;color:#374151">NIVEL_GOBIERNO = M (Gobiernos Locales) no tiene Sector ni Pliego en el clasificador SIAF. Los 8,880,692 registros afectados corresponden exactamente a todos los registros del nivel M. Es comportamiento esperado, no un error de datos.</span>
+          <br><code style="font-size:11px;background:#fff;padding:2px 5px;border-radius:4px">
+            accion_quality: DOCUMENTAR_COMO_ESPERADO</code>
+        </div>
+        
+        <div style="background:#fff3cd;border-radius:8px;padding:12px 16px;margin:8px 0;
+                    border-left:4px solid #6b7280;">
+          <b>duplicados_clave_negocio</b>
+          <span style="float:right;color:#374151;font-size:12px">81.4532% · 8,778,272 filas</span>
+          <br><span style="font-size:12px;color:#374151">La clave corta ANO_DOC+MES_DOC+SEC_EJEC+FUENTE_FINANCIAMIENTO+ ESPECIFICA_DET no identifica unívocamente un registro porque el clasificador de ingresos tiene 5 niveles adicionales. La clave real requiere 13 columnas.</span>
+          <br><code style="font-size:11px;background:#fff;padding:2px 5px;border-radius:4px">
+            accion_quality: EVALUAR_CON_CLAVE_COMPLETA</code>
+        </div>
+        
+        <div style="background:#fff3cd;border-radius:8px;padding:12px 16px;margin:8px 0;
+                    border-left:4px solid #6b7280;">
+          <b>montos_negativos</b>
+          <span style="float:right;color:#374151;font-size:12px">0.1506% · 16,235 filas</span>
+          <br><span style="font-size:12px;color:#374151">SIAF registra reversiones y anulaciones presupuestales como montos negativos. Son transacciones válidas que representan correcciones. No deben eliminarse sino clasificarse.</span>
+          <br><code style="font-size:11px;background:#fff;padding:2px 5px;border-radius:4px">
+            accion_quality: REPORTAR_COMO_OBSERVACION_NO_ERROR</code>
+        </div>
+        
+        <div style="background:#d9eadf;border-radius:8px;padding:12px 16px;margin:8px 0;
+                    border-left:4px solid #6b7280;">
+          <b>monto_pia_ceros</b>
+          <span style="float:right;color:#374151;font-size:12px">93.7714% · 10,105,810 filas</span>
+          <br><span style="font-size:12px;color:#374151">El PIA solo se asigna en el período de apertura (generalmente mes 1 de cada año). Los demás meses acumulan PIA = 0. Es comportamiento esperado del sistema presupuestal.</span>
+          <br><code style="font-size:11px;background:#fff;padding:2px 5px;border-radius:4px">
+            accion_quality: DOCUMENTAR_COMO_ESPERADO</code>
+        </div>
+        
+        <div style="background:#f8f9fa;border-radius:8px;padding:12px 16px;margin:8px 0;
+                    border-left:4px solid #6b7280;">
+          <b>year_2026_parcial</b>
+          
+          <br><span style="font-size:12px;color:#374151">El dataset fue descargado en mayo 2026. Solo existen datos para los primeros 4 meses del año. No es un error.</span>
+          <br><code style="font-size:11px;background:#fff;padding:2px 5px;border-radius:4px">
+            accion_quality: </code>
+        </div>
+        
+    
+
+    
+    <h2 class="section-title">Glosario de columnas del reporte</h2>
+    <table><thead><tr><th>Columna técnica</th><th>Nombre en español</th><th>Explicación</th></tr></thead><tbody><tr><td><code>dataset</code></td><td>Dataset evaluado</td><td>Archivo o tabla analizada.</td></tr><tr><td><code>dimension</code></td><td>Dimensión de calidad</td><td>Criterio de calidad evaluado.</td></tr><tr><td><code>rule_id</code></td><td>Identificador de regla</td><td>Código único de la regla aplicada.</td></tr><tr><td><code>rule_name</code></td><td>Regla aplicada</td><td>Descripción breve de la validación.</td></tr><tr><td><code>column_name</code></td><td>Columna evaluada</td><td>Campo específico revisado.</td></tr><tr><td><code>evaluated_rows</code></td><td>Filas evaluadas</td><td>Cantidad de registros revisados por la regla.</td></tr><tr><td><code>passed_rows</code></td><td>Filas que cumplen</td><td>Registros que cumplieron la regla.</td></tr><tr><td><code>failed_rows</code></td><td>Filas observadas</td><td>Registros que no cumplieron o quedaron observados.</td></tr><tr><td><code>score</code></td><td>Porcentaje de cumplimiento</td><td>Porcentaje de cumplimiento de la regla.</td></tr><tr><td><code>severity</code></td><td>Severidad</td><td>Nivel de importancia de la observación.</td></tr><tr><td><code>source</code></td><td>Fuente de la regla</td><td>Origen que justifica la regla: diccionario, profiling o inferencia documentada.</td></tr><tr><td><code>status</code></td><td>Estado</td><td>Resultado de la regla.</td></tr><tr><td><code>sample_failed_rows</code></td><td>Filas de ejemplo</td><td>Índices de filas usados como ejemplo de evidencia.</td></tr></tbody></table>
+    
+
+    <h2 class="section-title">Detalle completo de reglas</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Dataset evaluado</th>
+      <th>Dimensión de calidad</th>
+      <th>Identificador de regla</th>
+      <th>Regla aplicada</th>
+      <th>Columna evaluada</th>
+      <th>Tipo de regla</th>
+      <th>Valor esperado</th>
+      <th>Filas evaluadas</th>
+      <th>Filas que cumplen</th>
+      <th>Filas observadas</th>
+      <th>Porcentaje de cumplimiento</th>
+      <th>Severidad</th>
+      <th>Fuente de la regla</th>
+      <th>Estado</th>
+      <th>Descripción de la observación</th>
+      <th>Filas de ejemplo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.ANO_DOC.not_null</td>
+      <td>No nulo: ANO_DOC</td>
+      <td>ANO_DOC</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en ANO_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.MES_DOC.not_null</td>
+      <td>No nulo: MES_DOC</td>
+      <td>MES_DOC</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en MES_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.NIVEL_GOBIERNO.not_null</td>
+      <td>No nulo: NIVEL_GOBIERNO</td>
+      <td>NIVEL_GOBIERNO</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en NIVEL_GOBIERNO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.NIVEL_GOBIERNO_NOMBRE.not_null</td>
+      <td>No nulo: NIVEL_GOBIERNO_NOMBRE</td>
+      <td>NIVEL_GOBIERNO_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en NIVEL_GOBIERNO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SEC_EJEC.not_null</td>
+      <td>No nulo: SEC_EJEC</td>
+      <td>SEC_EJEC</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en SEC_EJEC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.EJECUTORA.not_null</td>
+      <td>No nulo: EJECUTORA</td>
+      <td>EJECUTORA</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en EJECUTORA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.EJECUTORA_NOMBRE.not_null</td>
+      <td>No nulo: EJECUTORA_NOMBRE</td>
+      <td>EJECUTORA_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en EJECUTORA_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.FUENTE_FINANCIAMIENTO.not_null</td>
+      <td>No nulo: FUENTE_FINANCIAMIENTO</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en FUENTE_FINANCIAMIENTO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.FUENTE_FINANCIAMIENTO_NOMBRE.not_null</td>
+      <td>No nulo: FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en FUENTE_FINANCIAMIENTO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.RUBRO.not_null</td>
+      <td>No nulo: RUBRO</td>
+      <td>RUBRO</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en RUBRO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.RUBRO_NOMBRE.not_null</td>
+      <td>No nulo: RUBRO_NOMBRE</td>
+      <td>RUBRO_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en RUBRO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.TIPO_RECURSO.not_null</td>
+      <td>No nulo: TIPO_RECURSO</td>
+      <td>TIPO_RECURSO</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en TIPO_RECURSO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.TIPO_RECURSO_NOMBRE.not_null</td>
+      <td>No nulo: TIPO_RECURSO_NOMBRE</td>
+      <td>TIPO_RECURSO_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en TIPO_RECURSO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.GENERICA.not_null</td>
+      <td>No nulo: GENERICA</td>
+      <td>GENERICA</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en GENERICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.GENERICA_NOMBRE.not_null</td>
+      <td>No nulo: GENERICA_NOMBRE</td>
+      <td>GENERICA_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en GENERICA_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SUBGENERICA.not_null</td>
+      <td>No nulo: SUBGENERICA</td>
+      <td>SUBGENERICA</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en SUBGENERICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SUBGENERICA_NOMBRE.not_null</td>
+      <td>No nulo: SUBGENERICA_NOMBRE</td>
+      <td>SUBGENERICA_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en SUBGENERICA_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SUBGENERICA_DET.not_null</td>
+      <td>No nulo: SUBGENERICA_DET</td>
+      <td>SUBGENERICA_DET</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en SUBGENERICA_DET.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SUBGENERICA_DET_NOMBRE.not_null</td>
+      <td>No nulo: SUBGENERICA_DET_NOMBRE</td>
+      <td>SUBGENERICA_DET_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en SUBGENERICA_DET_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.ESPECIFICA.not_null</td>
+      <td>No nulo: ESPECIFICA</td>
+      <td>ESPECIFICA</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en ESPECIFICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.ESPECIFICA_NOMBRE.not_null</td>
+      <td>No nulo: ESPECIFICA_NOMBRE</td>
+      <td>ESPECIFICA_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en ESPECIFICA_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.ESPECIFICA_DET.not_null</td>
+      <td>No nulo: ESPECIFICA_DET</td>
+      <td>ESPECIFICA_DET</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en ESPECIFICA_DET.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.ESPECIFICA_DET_NOMBRE.not_null</td>
+      <td>No nulo: ESPECIFICA_DET_NOMBRE</td>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en ESPECIFICA_DET_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.MONTO_PIA.not_null</td>
+      <td>No nulo: MONTO_PIA</td>
+      <td>MONTO_PIA</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en MONTO_PIA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.MONTO_PIM.not_null</td>
+      <td>No nulo: MONTO_PIM</td>
+      <td>MONTO_PIM</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en MONTO_PIM.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.MONTO_RECAUDADO.not_null</td>
+      <td>No nulo: MONTO_RECAUDADO</td>
+      <td>MONTO_RECAUDADO</td>
+      <td>not_null</td>
+      <td>no nulo</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Bloqueante</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Registros nulos o vacíos en MONTO_RECAUDADO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.DEPARTAMENTO_EJECUTORA.null_threshold</td>
+      <td>Nulos bajo umbral (0.1%): DEPARTAMENTO_EJECUTORA</td>
+      <td>DEPARTAMENTO_EJECUTORA</td>
+      <td>null_threshold</td>
+      <td>< 0.1% nulos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Nulos en DEPARTAMENTO_EJECUTORA: 0.0140% (umbral: 0.1%). Dentro del umbral esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.DEPARTAMENTO_EJECUTORA_NOMBRE.null_threshold</td>
+      <td>Nulos bajo umbral (0.1%): DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>null_threshold</td>
+      <td>< 0.1% nulos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Nulos en DEPARTAMENTO_EJECUTORA_NOMBRE: 0.0150% (umbral: 0.1%). Dentro del umbral esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.PROVINCIA_EJECUTORA.null_threshold</td>
+      <td>Nulos bajo umbral (0.1%): PROVINCIA_EJECUTORA</td>
+      <td>PROVINCIA_EJECUTORA</td>
+      <td>null_threshold</td>
+      <td>< 0.1% nulos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Nulos en PROVINCIA_EJECUTORA: 0.0140% (umbral: 0.1%). Dentro del umbral esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.PROVINCIA_EJECUTORA_NOMBRE.null_threshold</td>
+      <td>Nulos bajo umbral (0.1%): PROVINCIA_EJECUTORA_NOMBRE</td>
+      <td>PROVINCIA_EJECUTORA_NOMBRE</td>
+      <td>null_threshold</td>
+      <td>< 0.1% nulos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Nulos en PROVINCIA_EJECUTORA_NOMBRE: 0.0150% (umbral: 0.1%). Dentro del umbral esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.DISTRITO_EJECUTORA.null_threshold</td>
+      <td>Nulos bajo umbral (0.1%): DISTRITO_EJECUTORA</td>
+      <td>DISTRITO_EJECUTORA</td>
+      <td>null_threshold</td>
+      <td>< 0.1% nulos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Nulos en DISTRITO_EJECUTORA: 0.0140% (umbral: 0.1%). Dentro del umbral esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.DISTRITO_EJECUTORA_NOMBRE.null_threshold</td>
+      <td>Nulos bajo umbral (0.1%): DISTRITO_EJECUTORA_NOMBRE</td>
+      <td>DISTRITO_EJECUTORA_NOMBRE</td>
+      <td>null_threshold</td>
+      <td>< 0.1% nulos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Nulos en DISTRITO_EJECUTORA_NOMBRE: 0.0150% (umbral: 0.1%). Dentro del umbral esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SECTOR.conditional_null</td>
+      <td>Vacío estructural válido: SECTOR (solo cuando NIVEL_GOBIERNO=M)</td>
+      <td>SECTOR</td>
+      <td>conditional_null_allowed</td>
+      <td>vacío solo cuando NIVEL_GOBIERNO=M</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Informativo</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>SECTOR vacío cuando NIVEL_GOBIERNO ≠ M: 0 casos. Cuando NIVEL_GOBIERNO=M el vacío es esperado (diseño SIAF).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.SECTOR_NOMBRE.conditional_null</td>
+      <td>Vacío estructural válido: SECTOR_NOMBRE (solo cuando NIVEL_GOBIERNO=M)</td>
+      <td>SECTOR_NOMBRE</td>
+      <td>conditional_null_allowed</td>
+      <td>vacío solo cuando NIVEL_GOBIERNO=M</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Informativo</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>SECTOR_NOMBRE vacío cuando NIVEL_GOBIERNO ≠ M: 0 casos. Cuando NIVEL_GOBIERNO=M el vacío es esperado (diseño SIAF).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.PLIEGO.conditional_null</td>
+      <td>Vacío estructural válido: PLIEGO (solo cuando NIVEL_GOBIERNO=M)</td>
+      <td>PLIEGO</td>
+      <td>conditional_null_allowed</td>
+      <td>vacío solo cuando NIVEL_GOBIERNO=M</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Informativo</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>PLIEGO vacío cuando NIVEL_GOBIERNO ≠ M: 0 casos. Cuando NIVEL_GOBIERNO=M el vacío es esperado (diseño SIAF).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Completitud</td>
+      <td>siaf.PLIEGO_NOMBRE.conditional_null</td>
+      <td>Vacío estructural válido: PLIEGO_NOMBRE (solo cuando NIVEL_GOBIERNO=M)</td>
+      <td>PLIEGO_NOMBRE</td>
+      <td>conditional_null_allowed</td>
+      <td>vacío solo cuando NIVEL_GOBIERNO=M</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Informativo</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>PLIEGO_NOMBRE vacío cuando NIVEL_GOBIERNO ≠ M: 0 casos. Cuando NIVEL_GOBIERNO=M el vacío es esperado (diseño SIAF).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.NIVEL_GOBIERNO.accepted_values</td>
+      <td>Catálogo válido: NIVEL_GOBIERNO</td>
+      <td>NIVEL_GOBIERNO</td>
+      <td>accepted_values</td>
+      <td>['E', 'R', 'M']</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo ['E', 'R', 'M'] en NIVEL_GOBIERNO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.NIVEL_GOBIERNO_NOMBRE.accepted_values</td>
+      <td>Catálogo válido: NIVEL_GOBIERNO_NOMBRE</td>
+      <td>NIVEL_GOBIERNO_NOMBRE</td>
+      <td>accepted_values</td>
+      <td>['GOBIERNO NACIONAL', 'GOBIERNOS REGIONALES', 'GOBIERNOS LOCALES']</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo ['GOBIERNO NACIONAL', 'GOBIERNOS REGIONALES', 'GOBIERNOS LOCALES'] en NIVEL_GOBIERNO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.FUENTE_FINANCIAMIENTO.accepted_values</td>
+      <td>Catálogo válido: FUENTE_FINANCIAMIENTO</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>accepted_values</td>
+      <td>['2', '3', '4', '5']</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo ['2', '3', '4', '5'] en FUENTE_FINANCIAMIENTO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.RUBRO.accepted_values</td>
+      <td>Catálogo válido: RUBRO</td>
+      <td>RUBRO</td>
+      <td>accepted_values</td>
+      <td>['04', '07', '08', '09', '13', '15', '18', '19']</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo ['04', '07', '08', '09', '13', '15', '18', '19'] en RUBRO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.GENERICA.accepted_values</td>
+      <td>Catálogo válido: GENERICA</td>
+      <td>GENERICA</td>
+      <td>accepted_values</td>
+      <td>['1', '2', '3', '4', '5', '6', '7', '8', '9']</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo ['1', '2', '3', '4', '5', '6', '7', '8', '9'] en GENERICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.ANO_DOC.numeric</td>
+      <td>Tipo numérico: ANO_DOC</td>
+      <td>ANO_DOC</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en ANO_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.MES_DOC.numeric</td>
+      <td>Tipo numérico: MES_DOC</td>
+      <td>MES_DOC</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en MES_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.GENERICA.numeric</td>
+      <td>Tipo numérico: GENERICA</td>
+      <td>GENERICA</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en GENERICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.SUBGENERICA.numeric</td>
+      <td>Tipo numérico: SUBGENERICA</td>
+      <td>SUBGENERICA</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en SUBGENERICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.SUBGENERICA_DET.numeric</td>
+      <td>Tipo numérico: SUBGENERICA_DET</td>
+      <td>SUBGENERICA_DET</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en SUBGENERICA_DET.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.ESPECIFICA.numeric</td>
+      <td>Tipo numérico: ESPECIFICA</td>
+      <td>ESPECIFICA</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en ESPECIFICA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.ESPECIFICA_DET.numeric</td>
+      <td>Tipo numérico: ESPECIFICA_DET</td>
+      <td>ESPECIFICA_DET</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en ESPECIFICA_DET.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.MONTO_PIA.numeric</td>
+      <td>Tipo numérico: MONTO_PIA</td>
+      <td>MONTO_PIA</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en MONTO_PIA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.MONTO_PIM.numeric</td>
+      <td>Tipo numérico: MONTO_PIM</td>
+      <td>MONTO_PIM</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en MONTO_PIM.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Validez</td>
+      <td>siaf.MONTO_RECAUDADO.numeric</td>
+      <td>Tipo numérico: MONTO_RECAUDADO</td>
+      <td>MONTO_RECAUDADO</td>
+      <td>numeric_type</td>
+      <td>numérico</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número en MONTO_RECAUDADO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Exactitud</td>
+      <td>siaf.ANO_DOC.range</td>
+      <td>Rango numérico: ANO_DOC</td>
+      <td>ANO_DOC</td>
+      <td>accepted_range</td>
+      <td>[2000, 2030]</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango [2000, 2030] en ANO_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Exactitud</td>
+      <td>siaf.MES_DOC.range</td>
+      <td>Rango numérico: MES_DOC</td>
+      <td>MES_DOC</td>
+      <td>accepted_range</td>
+      <td>[1, 12]</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango [1, 12] en MES_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.ANO_DOC.regex</td>
+      <td>Formato regex: ANO_DOC</td>
+      <td>ANO_DOC</td>
+      <td>regex</td>
+      <td>^\d{4}$</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{4}$ en ANO_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Exactitud</td>
+      <td>siaf.MONTO_PIA.range</td>
+      <td>Rango numérico: MONTO_PIA</td>
+      <td>MONTO_PIA</td>
+      <td>accepted_range</td>
+      <td>[0.0, 30000000000.0]</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango [0.0, 30000000000.0] en MONTO_PIA.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Exactitud</td>
+      <td>siaf.MONTO_PIM.range</td>
+      <td>Rango numérico: MONTO_PIM</td>
+      <td>MONTO_PIM</td>
+      <td>accepted_range</td>
+      <td>[-2100000000.0, 30000000000.0]</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango [-2100000000.0, 30000000000.0] en MONTO_PIM.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Exactitud</td>
+      <td>siaf.MONTO_RECAUDADO.range</td>
+      <td>Rango numérico: MONTO_RECAUDADO</td>
+      <td>MONTO_RECAUDADO</td>
+      <td>accepted_range</td>
+      <td>[-1700000000.0, 12000000000.0]</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango [-1700000000.0, 12000000000.0] en MONTO_RECAUDADO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.nivel_gobierno_nombre_m.conditional_value</td>
+      <td>NIVEL_GOBIERNO=M → NIVEL_GOBIERNO_NOMBRE=GOBIERNOS LOCALES</td>
+      <td>NIVEL_GOBIERNO,NIVEL_GOBIERNO_NOMBRE</td>
+      <td>conditional_value</td>
+      <td>GOBIERNOS LOCALES</td>
+      <td>8880692</td>
+      <td>8880692</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Inconsistencias entre NIVEL_GOBIERNO y NIVEL_GOBIERNO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.nivel_gobierno_nombre_r.conditional_value</td>
+      <td>NIVEL_GOBIERNO=R → NIVEL_GOBIERNO_NOMBRE=GOBIERNOS REGIONALES</td>
+      <td>NIVEL_GOBIERNO,NIVEL_GOBIERNO_NOMBRE</td>
+      <td>conditional_value</td>
+      <td>GOBIERNOS REGIONALES</td>
+      <td>1189584</td>
+      <td>1189584</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Inconsistencias entre NIVEL_GOBIERNO y NIVEL_GOBIERNO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.nivel_gobierno_nombre_e.conditional_value</td>
+      <td>NIVEL_GOBIERNO=E → NIVEL_GOBIERNO_NOMBRE=GOBIERNO NACIONAL</td>
+      <td>NIVEL_GOBIERNO,NIVEL_GOBIERNO_NOMBRE</td>
+      <td>conditional_value</td>
+      <td>GOBIERNO NACIONAL</td>
+      <td>706792</td>
+      <td>706792</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>dictionary_mef</td>
+      <td>Sin observaciones</td>
+      <td>Inconsistencias entre NIVEL_GOBIERNO y NIVEL_GOBIERNO_NOMBRE.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.PLIEGO_PLIEGO_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: PLIEGO → PLIEGO_NOMBRE</td>
+      <td>PLIEGO,PLIEGO_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>1896376</td>
+      <td>427744</td>
+      <td>1468632</td>
+      <td>22.5559</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>74 código(s) de PLIEGO con múltiples nombres en PLIEGO_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.EJECUTORA_EJECUTORA_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: EJECUTORA → EJECUTORA_NOMBRE</td>
+      <td>EJECUTORA,EJECUTORA_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>8586994</td>
+      <td>2190074</td>
+      <td>79.6784</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>128 código(s) de EJECUTORA con múltiples nombres en EJECUTORA_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.DEPARTAMENTO_EJECUTORA_DEPARTAMENTO_EJECUTORA_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: DEPARTAMENTO_EJECUTORA → DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>DEPARTAMENTO_EJECUTORA,DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10775452</td>
+      <td>10775452</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>0 código(s) de DEPARTAMENTO_EJECUTORA con múltiples nombres en DEPARTAMENTO_EJECUTORA_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.FUENTE_FINANCIAMIENTO_FUENTE_FINANCIAMIENTO_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: FUENTE_FINANCIAMIENTO → FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>FUENTE_FINANCIAMIENTO,FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>0 código(s) de FUENTE_FINANCIAMIENTO con múltiples nombres en FUENTE_FINANCIAMIENTO_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.RUBRO_RUBRO_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: RUBRO → RUBRO_NOMBRE</td>
+      <td>RUBRO,RUBRO_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>0 código(s) de RUBRO con múltiples nombres en RUBRO_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.TIPO_RECURSO_TIPO_RECURSO_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: TIPO_RECURSO → TIPO_RECURSO_NOMBRE</td>
+      <td>TIPO_RECURSO,TIPO_RECURSO_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>12731</td>
+      <td>10764337</td>
+      <td>0.1181</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>55 código(s) de TIPO_RECURSO con múltiples nombres en TIPO_RECURSO_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.GENERICA_GENERICA_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: GENERICA → GENERICA_NOMBRE</td>
+      <td>GENERICA,GENERICA_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>0 código(s) de GENERICA con múltiples nombres en GENERICA_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.SUBGENERICA_SUBGENERICA_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: SUBGENERICA → SUBGENERICA_NOMBRE</td>
+      <td>SUBGENERICA,SUBGENERICA_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>7844</td>
+      <td>10769224</td>
+      <td>0.0728</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>5 código(s) de SUBGENERICA con múltiples nombres en SUBGENERICA_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.ESPECIFICA_ESPECIFICA_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: ESPECIFICA → ESPECIFICA_NOMBRE</td>
+      <td>ESPECIFICA,ESPECIFICA_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>546</td>
+      <td>10776522</td>
+      <td>0.0051</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>8 código(s) de ESPECIFICA con múltiples nombres en ESPECIFICA_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.ESPECIFICA_DET_ESPECIFICA_DET_NOMBRE.code_name</td>
+      <td>Consistencia código-nombre: ESPECIFICA_DET → ESPECIFICA_DET_NOMBRE</td>
+      <td>ESPECIFICA_DET,ESPECIFICA_DET_NOMBRE</td>
+      <td>code_name_consistency</td>
+      <td>1 nombre por código</td>
+      <td>10777068</td>
+      <td>451121</td>
+      <td>10325947</td>
+      <td>4.1859</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>15 código(s) de ESPECIFICA_DET con múltiples nombres en ESPECIFICA_DET_NOMBRE. Puede indicar renombramientos institucionales sin homologar.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.pim_mayor_igual_pia.column_comparison</td>
+      <td>Comparación: MONTO_PIM >= MONTO_PIA</td>
+      <td>MONTO_PIM,MONTO_PIA</td>
+      <td>column_comparison</td>
+      <td>MONTO_PIM >= MONTO_PIA</td>
+      <td>671216</td>
+      <td>650678</td>
+      <td>20538</td>
+      <td>96.9402</td>
+      <td>Media</td>
+      <td>business_rule</td>
+      <td>Con observaciones</td>
+      <td>Registros donde MONTO_PIM no cumple >= MONTO_PIA. Filtro aplicado: MONTO_PIA > 0.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.SECTOR.null_only_when</td>
+      <td>Nulo solo cuando NIVEL_GOBIERNO=M: SECTOR</td>
+      <td>SECTOR</td>
+      <td>null_only_when</td>
+      <td>nulo solo cuando NIVEL_GOBIERNO=M</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>SECTOR vacío cuando NIVEL_GOBIERNO ≠ M: 0 casos inesperados.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Consistencia</td>
+      <td>siaf.PLIEGO.null_only_when</td>
+      <td>Nulo solo cuando NIVEL_GOBIERNO=M: PLIEGO</td>
+      <td>PLIEGO</td>
+      <td>null_only_when</td>
+      <td>nulo solo cuando NIVEL_GOBIERNO=M</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>PLIEGO vacío cuando NIVEL_GOBIERNO ≠ M: 0 casos inesperados.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Unicidad</td>
+      <td>siaf.full_row_duplicates</td>
+      <td>Filas completamente duplicadas</td>
+      <td>*</td>
+      <td>duplicate_full_rows</td>
+      <td>0 duplicados exactos</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>0 filas exactamente duplicadas detectadas.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Unicidad</td>
+      <td>siaf.unique_key.13cols</td>
+      <td>Clave de negocio única (13 columnas clasificador completo)</td>
+      <td>ANO_DOC,MES_DOC,NIVEL_GOBIERNO,SEC_EJEC,EJECUTORA,FUENTE_FINANCIAMIENTO,RUBRO,TIPO_RECURSO,GENERICA,SUBGENERICA,SUBGENERICA_DET,ESPECIFICA,ESPECIFICA_DET</td>
+      <td>unique_key</td>
+      <td>sin duplicados por clave</td>
+      <td>10777068</td>
+      <td>10776863</td>
+      <td>205</td>
+      <td>99.9981</td>
+      <td>Alta</td>
+      <td>inferred_business_key</td>
+      <td>Con observaciones</td>
+      <td>205 filas duplicadas según clave de 13 columnas. Puede indicar solapamiento entre archivos anuales al consolidar el histórico.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.GENERICA_SUBGENERICA.hierarchy</td>
+      <td>Jerarquía clasificador: GENERICA padre de SUBGENERICA</td>
+      <td>GENERICA,SUBGENERICA</td>
+      <td>parent_not_zero_if_child_nonzero</td>
+      <td>GENERICA ≠ 0 cuando SUBGENERICA ≠ 0</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Filas donde SUBGENERICA ≠ 0 pero GENERICA = 0 (rompería la jerarquía).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.SUBGENERICA_SUBGENERICA_DET.hierarchy</td>
+      <td>Jerarquía clasificador: SUBGENERICA padre de SUBGENERICA_DET</td>
+      <td>SUBGENERICA,SUBGENERICA_DET</td>
+      <td>parent_not_zero_if_child_nonzero</td>
+      <td>SUBGENERICA ≠ 0 cuando SUBGENERICA_DET ≠ 0</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Filas donde SUBGENERICA_DET ≠ 0 pero SUBGENERICA = 0 (rompería la jerarquía).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.SUBGENERICA_DET_ESPECIFICA.hierarchy</td>
+      <td>Jerarquía clasificador: SUBGENERICA_DET padre de ESPECIFICA</td>
+      <td>SUBGENERICA_DET,ESPECIFICA</td>
+      <td>parent_not_zero_if_child_nonzero</td>
+      <td>SUBGENERICA_DET ≠ 0 cuando ESPECIFICA ≠ 0</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Filas donde ESPECIFICA ≠ 0 pero SUBGENERICA_DET = 0 (rompería la jerarquía).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.ESPECIFICA_ESPECIFICA_DET.hierarchy</td>
+      <td>Jerarquía clasificador: ESPECIFICA padre de ESPECIFICA_DET</td>
+      <td>ESPECIFICA,ESPECIFICA_DET</td>
+      <td>parent_not_zero_if_child_nonzero</td>
+      <td>ESPECIFICA ≠ 0 cuando ESPECIFICA_DET ≠ 0</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Filas donde ESPECIFICA_DET ≠ 0 pero ESPECIFICA = 0 (rompería la jerarquía).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.GENERICA.cardinality</td>
+      <td>Cardinalidad catálogo: GENERICA</td>
+      <td>GENERICA</td>
+      <td>cardinality_check</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 9 | esperada: 9. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.SUBGENERICA.cardinality</td>
+      <td>Cardinalidad catálogo: SUBGENERICA</td>
+      <td>SUBGENERICA</td>
+      <td>cardinality_check</td>
+      <td>6</td>
+      <td>6</td>
+      <td>6</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 6 | esperada: 6. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.SUBGENERICA_DET.cardinality</td>
+      <td>Cardinalidad catálogo: SUBGENERICA_DET</td>
+      <td>SUBGENERICA_DET</td>
+      <td>cardinality_check</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 10 | esperada: 10. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.ESPECIFICA.cardinality</td>
+      <td>Cardinalidad catálogo: ESPECIFICA</td>
+      <td>ESPECIFICA</td>
+      <td>cardinality_check</td>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 9 | esperada: 9. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.ESPECIFICA_DET.cardinality</td>
+      <td>Cardinalidad catálogo: ESPECIFICA_DET</td>
+      <td>ESPECIFICA_DET</td>
+      <td>cardinality_check</td>
+      <td>29</td>
+      <td>28</td>
+      <td>28</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 28 | esperada: 29. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.RUBRO.cardinality</td>
+      <td>Cardinalidad catálogo: RUBRO</td>
+      <td>RUBRO</td>
+      <td>cardinality_check</td>
+      <td>8</td>
+      <td>8</td>
+      <td>8</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 8 | esperada: 8. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.FUENTE_FINANCIAMIENTO.cardinality</td>
+      <td>Cardinalidad catálogo: FUENTE_FINANCIAMIENTO</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>cardinality_check</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 4 | esperada: 4. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Integridad</td>
+      <td>siaf.NIVEL_GOBIERNO.cardinality</td>
+      <td>Cardinalidad catálogo: NIVEL_GOBIERNO</td>
+      <td>NIVEL_GOBIERNO</td>
+      <td>cardinality_check</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad observada: 3 | esperada: 3. Dentro del rango esperado.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Oportunidad</td>
+      <td>siaf.ANO_DOC.year_not_future</td>
+      <td>Año no futuro: ANO_DOC</td>
+      <td>ANO_DOC</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución (2026).</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Exactitud</td>
+      <td>siaf.MES_DOC.range</td>
+      <td>Rango numérico: MES_DOC</td>
+      <td>MES_DOC</td>
+      <td>accepted_range</td>
+      <td>[1, 12]</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del rango [1, 12] en MES_DOC.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Oportunidad</td>
+      <td>siaf.temporal_coverage</td>
+      <td>Cobertura temporal: 12 meses por año</td>
+      <td>ANO_DOC,MES_DOC</td>
+      <td>temporal_coverage_check</td>
+      <td>12 meses/año</td>
+      <td>15</td>
+      <td>15</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Años con cobertura incompleta (< 12 meses): ninguno. Excepciones permitidas: [2026].</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.RUBRO.regex</td>
+      <td>Formato regex: RUBRO</td>
+      <td>RUBRO</td>
+      <td>regex</td>
+      <td>^\d{2}$</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{2}$ en RUBRO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.SEC_EJEC.regex</td>
+      <td>Formato regex: SEC_EJEC</td>
+      <td>SEC_EJEC</td>
+      <td>regex</td>
+      <td>^\d{6}$</td>
+      <td>10777068</td>
+      <td>8881044</td>
+      <td>1896024</td>
+      <td>82.4069</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Con observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{6}$ en SEC_EJEC.</td>
+      <td>[{"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}, {"SEC_EJEC": "721"}]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.DEPARTAMENTO_EJECUTORA.regex</td>
+      <td>Formato regex: DEPARTAMENTO_EJECUTORA</td>
+      <td>DEPARTAMENTO_EJECUTORA</td>
+      <td>regex</td>
+      <td>^\d{2}$</td>
+      <td>10775558</td>
+      <td>10775452</td>
+      <td>106</td>
+      <td>99.9990</td>
+      <td>Media</td>
+      <td>dictionary_mef</td>
+      <td>Con observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{2}$ en DEPARTAMENTO_EJECUTORA.</td>
+      <td>[{"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}, {"DEPARTAMENTO_EJECUTORA": "0 "}]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.FUENTE_FINANCIAMIENTO.regex</td>
+      <td>Formato regex: FUENTE_FINANCIAMIENTO</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>regex</td>
+      <td>^\d$</td>
+      <td>10777068</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d$ en FUENTE_FINANCIAMIENTO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.PLIEGO.regex</td>
+      <td>Formato regex: PLIEGO</td>
+      <td>PLIEGO</td>
+      <td>regex</td>
+      <td>^\d{3}$</td>
+      <td>1896376</td>
+      <td>1896376</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{3}$ en PLIEGO.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Conformidad</td>
+      <td>siaf.ESPECIFICA_DET_NOMBRE.cardinality_upper</td>
+      <td>Cardinalidad máxima: ESPECIFICA_DET_NOMBRE</td>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>cardinality_upper_bound</td>
+      <td><= 600</td>
+      <td>496</td>
+      <td>496</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Baja</td>
+      <td>profiling_bronze</td>
+      <td>Sin observaciones</td>
+      <td>Cardinalidad actual: 496 | límite: 600. OK.</td>
+      <td>[]</td>
+    </tr>
+  </tbody>
+</table>
+  </main>
+</body>
+</html>

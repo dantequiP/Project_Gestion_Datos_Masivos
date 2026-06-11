@@ -1,398 +1,682 @@
-# ============================================================
-# REGLAS DE CALIDAD DE DATOS - SIAF INGRESOS
-# ============================================================
-# Evalúa los 8 criterios de calidad sobre los Parquet Bronze
-# de SIAF. El pipeline NO modifica Bronze: solo evalúa,
-# reporta y genera auditoría.
+# =============================================================================
+# quality_rules_siaf.yaml
+# Control de Calidad de Datos — SIAF Ingresos Bronze
+# =============================================================================
 #
-# Criterios evaluados:
-#   1. Completitud   — campos obligatorios no deben ser nulos
-#   2. Validez       — valores dentro del dominio permitido
-#   3. Exactitud     — datos corresponden a la realidad conocida
-#   4. Consistencia  — coherencia interna entre columnas
-#   5. Unicidad      — no debe haber registros duplicados
-#   6. Integridad    — relaciones entre campos del clasificador
-#   7. Oportunidad   — temporalidad coherente
-#   8. Conformidad   — formatos y longitudes según diccionario
+# Base empírica: profiling sobre 10,777,068 filas (años 2012–2026).
+# Cada regla indica su FUENTE para trazabilidad académica.
 #
-# Fuentes de las reglas:
-#   - dictionary_csv         : diccionario oficial MEF
-#   - naming_pattern         : regla por patrón del nombre de campo
-#   - profiling_based        : hallazgo del profiling de Bronze
-#   - inferred_business_key  : clave candidata inferida por negocio
-#   - business_rule          : regla presupuestaria conocida
-# ============================================================
+# Fuentes documentadas:
+#   profiling_bronze    → hallazgo directo del profiling ejecutado
+#   dictionary_mef      → diccionario oficial MEF/SIAF
+#   business_rule       → lógica del sistema presupuestal peruano
+#   inferred_business_key → clave candidata inferida del dominio
+#
+# Dimensiones evaluadas (8):
+#   Completitud | Validez | Exactitud | Consistencia |
+#   Unicidad    | Integridad | Oportunidad | Conformidad
+# =============================================================================
 
 settings:
-  source: siaf
-  bronze_root: data/bronze/siaf
-  reports_root: reports/quality/siaf
-  data_quality_root: data/quality/siaf
-  audit_root: data/audit/quality
+  source:                 siaf
+  dataset_name:           ingresos
+  bronze_root:            data/bronze/siaf
+  reports_root:           reports/quality/siaf
+  data_quality_root:      data/quality/siaf
+  audit_root:             data/audit/quality
   max_failed_samples_per_rule: 10
+  total_rows_profiled:    10777068
+  profiling_date:         "2026-05"
 
-missing_tokens: ["", "nan", "NaN", "None", "none", "NULL", "null", "<NA>", "NaT"]
+missing_tokens: ["", " ", "nan", "NaN", "None", "none", "NULL", "null", "<NA>", "NaT"]
 
-dimensions:
-  - Completitud
-  - Validez
-  - Exactitud
-  - Consistencia
-  - Unicidad
-  - Integridad
-  - Oportunidad
-  - Conformidad
 
-# ============================================================
-# REGLAS GLOBALES
-# Se aplican a todo el dataset sin distinción de columna.
-# ============================================================
-global_rules:
+profiling_findings:
 
-  # ── Unicidad ──────────────────────────────────────────────
-  duplicate_full_rows:
-    enabled: true
+  # ── HALLAZGO 1: 82.4% de vacíos en SECTOR/PLIEGO ─────────────────────────
+  # CAUSA RAÍZ: En SIAF, el nivel GOBIERNOS LOCALES (NIVEL_GOBIERNO = M)
+  # no tiene SECTOR ni PLIEGO asignado — la institución es la propia
+  # municipalidad. El 82.4% corresponde exactamente a los 8,880,692
+  # registros de nivel M. Esto NO es un error de datos: es la
+  # estructura del clasificador presupuestal peruano.
+  sector_pliego_vacios_nivel_local:
+    afecta_columnas: [SECTOR, SECTOR_NOMBRE, PLIEGO, PLIEGO_NOMBRE]
+    filas_afectadas: 8880692
+    pct_afectado: 82.4036
+    causa_raiz: >
+      NIVEL_GOBIERNO = M (Gobiernos Locales) no tiene Sector ni Pliego
+      en el clasificador SIAF. Los 8,880,692 registros afectados
+      corresponden exactamente a todos los registros del nivel M.
+      Es comportamiento esperado, no un error de datos.
+    accion_quality: DOCUMENTAR_COMO_ESPERADO   # no falla la regla, se documenta
+    accion_silver:  IMPUTAR_CONSTANTE            # ver silver_transformations.yaml
+
+  # ── HALLAZGO 2: Duplicados por clave de negocio corta ────────────────────
+  # CAUSA RAÍZ: La clave de negocio usada en el profiling era demasiado
+  # corta (5 columnas). Con la clave completa del clasificador (13 cols)
+  # los duplicados se reducen significativamente o desaparecen.
+  # Si persisten, son registros del mismo clasificador en distintos
+  # archivos anuales que se solapan al combinar el histórico.
+  duplicados_clave_negocio:
+    filas_afectadas: 8778272
+    grupos_afectados: 1928814
+    pct_afectado: 81.4532
+    causa_raiz: >
+      La clave corta ANO_DOC+MES_DOC+SEC_EJEC+FUENTE_FINANCIAMIENTO+
+      ESPECIFICA_DET no identifica unívocamente un registro porque
+      el clasificador de ingresos tiene 5 niveles adicionales.
+      La clave real requiere 13 columnas.
+    accion_quality: EVALUAR_CON_CLAVE_COMPLETA
+    accion_silver:  DEDUPLICAR_CON_CLAVE_13_COLS
+
+  # ── HALLAZGO 3: Negativos en MONTO_PIM y MONTO_RECAUDADO ─────────────────
+  # PIM: 16,235 negativos (0.15%) | RECAUDADO: 109,250 negativos (1.01%)
+  # CAUSA RAÍZ: Las reversiones y devoluciones en SIAF se registran
+  # como valores negativos en el mismo campo (no en campos separados).
+  # Son transacciones válidas del sistema presupuestal.
+  montos_negativos:
+    pim_negativos:         16235
+    pim_pct:               0.1506
+    recaudado_negativos:   109250
+    recaudado_pct:         1.0137
+    valor_minimo_pim:      -2056276286.0
+    valor_minimo_recaudado: -1603920101.66
+    causa_raiz: >
+      SIAF registra reversiones y anulaciones presupuestales como
+      montos negativos. Son transacciones válidas que representan
+      correcciones. No deben eliminarse sino clasificarse.
+    accion_quality: REPORTAR_COMO_OBSERVACION_NO_ERROR
+    accion_silver:  CLASIFICAR_TIPO_TRANSACCION
+
+  # ── HALLAZGO 4: 93.7% de MONTO_PIA = 0 ──────────────────────────────────
+  # CAUSA RAÍZ: El PIA (Presupuesto Institucional de Apertura) solo
+  # tiene valor en el mes de apertura (generalmente enero). Los 11
+  # meses restantes del año tienen PIA = 0 por diseño del SIAF.
+  monto_pia_ceros:
+    filas_con_cero: 10105810
+    pct_ceros:      93.7714
+    causa_raiz: >
+      El PIA solo se asigna en el período de apertura (generalmente
+      mes 1 de cada año). Los demás meses acumulan PIA = 0.
+      Es comportamiento esperado del sistema presupuestal.
+    accion_quality: DOCUMENTAR_COMO_ESPERADO
+    accion_silver:  CALCULAR_PIA_ANUAL_POR_AGREGACION
+
+  # ── HALLAZGO 5: 2026 solo tiene 4 meses (datos parciales) ────────────────
+  year_2026_parcial:
+    registros: 272326
+    meses_con_datos: 4
+    causa_raiz: >
+      El dataset fue descargado en mayo 2026. Solo existen datos
+      para los primeros 4 meses del año. No es un error.
+    accion_silver: MARCAR_COMO_ANO_PARCIAL_EN_METADATA
+
+
+# =============================================================================
+# DIMENSIÓN 1: COMPLETITUD
+# =============================================================================
+completitud:
+
+  # Columnas siempre presentes (completitud = 100% en profiling)
+  columnas_criticas_no_nulas:
+    dimension: Completitud
+    severity: Bloqueante
+    source: profiling_bronze
+    description: >
+      Columnas con completitud = 100% en el profiling. Su ausencia
+      indica corrupción o cambio de schema en la fuente.
+    rule_type: not_null
+    columns:
+      - ANO_DOC
+      - MES_DOC
+      - NIVEL_GOBIERNO
+      - NIVEL_GOBIERNO_NOMBRE
+      - SEC_EJEC
+      - EJECUTORA
+      - EJECUTORA_NOMBRE
+      - FUENTE_FINANCIAMIENTO
+      - FUENTE_FINANCIAMIENTO_NOMBRE
+      - RUBRO
+      - RUBRO_NOMBRE
+      - TIPO_RECURSO
+      - TIPO_RECURSO_NOMBRE
+      - GENERICA
+      - GENERICA_NOMBRE
+      - SUBGENERICA
+      - SUBGENERICA_NOMBRE
+      - SUBGENERICA_DET
+      - SUBGENERICA_DET_NOMBRE
+      - ESPECIFICA
+      - ESPECIFICA_NOMBRE
+      - ESPECIFICA_DET
+      - ESPECIFICA_DET_NOMBRE
+      - MONTO_PIA
+      - MONTO_PIM
+      - MONTO_RECAUDADO
+
+  # Columnas con vacíos estructurales esperados (no son errores)
+  columnas_vacias_estructurales:
+    dimension: Completitud
+    severity: Informativo
+    source: profiling_bronze
+    description: >
+      SECTOR, SECTOR_NOMBRE, PLIEGO y PLIEGO_NOMBRE están vacíos
+      exactamente donde NIVEL_GOBIERNO = M (8,880,692 registros = 82.4%).
+      Este patrón es estructural en SIAF, no un error de datos.
+      La regla verifica que los vacíos ocurran SOLO donde es esperado.
+    rule_type: conditional_null_allowed
+    columns: [SECTOR, SECTOR_NOMBRE, PLIEGO, PLIEGO_NOMBRE]
+    null_allowed_when:
+      column: NIVEL_GOBIERNO
+      value: "M"
+    expected_null_pct_when_m: 100.0     # cuando NIVEL_GOBIERNO=M, es correcto que sea vacío
+    expected_null_pct_when_not_m: 0.0   # cuando R o E, NUNCA debe ser vacío
+
+  # Ubicación geográfica: 0.014% de vacíos (1,510 registros)
+  columnas_ubigeo_casi_completas:
+    dimension: Completitud
+    severity: Media
+    source: profiling_bronze
+    description: >
+      Los campos UBIGEO tienen 1,510–1,616 registros vacíos (0.014–0.015%).
+      Probablemente son unidades ejecutoras sin ubicación registrada
+      en el catálogo geográfico del MEF.
+    rule_type: null_threshold
+    threshold_pct: 0.1     # alerta si supera 0.1%
+    columns:
+      - DEPARTAMENTO_EJECUTORA
+      - DEPARTAMENTO_EJECUTORA_NOMBRE
+      - PROVINCIA_EJECUTORA
+      - PROVINCIA_EJECUTORA_NOMBRE
+      - DISTRITO_EJECUTORA
+      - DISTRITO_EJECUTORA_NOMBRE
+
+
+# =============================================================================
+# DIMENSIÓN 2: VALIDEZ
+# =============================================================================
+validez:
+
+  # Catálogos de dominio cerrado (profiling confirmó exactamente estos valores)
+  nivel_gobierno:
+    dimension: Validez
+    severity: Alta
+    source: dictionary_mef
+    rule_type: accepted_values
+    column: NIVEL_GOBIERNO
+    accepted: ["E", "R", "M"]
+    distribution_observed:
+      M: 8880692    # 82.4% — Gobiernos Locales
+      R: 1189584    # 11.0% — Gobiernos Regionales
+      E: 706792     #  6.6% — Gobierno Nacional
+
+  nivel_gobierno_nombre:
+    dimension: Validez
+    severity: Alta
+    source: dictionary_mef
+    rule_type: accepted_values
+    column: NIVEL_GOBIERNO_NOMBRE
+    accepted:
+      - "GOBIERNO NACIONAL"
+      - "GOBIERNOS REGIONALES"
+      - "GOBIERNOS LOCALES"
+
+  fuente_financiamiento:
+    dimension: Validez
+    severity: Alta
+    source: dictionary_mef
+    rule_type: accepted_values
+    column: FUENTE_FINANCIAMIENTO
+    accepted: ["2", "3", "4", "5"]
+    # 2=RDR, 3=Op.Oficiales Crédito, 4=Donaciones, 5=Recursos Determinados
+    # El profiling confirma exactamente 4 valores distintos con 100% cobertura
+
+  rubro:
+    dimension: Validez
+    severity: Media
+    source: profiling_bronze
+    rule_type: accepted_values
+    column: RUBRO
+    accepted: ["04", "07", "08", "09", "13", "15", "18", "19"]
+    # Profiling: exactamente 8 rubros, 100% de cobertura en top-8
+
+  generica:
+    dimension: Validez
+    severity: Media
+    source: profiling_bronze
+    rule_type: accepted_values
+    column: GENERICA
+    accepted: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    # Profiling: 9 genéricas, 100% cobertura
+
+  # Columnas numéricas declaradas en diccionario MEF
+  columnas_numericas:
+    dimension: Validez
+    severity: Alta
+    source: dictionary_mef
+    rule_type: numeric_type
+    columns:
+      - ANO_DOC
+      - MES_DOC
+      - GENERICA
+      - SUBGENERICA
+      - SUBGENERICA_DET
+      - ESPECIFICA
+      - ESPECIFICA_DET
+      - MONTO_PIA
+      - MONTO_PIM
+      - MONTO_RECAUDADO
+
+  # Tipo de recurso: 58 valores distintos (profiling), catálogo abierto
+  tipo_recurso_numerico_o_alfanumerico:
+    dimension: Validez
+    severity: Baja
+    source: profiling_bronze
+    description: >
+      TIPO_RECURSO tiene 58 valores distintos incluyendo códigos
+      numéricos ("0","1","7") y alfanuméricos ("A","I","P","H").
+      Es un catálogo mixto del MEF. No se restringe a solo numérico.
+    rule_type: not_null
+    column: TIPO_RECURSO
+
+
+# =============================================================================
+# DIMENSIÓN 3: EXACTITUD
+# =============================================================================
+exactitud:
+
+  # ANO_DOC: 15 años distintos, rango 2012–2026 confirmado por profiling
+  ano_doc_rango:
+    dimension: Exactitud
+    severity: Alta
+    source: profiling_bronze
+    rule_type: accepted_range
+    column: ANO_DOC
+    min_value: 2000      # conservador: antes del 2012 posible en años futuros
+    max_value: 2030      # conservador para 5 años de vigencia del pipeline
+    no_future_from_execution: true
+    observed_min: 2012
+    observed_max: 2026
+
+  # MES_DOC: exactamente 12 valores, rango 1–12, sin excepciones
+  mes_doc_rango:
+    dimension: Exactitud
+    severity: Alta
+    source: profiling_bronze
+    rule_type: accepted_range
+    column: MES_DOC
+    min_value: 1
+    max_value: 12
+    observed_distinct: 12     # profiling confirmó los 12 meses en todos los años
+
+  # ANO_DOC formato 4 dígitos (no puede ser "26" en vez de "2026")
+  ano_doc_formato:
+    dimension: Exactitud
+    severity: Alta
+    source: dictionary_mef
+    rule_type: regex
+    column: ANO_DOC
+    pattern: "^\\d{4}$"
+
+  # Rangos de montos consistentes con el histórico observado
+  monto_pia_rango:
+    dimension: Exactitud
+    severity: Media
+    source: profiling_bronze
+    rule_type: accepted_range
+    column: MONTO_PIA
+    min_value: 0.0                 # PIA solo puede ser >= 0
+    max_value: 30000000000.0       # max observado: 28,830,842,000
+    allow_zero: true               # 93.77% son ceros (esperado por diseño)
+
+  monto_pim_rango:
+    dimension: Exactitud
+    severity: Media
+    source: profiling_bronze
+    rule_type: accepted_range
+    column: MONTO_PIM
+    min_value: -2100000000.0       # min observado: -2,056,276,286 (reversiones)
+    max_value: 30000000000.0       # max observado: 28,830,842,000
+    description: >
+      Negativos son válidos (reversiones). Se reportan como observación.
+
+  monto_recaudado_rango:
+    dimension: Exactitud
+    severity: Media
+    source: profiling_bronze
+    rule_type: accepted_range
+    column: MONTO_RECAUDADO
+    min_value: -1700000000.0       # min observado: -1,603,920,101.66
+    max_value: 12000000000.0       # max observado: 11,059,067,178.01
+
+
+# =============================================================================
+# DIMENSIÓN 4: CONSISTENCIA
+# =============================================================================
+consistencia:
+
+  # ── 4a. NIVEL_GOBIERNO ↔ NIVEL_GOBIERNO_NOMBRE (biyección perfecta)
+  nivel_gobierno_nombre_m:
+    dimension: Consistencia
+    severity: Alta
+    source: dictionary_mef
+    rule_type: conditional_value
+    condition_column:  NIVEL_GOBIERNO
+    condition_value:   "M"
+    expected_column:   NIVEL_GOBIERNO_NOMBRE
+    expected_value:    "GOBIERNOS LOCALES"
+
+  nivel_gobierno_nombre_r:
+    dimension: Consistencia
+    severity: Alta
+    source: dictionary_mef
+    rule_type: conditional_value
+    condition_column:  NIVEL_GOBIERNO
+    condition_value:   "R"
+    expected_column:   NIVEL_GOBIERNO_NOMBRE
+    expected_value:    "GOBIERNOS REGIONALES"
+
+  nivel_gobierno_nombre_e:
+    dimension: Consistencia
+    severity: Alta
+    source: dictionary_mef
+    rule_type: conditional_value
+    condition_column:  NIVEL_GOBIERNO
+    condition_value:   "E"
+    expected_column:   NIVEL_GOBIERNO_NOMBRE
+    expected_value:    "GOBIERNO NACIONAL"
+
+  # ── 4b. Pares código → nombre (relación 1→1)
+  # Profiling detectó que NIVEL_GOBIERNO → NIVEL_GOBIERNO_NOMBRE es 1→1 perfecto.
+  # Los demás pares deben ser verificados con la regla code_name_consistency.
+
+  pares_codigo_nombre:
+    dimension: Consistencia
+    severity: Media
+    source: profiling_bronze
+    rule_type: code_name_consistency
+    description: >
+      Cada código debe tener exactamente un nombre asociado en todos
+      los registros del histórico. Múltiples nombres para el mismo
+      código indican renombramientos institucionales sin homologar.
+    pairs:
+    - code: PLIEGO
+      name: PLIEGO_NOMBRE
+    - code: EJECUTORA
+      name: EJECUTORA_NOMBRE
+    - code: DEPARTAMENTO_EJECUTORA
+      name: DEPARTAMENTO_EJECUTORA_NOMBRE
+    - code: FUENTE_FINANCIAMIENTO
+      name: FUENTE_FINANCIAMIENTO_NOMBRE
+    - code: RUBRO
+      name: RUBRO_NOMBRE
+    - code: TIPO_RECURSO
+      name: TIPO_RECURSO_NOMBRE
+    - code: GENERICA
+      name: GENERICA_NOMBRE
+    - code: SUBGENERICA
+      name: SUBGENERICA_NOMBRE
+    - code: ESPECIFICA
+      name: ESPECIFICA_NOMBRE
+    - code: ESPECIFICA_DET
+      name: ESPECIFICA_DET_NOMBRE
+
+  # ── 4c. Relación aritmética PIM ≥ PIA
+  # El profiling indica PIA tiene 93.77% de ceros (esperado).
+  # La regla se aplica solo sobre registros donde PIA > 0.
+  pim_mayor_igual_pia:
+    dimension: Consistencia
+    severity: Media
+    source: business_rule
+    rule_type: column_comparison
+    left_column:   MONTO_PIM
+    operator:      ">="
+    right_column:  MONTO_PIA
+    filter_condition: "MONTO_PIA > 0"    # excluir el 93.77% con PIA=0
+    description: >
+      PIM = PIA + modificaciones aprobadas. Debe ser >= PIA original.
+      Excepciones pueden ocurrir por recortes presupuestales extraordinarios.
+      Se reporta como observación (no bloqueante).
+
+  # ── 4d. Consistencia estructural SECTOR/PLIEGO vacíos SOLO en nivel M
+  sector_vacio_solo_en_nivel_m:
+    dimension: Consistencia
+    severity: Alta
+    source: profiling_bronze
+    rule_type: null_only_when
+    column: SECTOR
+    null_only_when_column: NIVEL_GOBIERNO
+    null_only_when_value:  "M"
+    description: >
+      SECTOR debe estar vacío ÚNICAMENTE cuando NIVEL_GOBIERNO = M.
+      Un SECTOR vacío con NIVEL_GOBIERNO = R o E indica error de carga.
+
+  pliego_vacio_solo_en_nivel_m:
+    dimension: Consistencia
+    severity: Alta
+    source: profiling_bronze
+    rule_type: null_only_when
+    column: PLIEGO
+    null_only_when_column: NIVEL_GOBIERNO
+    null_only_when_value:  "M"
+    description: >
+      PLIEGO debe estar vacío ÚNICAMENTE cuando NIVEL_GOBIERNO = M.
+
+
+# =============================================================================
+# DIMENSIÓN 5: UNICIDAD
+# =============================================================================
+unicidad:
+
+  # Sin duplicados exactos (profiling confirmó 0 duplicados exactos ✓)
+  filas_exactas_duplicadas:
     dimension: Unicidad
     severity: Media
-    source: profiling_based
+    source: profiling_bronze
+    rule_type: duplicate_full_rows
+    expected_count: 0
+    profiling_result: 0    # confirmado en profiling
+
+  # Clave de negocio completa (13 columnas = granularidad real de SIAF)
+  clave_negocio_completa:
+    dimension: Unicidad
+    severity: Alta
+    source: inferred_business_key
+    rule_type: unique_key
     description: >
-      Filas completamente duplicadas. En SIAF cada registro
-      representa una combinación única de período, entidad y
-      clasificador. Duplicados exactos indican reprocesamiento
-      o error en la descarga.
+      La clave de 5 columnas del profiling generaba 81.4% de duplicados
+      aparentes porque no incluía el clasificador completo. La clave real
+      requiere las 13 columnas del período + entidad + clasificador.
+      Con esta clave los duplicados deberían ser cercanos a 0.
+    columns:
+      - ANO_DOC
+      - MES_DOC
+      - NIVEL_GOBIERNO
+      - SEC_EJEC
+      - EJECUTORA
+      - FUENTE_FINANCIAMIENTO
+      - RUBRO
+      - TIPO_RECURSO
+      - GENERICA
+      - SUBGENERICA
+      - SUBGENERICA_DET
+      - ESPECIFICA
+      - ESPECIFICA_DET
 
-  # ── Exactitud: formato de año ─────────────────────────────
-  pattern_rules:
-    year_4_digits:
-      enabled: true
-      dimension: Exactitud
-      severity: Alta
-      source: naming_pattern
-      startswith: ["ANO_"]
-      min_year: 2000
-      max_year: 2100
-      description: >
-        El año debe ser un entero de 4 dígitos dentro de un
-        rango razonable. SIAF publica datos desde el año 2000
-        aproximadamente.
 
-    # ── Conformidad: montos no negativos ─────────────────────
-    monetary_non_negative:
-      enabled: true
-      dimension: Conformidad
-      severity: Alta
-      source: naming_pattern
-      startswith: ["MONTO_"]
-      description: >
-        Los montos presupuestales (PIA, PIM, RECAUDADO) no
-        pueden ser negativos. Un valor negativo indicaría un
-        error de carga o una reversión mal registrada.
+# =============================================================================
+# DIMENSIÓN 6: INTEGRIDAD
+# =============================================================================
+integridad:
 
-# ============================================================
-# REGLAS POR DATASET
-# SIAF tiene un único dataset: ingresos
-# ============================================================
-datasets:
-  ingresos:
+  # Jerarquía completa del clasificador de ingresos MEF:
+  # GENERICA(9) → SUBGENERICA(6) → SUBGENERICA_DET(10)
+  #             → ESPECIFICA(9)  → ESPECIFICA_DET(29)
 
-    # ── 1. COMPLETITUD ────────────────────────────────────────
-    # Columnas que jamás deberían llegar vacías según el
-    # diccionario oficial y la lógica presupuestal.
-    required_columns:
-      dimension: Completitud
-      severity: Alta
-      source: dictionary_csv
-      columns:
-        - ANO_DOC
-        - MES_DOC
-        - NIVEL_GOBIERNO
-        - NIVEL_GOBIERNO_NOMBRE
-        - SECTOR
-        - PLIEGO
-        - PLIEGO_NOMBRE
-        - SEC_EJEC
-        - EJECUTORA
-        - EJECUTORA_NOMBRE
-        - DEPARTAMENTO_EJECUTORA
-        - DEPARTAMENTO_EJECUTORA_NOMBRE
-        - PROVINCIA_EJECUTORA
-        - PROVINCIA_EJECUTORA_NOMBRE
-        - DISTRITO_EJECUTORA
-        - DISTRITO_EJECUTORA_NOMBRE
-        - FUENTE_FINANCIAMIENTO
-        - FUENTE_FINANCIAMIENTO_NOMBRE
-        - RUBRO
-        - RUBRO_NOMBRE
-        - TIPO_RECURSO
-        - TIPO_RECURSO_NOMBRE
-        - GENERICA
-        - GENERICA_NOMBRE
-        - SUBGENERICA
-        - SUBGENERICA_NOMBRE
-        - SUBGENERICA_DET
-        - SUBGENERICA_DET_NOMBRE
-        - ESPECIFICA
-        - ESPECIFICA_NOMBRE
-        - ESPECIFICA_DET
-        - ESPECIFICA_DET_NOMBRE
-        - MONTO_PIA
-        - MONTO_PIM
-        - MONTO_RECAUDADO
+  generica_padre_de_subgenerica:
+    dimension: Integridad
+    severity: Media
+    source: business_rule
+    rule_type: parent_not_zero_if_child_nonzero
+    parent_column: GENERICA
+    child_column:  SUBGENERICA
 
-    # ── 2. VALIDEZ ────────────────────────────────────────────
-    # Valores dentro del dominio documentado por el MEF.
+  subgenerica_padre_de_subgenerica_det:
+    dimension: Integridad
+    severity: Media
+    source: business_rule
+    rule_type: parent_not_zero_if_child_nonzero
+    parent_column: SUBGENERICA
+    child_column:  SUBGENERICA_DET
 
-    allowed_values:
-      # El diccionario oficial declara exactamente tres niveles.
-      NIVEL_GOBIERNO:
-        values: ["E", "R", "M"]
-        dimension: Validez
-        severity: Alta
-        source: dictionary_csv
-        description: >
-          E = Nacional, R = Regional, M = Local (Municipal).
-          Cualquier otro valor no está definido por el MEF.
+  subgenerica_det_padre_de_especifica:
+    dimension: Integridad
+    severity: Media
+    source: business_rule
+    rule_type: parent_not_zero_if_child_nonzero
+    parent_column: SUBGENERICA_DET
+    child_column:  ESPECIFICA
 
-      NIVEL_GOBIERNO_NOMBRE:
-        values: ["GOBIERNO NACIONAL", "GOBIERNOS REGIONALES", "GOBIERNOS LOCALES"]
-        dimension: Validez
-        severity: Media
-        source: dictionary_csv
-        description: >
-          Descripción del nivel de gobierno. Debe coincidir
-          con el código NIVEL_GOBIERNO (ver regla de
-          consistencia). La muestra muestra "GOBIERNOS
-          REGIONALES" para R.
+  especifica_padre_de_especifica_det:
+    dimension: Integridad
+    severity: Media
+    source: business_rule
+    rule_type: parent_not_zero_if_child_nonzero
+    parent_column: ESPECIFICA
+    child_column:  ESPECIFICA_DET
 
-    # ── 3. VALIDEZ NUMÉRICA ───────────────────────────────────
-    numeric_columns:
-      dimension: Validez
-      severity: Alta
-      source: dictionary_csv
-      columns:
-        - ANO_DOC
-        - MES_DOC
-        - GENERICA
-        - SUBGENERICA
-        - SUBGENERICA_DET
-        - ESPECIFICA
-        - ESPECIFICA_DET
-        - MONTO_PIA
-        - MONTO_PIM
-        - MONTO_RECAUDADO
+  # Cardinalidad esperada por nivel (alarma si cambia el catálogo)
+  cardinalidad_clasificador:
+    dimension: Integridad
+    severity: Baja
+    source: profiling_bronze
+    rule_type: cardinality_check
+    description: >
+      El profiling estableció la cardinalidad esperada de cada nivel
+      del clasificador. Un aumento repentino indica versión nueva del
+      catálogo MEF sin homologar con el histórico.
+    expected_cardinality:
+      GENERICA:         9
+      SUBGENERICA:      6
+      SUBGENERICA_DET:  10
+      ESPECIFICA:       9
+      ESPECIFICA_DET:   29
+      RUBRO:            8
+      FUENTE_FINANCIAMIENTO: 4
+      NIVEL_GOBIERNO:   3
 
-    # ── 4. VALIDEZ DE MONTOS ──────────────────────────────────
-    non_negative_columns:
-      dimension: Validez
-      severity: Alta
-      source: dictionary_csv
-      columns:
-        - MONTO_PIA
-        - MONTO_PIM
-        - MONTO_RECAUDADO
-      description: >
-        PIA, PIM y MONTO_RECAUDADO son saldos presupuestales
-        acumulados. Ninguno puede ser negativo en la fuente
-        SIAF. Si lo fueran indicaría corrupción en el CSV.
 
-    # ── 5. EXACTITUD — RELACIÓN PIM >= PIA ───────────────────
-    # El PIM es el PIA ajustado con modificaciones. En teoría
-    # PIM >= PIA. Puede haber excepciones por recortes.
-    consistency_rules:
-      
-      nivel_gobierno_nombre_coherente_local:
-        enabled: true
-        dimension: Consistencia
-        severity: Alta
-        source: dictionary_csv
-        rule_type: conditional_value
-        condition_column: NIVEL_GOBIERNO
-        condition_value: "M"
-        expected_column: NIVEL_GOBIERNO_NOMBRE
-        expected_value: "GOBIERNOS LOCALES"
+# =============================================================================
+# DIMENSIÓN 7: OPORTUNIDAD
+# =============================================================================
+oportunidad:
 
-      nivel_gobierno_nombre_coherente_regional:
-        enabled: true
-        dimension: Consistencia
-        severity: Alta
-        source: dictionary_csv
-        rule_type: conditional_value
-        condition_column: NIVEL_GOBIERNO
-        condition_value: "R"
-        expected_column: NIVEL_GOBIERNO_NOMBRE
-        expected_value: "GOBIERNOS REGIONALES"
+  ano_no_futuro:
+    dimension: Oportunidad
+    severity: Media
+    source: business_rule
+    rule_type: year_not_future
+    column: ANO_DOC
+    description: >
+      ANO_DOC no puede ser posterior al año de ejecución del pipeline.
+      El profiling confirma que 2026 tiene datos parciales (4 meses),
+      lo cual es correcto para un pipeline ejecutado en mayo 2026.
 
-      nivel_gobierno_nombre_coherente_nacional:
-        enabled: true
-        dimension: Consistencia
-        severity: Alta
-        source: dictionary_csv
-        rule_type: conditional_value
-        condition_column: NIVEL_GOBIERNO
-        condition_value: "E"
-        expected_column: NIVEL_GOBIERNO_NOMBRE
-        expected_value: "GOBIERNO NACIONAL"
+  mes_valido:
+    dimension: Oportunidad
+    severity: Alta
+    source: profiling_bronze
+    rule_type: accepted_range
+    column: MES_DOC
+    min_value: 1
+    max_value: 12
+    description: >
+      MES_DOC debe ser un mes calendario 1–12. SIAF no usa período 13
+      (a diferencia de SISMEPRE que sí lo usa). El profiling confirmó
+      exactamente 12 valores distintos en todos los años.
 
-      # RUBRO debe tener exactamente 2 caracteres (patrón observado
-      # en muestra: "09", "13", etc.)
-      rubro_formato:
-        enabled: true
-        dimension: Conformidad
-        severity: Media
-        source: profiling_based
-        rule_type: regex
-        column: RUBRO
-        regex: "^\\d{2}$"
-        description: >
-          El código de RUBRO observado en la muestra 2026 siempre
-          tiene 2 dígitos con cero a la izquierda cuando corresponde
-          (ej: "09", "13"). Valores de longitud diferente indican
-          posible cambio de versión en el clasificador del MEF.
+  cobertura_temporal_esperada:
+    dimension: Oportunidad
+    severity: Baja
+    source: profiling_bronze
+    rule_type: temporal_coverage_check
+    description: >
+      El histórico completo debe tener 12 meses en cada año excepto
+      2026 (año en curso, 4 meses al momento del profiling).
+      Años con menos de 12 meses indican descarga incompleta.
+    expected_months_per_year: 12
+    exception_years: [2026]     # año en curso, cobertura parcial esperada
 
-      # SEC_EJEC: 6 dígitos según patrón observado en muestra
-      sec_ejec_formato:
-        enabled: true
-        dimension: Conformidad
-        severity: Media
-        source: profiling_based
-        rule_type: regex
-        column: SEC_EJEC
-        regex: "^\\d{6}$"
-        description: >
-          SEC_EJEC identifica a la unidad ejecutora. La muestra
-          2026 muestra valores de 6 dígitos (ej: 360001). La
-          longitud diferente indica posible código inválido.
 
-      # Códigos de departamento: exactamente 2 dígitos
-      departamento_formato:
-        enabled: true
-        dimension: Conformidad
-        severity: Media
-        source: naming_pattern
-        rule_type: regex
-        column: DEPARTAMENTO_EJECUTORA
-        regex: "^\\d{2}$"
-        description: >
-          El código UBIGEO de departamento en Perú siempre tiene
-          2 dígitos (01–25). Formato diferente indica error.
+# =============================================================================
+# DIMENSIÓN 8: CONFORMIDAD
+# =============================================================================
+conformidad:
 
-      # Códigos de provincia: exactamente 2 dígitos
-      provincia_formato:
-        enabled: true
-        dimension: Conformidad
-        severity: Media
-        source: naming_pattern
-        rule_type: regex
-        column: PROVINCIA_EJECUTORA
-        regex: "^\\d{2}$"
-        description: >
-          El código de provincia en Perú siempre tiene 2 dígitos.
+  # Formatos confirmados por el profiling (100% de registros evaluables)
+  rubro_2_digitos:
+    dimension: Conformidad
+    severity: Media
+    source: profiling_bronze
+    rule_type: regex
+    column: RUBRO
+    pattern: "^\\d{2}$"
+    description: >
+      Profiling confirmó exactamente 8 valores, todos de 2 dígitos.
 
-      # Códigos de distrito: exactamente 2 dígitos
-      distrito_formato:
-        enabled: true
-        dimension: Conformidad
-        severity: Media
-        source: naming_pattern
-        rule_type: regex
-        column: DISTRITO_EJECUTORA
-        regex: "^\\d{2}$"
-        description: >
-          El código de distrito en Perú siempre tiene 2 dígitos.
+  sec_ejec_6_digitos:
+    dimension: Conformidad
+    severity: Media
+    source: profiling_bronze
+    rule_type: regex
+    column: SEC_EJEC
+    pattern: "^\\d{6}$"
+    description: >
+      Profiling confirmó cardinalidad 2,924 valores, formato 6 dígitos.
 
-    # ── 6. UNICIDAD — CLAVE DE NEGOCIO ───────────────────────
-    # La granularidad de SIAF ingresos es la combinación de
-    # período + entidad ejecutora + clasificador completo.
-    unique_keys:
-      - columns:
-          - ANO_DOC
-          - MES_DOC
-          - NIVEL_GOBIERNO
-          - SEC_EJEC
-          - EJECUTORA
-          - FUENTE_FINANCIAMIENTO
-          - RUBRO
-          - TIPO_RECURSO
-          - GENERICA
-          - SUBGENERICA
-          - SUBGENERICA_DET
-          - ESPECIFICA
-          - ESPECIFICA_DET
-        dimension: Unicidad
-        severity: Alta
-        source: inferred_business_key
-        description: >
-          Clave candidata inferida: la combinación del período
-          (año+mes), la entidad ejecutora y el clasificador
-          completo de ingreso debe identificar unívocamente
-          un registro. Duplicados en esta clave indican filas
-          redundantes o error de paginación en la descarga.
+  departamento_2_digitos:
+    dimension: Conformidad
+    severity: Media
+    source: dictionary_mef
+    rule_type: regex
+    column: DEPARTAMENTO_EJECUTORA
+    pattern: "^\\d{2}$"
+    description: >
+      UBIGEO departamento: 2 dígitos, 28 valores distintos
+      (incluye algunos no estándar detectados en profiling).
 
-    # ── 7. OPORTUNIDAD ───────────────────────────────────────
-    timeliness_rules:
-      # El año no debe ser posterior al año de ejecución del pipeline.
-      - rule_type: year_not_future
-        columns: [ANO_DOC]
-        dimension: Oportunidad
-        severity: Media
-        source: dictionary_csv
-        description: >
-          Un ANO_DOC posterior al año actual indica un dato
-          proyectado o un error en la fuente. Se acepta el año
-          en curso pero no años futuros.
+  fuente_financiamiento_1_digito:
+    dimension: Conformidad
+    severity: Media
+    source: profiling_bronze
+    rule_type: regex
+    column: FUENTE_FINANCIAMIENTO
+    pattern: "^\\d$"
+    description: >
+      Profiling confirmó exactamente 4 valores de 1 dígito: 2,3,4,5.
 
-      # El mes debe estar entre 1 y 12.
-      - rule_type: month_between
-        columns: [MES_DOC]
-        min_value: 1
-        max_value: 12
-        dimension: Oportunidad
-        severity: Alta
-        source: dictionary_csv
-        description: >
-          MES_DOC debe ser un mes calendario válido (1–12).
-          SIAF no usa períodos especiales fuera del rango
-          mensual, a diferencia de SISMEPRE.
+  pliego_3_digitos:
+    dimension: Conformidad
+    severity: Media
+    source: profiling_bronze
+    rule_type: regex
+    column: PLIEGO
+    pattern: "^\\d{3}$"
+    null_when_nivel_gobierno: "M"    # excepto cuando NIVEL_GOBIERNO=M
+    description: >
+      Profiling confirmó 180 pliegos distintos. Formato 3 dígitos.
+      Vacío solo cuando NIVEL_GOBIERNO = M (estructural).
 
-    # ── 8. INTEGRIDAD REFERENCIAL INTERNA ────────────────────
-    # La jerarquía del clasificador de ingreso debe ser
-    # coherente: GENERICA → SUBGENERICA → SUBGENERICA_DET →
-    # ESPECIFICA → ESPECIFICA_DET
-    referential_rules:
-      generica_not_zero_when_subgenerica_nonzero:
-        enabled: true
-        dimension: Integridad
-        severity: Media
-        source: business_rule
-        rule_type: parent_not_zero_if_child_nonzero
-        parent_column: GENERICA
-        child_column: SUBGENERICA
-        description: >
-          Si SUBGENERICA tiene un valor distinto de 0, el
-          nivel padre GENERICA también debe tenerlo. Un
-          clasificador sin padre en la jerarquía indica un
-          registro incoherente con el catálogo del MEF.
-
-      subgenerica_not_zero_when_subgenerica_det_nonzero:
-        enabled: true
-        dimension: Integridad
-        severity: Media
-        source: business_rule
-        rule_type: parent_not_zero_if_child_nonzero
-        parent_column: SUBGENERICA
-        child_column: SUBGENERICA_DET
-        description: >
-          Si SUBGENERICA_DET tiene valor distinto de 0,
-          SUBGENERICA también debe tenerlo.
-
-      especifica_not_zero_when_especifica_det_nonzero:
-        enabled: true
-        dimension: Integridad
-        severity: Media
-        source: business_rule
-        rule_type: parent_not_zero_if_child_nonzero
-        parent_column: ESPECIFICA
-        child_column: ESPECIFICA_DET
-        description: >
-          Si ESPECIFICA_DET tiene valor distinto de 0,
-          ESPECIFICA también debe tenerlo.
+  # ESPECIFICA_DET_NOMBRE tiene 474 valores distintos — cardinalidad alta
+  # pero esperada porque es el nivel más detallado del clasificador
+  especifica_det_nombre_cardinalidad:
+    dimension: Conformidad
+    severity: Baja
+    source: profiling_bronze
+    rule_type: cardinality_upper_bound
+    column: ESPECIFICA_DET_NOMBRE
+    max_cardinality: 600    # tolerancia del 26% sobre los 474 observados
+    description: >
+      474 valores distintos es la cardinalidad observada para el nivel
+      más detallado del clasificador de ingresos. Un valor mayor indica
+      versión nueva del catálogo sin homologar con el histórico.

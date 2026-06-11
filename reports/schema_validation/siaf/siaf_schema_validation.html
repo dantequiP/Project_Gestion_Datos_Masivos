@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Schema Validation SIAF</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px}
+    header h1{margin:0;font-size:25px}
+    header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card{background:white;border-radius:10px;padding:16px;
+          box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}
+    .value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;
+                   font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;
+          overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);
+          margin-bottom:20px}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;
+          text-align:left;vertical-align:middle}
+    th{background:#111827;color:white}
+    tr:nth-child(even){background:#fafafa}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px}
+    .ok{background:#d9eadf;color:#245c36}
+    .warn{background:#fff3cd;color:#7a5b00}
+    .falla{background:#fee2e2;color:#991b1b}
+    .note{background:#eef2ff;border-left:4px solid #3b82f6;border-radius:8px;
+          padding:14px 16px;margin-bottom:20px;font-size:13px}
+    code{background:#eef2ff;padding:2px 5px;border-radius:4px;font-size:12px}
+    .alert-card{background:white;border-left:4px solid #c24141;border-radius:8px;
+                padding:12px 16px;margin:6px 0;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+    </style>
+</head>
+<body>
+  <header>
+    <h1>Validación Estructural — SIAF Ingresos (Bronze)</h1>
+    <p>Generado: 2026-06-11T17:12:22 &nbsp;|&nbsp; Capa evaluada: Bronze
+       &nbsp;|&nbsp; Esta etapa NO modifica datos</p>
+  </header>
+  <main>
+    <div class="note">
+      Este reporte compara las columnas declaradas en
+      <code>app/config/schema_rules_siaf.yaml</code> contra las columnas
+      disponibles en los Parquet Bronze de SIAF. Se excluyen archivos
+      <code>_diario</code> para evitar duplicar montos presupuestales.
+      Las columnas <b>críticas faltantes</b> detienen el pipeline.
+    </div>
+
+    
+    <div class="cards">
+      <div class="card">
+        <div class="label">Total filas Bronze</div>
+        <div class="value">10,777,068</div>
+      </div>
+      <div class="card">
+        <div class="label">Archivos procesados</div>
+        <div class="value">15</div>
+      </div>
+      <div class="card">
+        <div class="label">Columnas OK</div>
+        <div class="value">36</div>
+      </div>
+      <div class="card">
+        <div class="label">Críticas faltantes</div>
+        <div class="value" style="color:#c24141">0</div>
+      </div>
+    </div>
+    
+
+    <h2 class="section-title">Resumen de validación</h2>
+    
+    <table>
+      <thead><tr>
+        <th>Métrica</th><th>Valor</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Estado global</td><td><span class="badge ok">OK</span></td></tr>
+        <tr><td>Columnas esperadas (YAML)</td><td>36</td></tr>
+        <tr><td>Columnas en Parquet</td><td>36</td></tr>
+        <tr><td>Columnas OK</td><td>36</td></tr>
+        <tr><td>Faltantes en Parquet</td><td>0</td></tr>
+        <tr><td>Extras en Parquet</td><td>0</td></tr>
+        <tr><td>Críticas faltantes</td><td><b style="color:#c24141">0</b></td></tr>
+        <tr><td>Total filas Bronze (sin _diario)</td><td>10,777,068</td></tr>
+      </tbody>
+    </table>
+    
+
+    <h2 class="section-title">Observaciones</h2>
+    <div class="note">✅ No se detectaron columnas faltantes ni extras. El schema es conforme al contrato YAML.</div>
+
+    <h2 class="section-title">Detalle columna por columna</h2>
+    <table border="1" class="dataframe detail">
+  <thead>
+    <tr style="text-align: right;">
+      <th>columna</th>
+      <th>tipo_logico_esperado</th>
+      <th>nullable_esperado</th>
+      <th>es_critica</th>
+      <th>presente_en_parquet</th>
+      <th>estado</th>
+      <th>tipo_parquet</th>
+      <th>fuente_regla</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ANO_DOC</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>MES_DOC</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>NIVEL_GOBIERNO</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>NIVEL_GOBIERNO_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SECTOR</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SECTOR_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>PLIEGO</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>PLIEGO_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SEC_EJEC</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>EJECUTORA</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>EJECUTORA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>DEPARTAMENTO_EJECUTORA</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>PROVINCIA_EJECUTORA</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>PROVINCIA_EJECUTORA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>DISTRITO_EJECUTORA</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>DISTRITO_EJECUTORA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>RUBRO</td>
+      <td>string</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>RUBRO_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>TIPO_RECURSO</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>TIPO_RECURSO_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>GENERICA</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>GENERICA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SUBGENERICA</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SUBGENERICA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SUBGENERICA_DET</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>SUBGENERICA_DET_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>ESPECIFICA</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>ESPECIFICA_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>ESPECIFICA_DET</td>
+      <td>integer</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>string</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>MONTO_PIA</td>
+      <td>decimal</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>MONTO_PIM</td>
+      <td>decimal</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+    <tr>
+      <td>MONTO_RECAUDADO</td>
+      <td>decimal</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>OK</td>
+      <td>StringType()</td>
+      <td>dictionary_csv</td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">Archivos Bronze procesados (sin _diario)</h2>
+    <table>
+      <thead><tr><th>Ruta Parquet</th></tr></thead>
+      <tbody><tr><td><code>data/bronze/siaf/2012_ingreso/2012_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2013_ingreso/2013_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2014_ingreso/2014_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2015_ingreso/2015_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2016_ingreso/2016_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2017_ingreso/2017_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2018_ingreso/2018_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2019_ingreso/2019_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2020_ingreso/2020_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2021_ingreso/2021_ingreso_20260527_013650.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2022_ingreso/2022_ingreso_raw.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2023_ingreso/2023_ingreso_raw.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2024_ingreso/2024_ingreso_20260527_040519.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2025_ingreso_mensual/2025_ingreso_mensual_20260527_040519.parquet</code></td></tr><tr><td><code>data/bronze/siaf/2026_ingreso_mensual/2026_ingreso_mensual_20260527_040519.parquet</code></td></tr></tbody>
+    </table>
+
+    <h2 class="section-title">Resumen ejecutivo (CSV)</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>fuente</th>
+      <th>dataset</th>
+      <th>contrato_yaml</th>
+      <th>estado_validacion</th>
+      <th>columnas_esperadas_yaml</th>
+      <th>columnas_en_parquet</th>
+      <th>columnas_ok</th>
+      <th>columnas_faltantes</th>
+      <th>columnas_extras</th>
+      <th>columnas_criticas_faltantes</th>
+      <th>total_filas_bronze</th>
+      <th>archivos_parquet_procesados</th>
+      <th>politica_columnas_extra</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SIAF</td>
+      <td>ingresos</td>
+      <td>schema_rules_siaf.yaml</td>
+      <td>OK</td>
+      <td>36</td>
+      <td>36</td>
+      <td>36</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>10777068</td>
+      <td>15</td>
+      <td>warn</td>
+    </tr>
+  </tbody>
+</table>
+  </main>
+</body>
+</html>

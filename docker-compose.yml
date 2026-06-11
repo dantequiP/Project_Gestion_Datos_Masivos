@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  pyspark_env:
+    image: jupyter/pyspark-notebook:latest
+    container_name: gdm_pyspark_siaf
+    user: root
+
+    environment:
+      - CHOWN_HOME=yes
+      - CHOWN_HOME_OPTS=-R
+      # CRÍTICO: /app debe estar en PYTHONPATH para que los imports
+      # como "from app.pipelines.xxx import yyy" funcionen desde
+      # cualquier script ejecutado con spark-submit o python.
+      - PYTHONPATH=/app
+      # Java 17+ requiere estas opciones para que Spark pueda
+      # acceder a módulos internos de la JVM (necesario en imágenes recientes)
+      - JAVA_OPTS=--add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED
+      # Evita warnings de Spark sobre memoria en contenedores
+      - SPARK_LOCAL_IP=127.0.0.1
+
+    ports:
+      - "8888:8888"
+      # Puerto de la Spark UI (útil para monitorear jobs largos)
+      - "4040:4040"
+
+    volumes:
+      # Bind mount: tu carpeta local queda accesible en /app dentro del contenedor.
+      # Así los datos, scripts y outputs persisten aunque el contenedor se reinicie.
+      - ./:/app
+
+    working_dir: /app
+
+    # Arranca Jupyter sin token ni password para acceso directo en localhost.
+    # NotebookApp = Jupyter classic; ServerApp = JupyterLab (ambos funcionan)
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.notebook_dir='/app'

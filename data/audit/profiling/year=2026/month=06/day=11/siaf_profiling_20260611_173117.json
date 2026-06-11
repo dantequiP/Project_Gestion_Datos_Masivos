@@ -1,0 +1,28 @@
+{
+  "pipeline_name": "profiling_siaf",
+  "status": "success",
+  "started_at": "2026-06-11T17:22:29.211798",
+  "finished_at": "2026-06-11T17:31:17.695575",
+  "duration_seconds": 528.483777,
+  "dataset": "siaf_ingresos",
+  "total_filas": 10777068,
+  "total_columnas": 36,
+  "archivos_combinados": 15,
+  "secciones_ejecutadas": 7,
+  "secciones": [
+    "nulos",
+    "duplicados",
+    "categoricas",
+    "temporal_resumen",
+    "temporal_evolucion",
+    "cardinalidad",
+    "consistencia",
+    "montos"
+  ],
+  "outputs": {
+    "reports_root": "reports/profiling/siaf",
+    "profile_html": "reports/profiling/siaf/siaf_ingresos_profile.html",
+    "dashboard_html": "reports/profiling/siaf/siaf_profile_dashboard.html",
+    "summary_csv": "reports/profiling/siaf/siaf_profile_summary.csv"
+  }
+}

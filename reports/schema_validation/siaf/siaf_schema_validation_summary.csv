@@ -1,0 +1,2 @@
+﻿fuente,dataset,contrato_yaml,estado_validacion,columnas_esperadas_yaml,columnas_en_parquet,columnas_ok,columnas_faltantes,columnas_extras,columnas_criticas_faltantes,total_filas_bronze,archivos_parquet_procesados,politica_columnas_extra
+SIAF,ingresos,schema_rules_siaf.yaml,OK,36,36,36,0,0,0,10777068,15,warn

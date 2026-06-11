@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Profiling SIAF — siaf_ingresos</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px}
+    header h1{margin:0;font-size:24px} header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}
+    .value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:28px 0 10px;
+                   border-bottom:2px solid #e5e7eb;padding-bottom:4px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;
+          font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}
+    th{background:#111827;color:white}
+    tr:nth-child(even){background:#fafafa}
+    .badge{padding:4px 10px;border-radius:999px;font-weight:bold;font-size:11px;white-space:nowrap}
+    .ok{background:#d9eadf;color:#245c36} .revisar{background:#fee2e2;color:#991b1b}
+    .note{background:#eef2ff;border-left:4px solid #3b82f6;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px}
+    code{background:#f1f5f9;padding:2px 5px;border-radius:4px;font-size:11px}
+    </style>
+</head>
+<body>
+  <header>
+    <h1>Data Profiling SIAF — siaf_ingresos</h1>
+    <p>Generado: 2026-06-11T17:31:17 | Capa: Bronze | PySpark | 15 archivos combinados | Sin modificación de datos</p>
+  </header>
+  <main>
+    <div class="note">
+      Profiling exhaustivo de 7 secciones sobre Bronze Parquet.
+      Resultados orientados a informar decisiones de <b>capa Silver</b> y reglas de <b>Quality</b>.
+      Motor: <code>PySpark</code> con agregaciones en pasada única donde es posible.
+    </div>
+
+    <div class="cards">
+      <div class="card"><div class="label">Filas totales</div><div class="value">10,777,068</div></div>
+      <div class="card"><div class="label">Columnas</div><div class="value">36</div></div>
+      <div class="card"><div class="label">Cols con faltantes</div><div class="value">10</div></div>
+      <div class="card"><div class="label">Filas exactas dupl.</div>
+        <div class="value" style="color:#2f7d46">0</div></div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="label">Cols faltantes &gt;5%</div>
+        <div class="value" style="color:#c24141">4</div></div>
+      <div class="card"><div class="label">Montos con negativos</div>
+        <div class="value" style="color:#c24141">2</div></div>
+      <div class="card"><div class="label">Pares inconsistentes</div>
+        <div class="value" style="color:#c24141">8</div></div>
+      <div class="card"><div class="label">Dataset</div>
+        <div class="value" style="font-size:14px;margin-top:12px">siaf_ingresos</div></div>
+    </div>
+
+    <h2 class="section-title">1 — Análisis de Nulos y Vacíos</h2>
+    <div class="note">Conteo de nulos reales (NULL) y faltantes-like (cadenas vacías, "nan", "NULL", etc.)
+    por columna. La columna <b>completitud_pct</b> indica qué porcentaje de filas tiene datos válidos.</div>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>columna</th>
+      <th>total_filas</th>
+      <th>nulos_reales</th>
+      <th>pct_nulos</th>
+      <th>faltantes_like</th>
+      <th>pct_faltantes</th>
+      <th>completitud_pct</th>
+      <th>alerta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ANO_DOC</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MES_DOC</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>NIVEL_GOBIERNO</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>NIVEL_GOBIERNO_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SECTOR</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>8880692</td>
+      <td>82.4036</td>
+      <td>17.5964</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SECTOR_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>8880692</td>
+      <td>82.4036</td>
+      <td>17.5964</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PLIEGO</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>8880692</td>
+      <td>82.4036</td>
+      <td>17.5964</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PLIEGO_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>8880692</td>
+      <td>82.4036</td>
+      <td>17.5964</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SEC_EJEC</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>EJECUTORA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>EJECUTORA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DEPARTAMENTO_EJECUTORA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1510</td>
+      <td>0.0140</td>
+      <td>99.9860</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1616</td>
+      <td>0.0150</td>
+      <td>99.9850</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PROVINCIA_EJECUTORA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1510</td>
+      <td>0.0140</td>
+      <td>99.9860</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PROVINCIA_EJECUTORA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1616</td>
+      <td>0.0150</td>
+      <td>99.9850</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DISTRITO_EJECUTORA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1510</td>
+      <td>0.0140</td>
+      <td>99.9860</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DISTRITO_EJECUTORA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1616</td>
+      <td>0.0150</td>
+      <td>99.9850</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>TIPO_RECURSO</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>TIPO_RECURSO_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_DET</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_DET_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_PIA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_PIM</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_RECAUDADO</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>100.0000</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">2 — Análisis de Duplicados</h2>
+    <div class="note">Duplicados exactos (todas las columnas idénticas) y duplicados lógicos
+    por clave de negocio <code>ANO_DOC + MES_DOC + SEC_EJEC + FUENTE_FINANCIAMIENTO + ESPECIFICA_DET</code>.</div>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>tipo_duplicado</th>
+      <th>conteo</th>
+      <th>pct</th>
+      <th>descripcion</th>
+      <th>alerta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Filas exactas duplicadas</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>Filas con todos los campos idénticos</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>Duplicados por clave de negocio</td>
+      <td>8778272</td>
+      <td>81.4532</td>
+      <td>Clave: ANO_DOC + MES_DOC + SEC_EJEC + FUENTE_FINANCIAMIENTO + ESPECIFICA_DET | grupos afectados: 1928814</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">3 — Columnas Categóricas</h2>
+    <div class="note">Cardinalidad y top-10 valores para columnas clasificatorias del SIAF.
+    Alta cardinalidad en estas columnas puede indicar datos sucios o campos no normalizados.</div>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>columna</th>
+      <th>cardinalidad_aprox</th>
+      <th>clase_cardinalidad</th>
+      <th>top10_valores</th>
+      <th>cobertura_top10_pct</th>
+      <th>alerta</th>
+      <th>nota</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>NIVEL_GOBIERNO</td>
+      <td>3</td>
+      <td>baja_categorica</td>
+      <td>{"M": 8880692, "R": 1189584, "E": 706792}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>NIVEL_GOBIERNO_NOMBRE</td>
+      <td>3</td>
+      <td>baja_categorica</td>
+      <td>{"GOBIERNOS LOCALES": 8880692, "GOBIERNOS REGIONALES": 1189584, "GOBIERNO NACIONAL": 706792}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SECTOR</td>
+      <td>34</td>
+      <td>baja_categorica</td>
+      <td>{" ": 8880692, "99": 1189232, "10": 304726, "11": 128770, "13": 33675, "26": 31189, "06": 29751, "01": 20729, "07": 18551, "09": 17100}</td>
+      <td>98.86</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SECTOR_NOMBRE</td>
+      <td>35</td>
+      <td>baja_categorica</td>
+      <td>{" ": 8880692, "GOBIERNOS REGIONALES": 1189232, "EDUCACION": 304726, "SALUD": 128770, "DEFENSA": 31189, "JUSTICIA": 29751, "AGRICULTURA": 26330, "PRESIDENCIA CONSEJO MINISTROS": 20729, "INTERIOR": 18551, "ECONOMIA Y FINANZAS": 17100}</td>
+      <td>98.79</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>4</td>
+      <td>baja_categorica</td>
+      <td>{"2": 5709223, "5": 4584830, "4": 323555, "3": 159460}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>4</td>
+      <td>baja_categorica</td>
+      <td>{"RECURSOS DIRECTAMENTE RECAUDADOS": 5709223, "RECURSOS DETERMINADOS": 4584830, "DONACIONES Y TRANSFERENCIAS": 323555, "RECURSOS POR OPERACIONES OFICIALES DE CREDITO": 159460}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO</td>
+      <td>8</td>
+      <td>baja_categorica</td>
+      <td>{"09": 5709223, "18": 2984079, "07": 917947, "08": 661621, "13": 323555, "19": 159460, "15": 19447, "04": 1736}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO_NOMBRE</td>
+      <td>8</td>
+      <td>baja_categorica</td>
+      <td>{"RECURSOS DIRECTAMENTE RECAUDADOS": 5709223, "CANON Y SOBRECANON, REGALIAS, RENTA DE ADUANAS Y PARTICIPACIONES": 2984079, "FONDO DE COMPENSACION MUNICIPAL": 917947, "IMPUESTOS MUNICIPALES": 661621, "DONACIONES Y TRANSFERENCIAS": 323555, "RECURSOS POR OPERACIONES OFICIALES DE CREDITO": 159460, "FONDO DE COMPENSACION REGIONAL - FONCOR": 19447, "CONTRIBUCIONES A FONDOS": 1736}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>TIPO_RECURSO</td>
+      <td>58</td>
+      <td>baja_categorica</td>
+      <td>{"0": 3652026, "1": 2081135, "7": 1385199, "A": 637633, "I": 485423, "P": 448549, "H": 399589, "L": 254012, "J": 169633, "O": 152460}</td>
+      <td>89.69</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>TIPO_RECURSO_NOMBRE</td>
+      <td>169</td>
+      <td>baja_categorica</td>
+      <td>{"NORMAL": 3179061, "UNIVERSIDADES / GOB. LOCALES": 2000637, "SUB CUENTA - RECURSOS DIRECTAMENTE RECAUDADOS": 1169433, "SUB CUENTA - FONCOMUN": 612667, "SUB CUENTA - CANON HIDROENERGETICO": 484266, "SUB CUENTA - REGALIAS MINERAS": 447673, "CANON": 408657, "SUB CUENTA - CANON MINERO": 399475, "SUB CUENTA - CANON FORESTAL": 253984, "SUB CUENTA - IMPUESTOS MUNICIPALES": 189222}</td>
+      <td>84.86</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA</td>
+      <td>9</td>
+      <td>baja_categorica</td>
+      <td>{"3": 4484662, "5": 2964088, "4": 1880888, "9": 746994, "1": 567069, "8": 107625, "6": 21881, "2": 2180, "7": 1681}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA_NOMBRE</td>
+      <td>9</td>
+      <td>baja_categorica</td>
+      <td>{"VENTA DE BIENES Y SERVICIOS Y DERECHOS ADMINISTRATIVOS": 4484662, "OTROS INGRESOS": 2964088, "DONACIONES Y TRANSFERENCIAS": 1880888, "SALDOS DE BALANCE": 746994, "IMPUESTOS Y CONTRIBUCIONES OBLIGATORIAS": 567069, "ENDEUDAMIENTO": 107625, "VENTA DE ACTIVOS NO FINANCIEROS": 21881, "CONTRIBUCIONES SOCIALES": 2180, "VENTA DE ACTIVOS FINANCIEROS": 1681}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA</td>
+      <td>6</td>
+      <td>baja_categorica</td>
+      <td>{"1": 5367963, "2": 3233924, "3": 1787075, "5": 368642, "4": 11620, "6": 7844}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_NOMBRE</td>
+      <td>26</td>
+      <td>baja_categorica</td>
+      <td>{"DERECHOS Y TASAS ADMINISTRATIVOS": 2438420, "RENTAS DE LA PROPIEDAD": 2429231, "DONACIONES Y TRANSFERENCIAS CORRIENTES": 1816415, "VENTA DE SERVICIOS": 1701168, "SALDOS DE BALANCE": 746994, "IMPUESTO A LA PROPIEDAD": 389831, "VENTA DE BIENES": 345074, "INGRESOS DIVERSOS": 262369, "MULTAS Y SANCIONES NO TRIBUTARIAS": 257174, "OTROS INGRESOS IMPOSITIVOS": 92495}</td>
+      <td>97.24</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_DET</td>
+      <td>10</td>
+      <td>baja_categorica</td>
+      <td>{"1": 4516787, "4": 2273764, "9": 1226297, "3": 747006, "5": 642374, "2": 505308, "10": 470627, "8": 263084, "6": 116442, "7": 15379}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_DET_NOMBRE</td>
+      <td>67</td>
+      <td>baja_categorica</td>
+      <td>{"RENTAS DE LA PROPIEDAD FINANCIERA": 2254124, "POR PARTICIPACIONES DE RECURSOS DETERMINADOS": 1642020, "OTROS INGRESOS POR PRESTACION DE SERVICIOS": 811832, "SALDOS DE BALANCE": 746994, "DERECHOS ADMINISTRATIVOS GENERALES": 602633, "OTROS DERECHOS ADMINISTRATIVOS": 470627, "SERVICIOS DE SALUD": 398458, "IMPUESTO SOBRE LA PROPIEDAD INMUEBLE": 360207, "DERECHOS ADMINISTRATIVOS DE VIVIENDA Y CONSTRUCCION": 332039, "DERECHOS ADMINISTRATIVOS DE INDUSTRIA Y COMERCIO": 329196}</td>
+      <td>73.75</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA</td>
+      <td>9</td>
+      <td>baja_categorica</td>
+      <td>{"1": 7425582, "2": 1988128, "5": 481606, "4": 435390, "3": 221422, "6": 216923, "7": 7379, "9": 546, "8": 92}</td>
+      <td>100.00</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_NOMBRE</td>
+      <td>133</td>
+      <td>baja_categorica</td>
+      <td>{"INTERESES": 2208454, "OTROS INGRESOS POR PRESTACION DE SERVICIOS": 777885, "CANON Y SOBRECANON": 757674, "SALDOS DE BALANCE": 746994, "OTROS DERECHOS ADMINISTRATIVOS": 470627, "REGISTROS Y LICENCIAS": 455075, "FONDO DE COMPENSACION MUNICIPAL": 413278, "DERECHOS ADMINISTRATIVOS DE INDUSTRIA Y COMERCIO": 329196, "REGALIAS": 304486, "PREDIAL": 268004}</td>
+      <td>62.46</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET</td>
+      <td>29</td>
+      <td>baja_categorica</td>
+      <td>{"1": 5548879, "99": 1081147, "2": 785307, "4": 767158, "5": 638431, "3": 590314, "6": 270922, "9": 208448, "7": 158472, "10": 110999}</td>
+      <td>94.27</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>474</td>
+      <td>baja_categorica</td>
+      <td>{"INTERESES POR DEPOSITOS DISTINTOS DE RECURSOS POR PRIVATIZACION Y CONCESIONES": 2208450, "SALDOS DE BALANCE": 746994, "FONDO DE COMPENSACION MUNICIPAL": 413278, "CANON GASIFERO": 272782, "REGISTRO CIVIL": 237741, "PREDIAL": 221892, "REGALIAS MINERAS": 215033, "CANON HIDROENERGETICO": 201628, "OTROS INGRESOS DIVERSOS": 142537, "SERVICIOS A TERCEROS": 142504}</td>
+      <td>44.57</td>
+      <td><span class="badge ok">OK</span></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">4 — Variables Temporales (ANO_DOC / MES_DOC)</h2>
+    <div class="note"><code>ANO_DOC</code> y <code>MES_DOC</code> no son campos de fecha pero
+    representan la dimensión temporal del presupuesto. Se analiza rango, gaps y cobertura.</div>
+    <b>Resumen temporal:</b>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>variable</th>
+      <th>valor_minimo</th>
+      <th>valor_maximo</th>
+      <th>valores_distintos</th>
+      <th>nulos</th>
+      <th>gaps_en_rango</th>
+      <th>valores_fuera_rango_esperado</th>
+      <th>alerta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ANO_DOC</td>
+      <td>2012</td>
+      <td>2026</td>
+      <td>15</td>
+      <td>0</td>
+      <td>ninguno</td>
+      <td>ninguno</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MES_DOC</td>
+      <td>1</td>
+      <td>12</td>
+      <td>12</td>
+      <td>0</td>
+      <td>ninguno</td>
+      <td>ninguno</td>
+      <td><span class="badge ok">OK</span></td>
+    </tr>
+  </tbody>
+</table>
+    <b>Evolución anual de registros y montos:</b>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>ano</th>
+      <th>registros</th>
+      <th>sum_monto_recaudado</th>
+      <th>avg_monto_recaudado</th>
+      <th>meses_con_datos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2012</td>
+      <td>759578</td>
+      <td>5.908773e+10</td>
+      <td>77790.21</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2013</td>
+      <td>721818</td>
+      <td>5.898730e+10</td>
+      <td>81720.46</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2014</td>
+      <td>754093</td>
+      <td>6.654575e+10</td>
+      <td>88246.08</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2015</td>
+      <td>781007</td>
+      <td>8.070828e+10</td>
+      <td>103338.74</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2016</td>
+      <td>764729</td>
+      <td>8.798770e+10</td>
+      <td>115057.36</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2017</td>
+      <td>683816</td>
+      <td>9.024022e+10</td>
+      <td>131965.65</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2018</td>
+      <td>656859</td>
+      <td>9.229988e+10</td>
+      <td>140517.04</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2019</td>
+      <td>706695</td>
+      <td>9.158252e+10</td>
+      <td>129592.71</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2020</td>
+      <td>692729</td>
+      <td>1.035773e+11</td>
+      <td>149520.66</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2021</td>
+      <td>828167</td>
+      <td>1.360007e+11</td>
+      <td>164218.90</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2022</td>
+      <td>774954</td>
+      <td>1.245461e+11</td>
+      <td>160714.15</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2023</td>
+      <td>743452</td>
+      <td>1.063094e+11</td>
+      <td>142994.36</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2024</td>
+      <td>758116</td>
+      <td>1.121327e+11</td>
+      <td>147909.64</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2025</td>
+      <td>878729</td>
+      <td>1.191812e+11</td>
+      <td>135629.08</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>2026</td>
+      <td>272326</td>
+      <td>5.191720e+10</td>
+      <td>190643.57</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">5 — Cardinalidad General</h2>
+    <div class="note">Cardinalidad aproximada (HyperLogLog, rsd=5%) para todas las columnas.
+    Útil para decidir tipos de índices y estrategias de particionado en Silver.</div>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>columna</th>
+      <th>cardinalidad_aprox</th>
+      <th>pct_unicidad</th>
+      <th>clase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ANO_DOC</td>
+      <td>15</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MES_DOC</td>
+      <td>12</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>NIVEL_GOBIERNO</td>
+      <td>3</td>
+      <td>0.0000</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>NIVEL_GOBIERNO_NOMBRE</td>
+      <td>3</td>
+      <td>0.0000</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SECTOR</td>
+      <td>34</td>
+      <td>0.0003</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SECTOR_NOMBRE</td>
+      <td>35</td>
+      <td>0.0003</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PLIEGO</td>
+      <td>180</td>
+      <td>0.0017</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PLIEGO_NOMBRE</td>
+      <td>264</td>
+      <td>0.0024</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SEC_EJEC</td>
+      <td>2924</td>
+      <td>0.0271</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>EJECUTORA</td>
+      <td>2124</td>
+      <td>0.0197</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>EJECUTORA_NOMBRE</td>
+      <td>2970</td>
+      <td>0.0276</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DEPARTAMENTO_EJECUTORA</td>
+      <td>28</td>
+      <td>0.0003</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>26</td>
+      <td>0.0002</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PROVINCIA_EJECUTORA</td>
+      <td>22</td>
+      <td>0.0002</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PROVINCIA_EJECUTORA_NOMBRE</td>
+      <td>201</td>
+      <td>0.0019</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DISTRITO_EJECUTORA</td>
+      <td>47</td>
+      <td>0.0004</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DISTRITO_EJECUTORA_NOMBRE</td>
+      <td>1772</td>
+      <td>0.0164</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>4</td>
+      <td>0.0000</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>4</td>
+      <td>0.0000</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO</td>
+      <td>8</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO_NOMBRE</td>
+      <td>8</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>TIPO_RECURSO</td>
+      <td>58</td>
+      <td>0.0005</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>TIPO_RECURSO_NOMBRE</td>
+      <td>169</td>
+      <td>0.0016</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA</td>
+      <td>9</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA_NOMBRE</td>
+      <td>9</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA</td>
+      <td>6</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_NOMBRE</td>
+      <td>26</td>
+      <td>0.0002</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_DET</td>
+      <td>10</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA_DET_NOMBRE</td>
+      <td>67</td>
+      <td>0.0006</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA</td>
+      <td>9</td>
+      <td>0.0001</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_NOMBRE</td>
+      <td>133</td>
+      <td>0.0012</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET</td>
+      <td>29</td>
+      <td>0.0003</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>474</td>
+      <td>0.0044</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_PIA</td>
+      <td>166981</td>
+      <td>1.5494</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_PIM</td>
+      <td>357240</td>
+      <td>3.3148</td>
+      <td>baja_categorica</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_RECAUDADO</td>
+      <td>2458352</td>
+      <td>22.8110</td>
+      <td>media</td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">6 — Consistencia Código → Nombre</h2>
+    <div class="note">Verifica que la relación entre columnas de código y su descripción sea 1→1.
+    Un código con múltiples nombres asociados indica datos inconsistentes que deben limpiarse en Silver.</div>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>columna_codigo</th>
+      <th>columna_nombre</th>
+      <th>cardinalidad_codigo</th>
+      <th>cardinalidad_nombre</th>
+      <th>codigos_con_multiples_nombres</th>
+      <th>consistencia</th>
+      <th>nota</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PLIEGO</td>
+      <td>PLIEGO_NOMBRE</td>
+      <td>180</td>
+      <td>264</td>
+      <td>74</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>74 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SEC_EJEC</td>
+      <td>EJECUTORA_NOMBRE</td>
+      <td>2924</td>
+      <td>2970</td>
+      <td>85</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>85 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>EJECUTORA</td>
+      <td>EJECUTORA_NOMBRE</td>
+      <td>2124</td>
+      <td>2970</td>
+      <td>128</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>128 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DEPARTAMENTO_EJECUTORA</td>
+      <td>DEPARTAMENTO_EJECUTORA_NOMBRE</td>
+      <td>28</td>
+      <td>26</td>
+      <td>0</td>
+      <td><span class="badge ok">OK</span></td>
+      <td>Relación 1→1 correcta</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>PROVINCIA_EJECUTORA</td>
+      <td>PROVINCIA_EJECUTORA_NOMBRE</td>
+      <td>22</td>
+      <td>201</td>
+      <td>13</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>13 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>DISTRITO_EJECUTORA</td>
+      <td>DISTRITO_EJECUTORA_NOMBRE</td>
+      <td>47</td>
+      <td>1772</td>
+      <td>36</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>36 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>FUENTE_FINANCIAMIENTO</td>
+      <td>FUENTE_FINANCIAMIENTO_NOMBRE</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td><span class="badge ok">OK</span></td>
+      <td>Relación 1→1 correcta</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>RUBRO</td>
+      <td>RUBRO_NOMBRE</td>
+      <td>8</td>
+      <td>8</td>
+      <td>0</td>
+      <td><span class="badge ok">OK</span></td>
+      <td>Relación 1→1 correcta</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>GENERICA</td>
+      <td>GENERICA_NOMBRE</td>
+      <td>9</td>
+      <td>9</td>
+      <td>0</td>
+      <td><span class="badge ok">OK</span></td>
+      <td>Relación 1→1 correcta</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>SUBGENERICA</td>
+      <td>SUBGENERICA_NOMBRE</td>
+      <td>6</td>
+      <td>26</td>
+      <td>5</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>5 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA</td>
+      <td>ESPECIFICA_NOMBRE</td>
+      <td>9</td>
+      <td>133</td>
+      <td>8</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>8 código(s) tienen más de un nombre asociado</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>ESPECIFICA_DET</td>
+      <td>ESPECIFICA_DET_NOMBRE</td>
+      <td>29</td>
+      <td>474</td>
+      <td>15</td>
+      <td><span class="badge revisar">INCONSISTENTE</span></td>
+      <td>15 código(s) tienen más de un nombre asociado</td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2 class="section-title">7 — Valores Negativos y Cero (Montos)</h2>
+    <div class="note">Análisis de signos en <code>MONTO_PIA</code>, <code>MONTO_PIM</code> y
+    <code>MONTO_RECAUDADO</code>. Valores negativos en ingresos son inusuales y pueden
+    indicar reversiones o errores de carga.</div>
+    <table border="1" class="dataframe profiling-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>dataset</th>
+      <th>columna</th>
+      <th>total_filas</th>
+      <th>negativos</th>
+      <th>pct_negativos</th>
+      <th>ceros</th>
+      <th>pct_ceros</th>
+      <th>positivos</th>
+      <th>pct_positivos</th>
+      <th>nulos</th>
+      <th>valor_minimo</th>
+      <th>valor_maximo</th>
+      <th>suma_total</th>
+      <th>promedio</th>
+      <th>alerta_negativos</th>
+      <th>alerta_ceros</th>
+      <th>nota</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_PIA</td>
+      <td>10777068</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>10105810</td>
+      <td>93.7714</td>
+      <td>671258</td>
+      <td>6.2286</td>
+      <td>0</td>
+      <td>0.000000e+00</td>
+      <td>2.883084e+10</td>
+      <td>9.116241e+11</td>
+      <td>84589.2519</td>
+      <td><span class="badge ok">OK</span></td>
+      <td><span class="badge revisar">REVISAR</span></td>
+      <td>Sin valores negativos</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_PIM</td>
+      <td>10777068</td>
+      <td>16235</td>
+      <td>0.1506</td>
+      <td>9269270</td>
+      <td>86.0092</td>
+      <td>1491563</td>
+      <td>13.8402</td>
+      <td>0</td>
+      <td>-2.056276e+09</td>
+      <td>2.883084e+10</td>
+      <td>1.268417e+12</td>
+      <td>117695.9431</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+      <td><span class="badge revisar">REVISAR</span></td>
+      <td>16,235 valores negativos detectados — ingresos negativos son inusuales</td>
+    </tr>
+    <tr>
+      <td>siaf_ingresos</td>
+      <td>MONTO_RECAUDADO</td>
+      <td>10777068</td>
+      <td>109250</td>
+      <td>1.0137</td>
+      <td>2706000</td>
+      <td>25.1089</td>
+      <td>7961818</td>
+      <td>73.8774</td>
+      <td>0</td>
+      <td>-1.603920e+09</td>
+      <td>1.105907e+10</td>
+      <td>1.381104e+12</td>
+      <td>128152.1067</td>
+      <td><span class="badge revisar">REVISAR</span></td>
+      <td><span class="badge ok">OK</span></td>
+      <td>109,250 valores negativos detectados — ingresos negativos son inusuales</td>
+    </tr>
+  </tbody>
+</table>
+
+  </main>
+</body>
+</html>

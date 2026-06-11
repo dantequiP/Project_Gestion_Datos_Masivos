@@ -1,0 +1,23 @@
+{
+  "pipeline_name": "quality_siaf_ingresos",
+  "status": "warning",
+  "started_at": "2026-06-11T18:54:09.105920",
+  "finished_at": "2026-06-11T19:01:07.628574",
+  "duration_seconds": 418.522654,
+  "total_rows_bronze": 10777068,
+  "parquets_procesados": 15,
+  "rules_evaluated": 96,
+  "rules_with_observations": 10,
+  "observations_total": 48211609,
+  "rules_bloqueantes_o_altas_con_observacion": 1,
+  "failed_samples_total": 0,
+  "outputs": {
+    "summary_csv": "reports/quality/siaf/siaf_quality_summary.csv",
+    "detail_csv": "reports/quality/siaf/siaf_quality_detail.csv",
+    "failed_samples_csv": "reports/quality/siaf/siaf_quality_failed_samples.csv",
+    "dashboard_html": "reports/quality/siaf/siaf_quality_dashboard.html",
+    "report_html": "reports/quality/siaf/siaf_ingresos_quality.html",
+    "detail_parquet": "data/quality/siaf/siaf_quality_detail.parquet",
+    "summary_parquet": "data/quality/siaf/siaf_quality_summary.parquet"
+  }
+}

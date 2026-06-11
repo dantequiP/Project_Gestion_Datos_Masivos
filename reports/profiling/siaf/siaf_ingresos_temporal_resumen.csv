@@ -1,0 +1,3 @@
+﻿dataset,variable,valor_minimo,valor_maximo,valores_distintos,nulos,gaps_en_rango,valores_fuera_rango_esperado,alerta
+siaf_ingresos,ANO_DOC,2012,2026,15,0,ninguno,ninguno,OK
+siaf_ingresos,MES_DOC,1,12,12,0,ninguno,ninguno,OK

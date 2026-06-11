@@ -1,0 +1,4 @@
+﻿dataset,columna,total_filas,negativos,pct_negativos,ceros,pct_ceros,positivos,pct_positivos,nulos,valor_minimo,valor_maximo,suma_total,promedio,alerta_negativos,alerta_ceros,nota
+siaf_ingresos,MONTO_PIA,10777068,0,0.0,10105810,93.7714,671258,6.2286,0,0.0,28830842000.0,911624119319.0,84589.2519,OK,REVISAR,Sin valores negativos
+siaf_ingresos,MONTO_PIM,10777068,16235,0.1506,9269270,86.0092,1491563,13.8402,0,-2056276286.0,28830842000.0,1268417181607.0,117695.9431,REVISAR,REVISAR,"16,235 valores negativos detectados — ingresos negativos son inusuales"
+siaf_ingresos,MONTO_RECAUDADO,10777068,109250,1.0137,2706000,25.1089,7961818,73.8774,0,-1603920101.66,11059067178.01,1381103968051.14,128152.1067,REVISAR,OK,"109,250 valores negativos detectados — ingresos negativos son inusuales"

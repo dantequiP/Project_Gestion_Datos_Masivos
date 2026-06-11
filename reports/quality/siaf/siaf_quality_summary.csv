@@ -1,0 +1,2 @@
+﻿dataset,rules_evaluated,rules_with_observations,observations_total,evaluated_rows_total,score_completitud,score_exactitud,score_consistencia,score_integridad,score_razonabilidad,score_oportunidad,score_unicidad,score_validez,score_general,estado_descriptivo
+siaf_ingresos,96,10,48211609,824119786,100.0,100.0,68.9723,100.0,,100.0,99.999,100.0,95.5673,Con observaciones

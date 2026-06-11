@@ -1,0 +1,3 @@
+﻿dataset,tipo_duplicado,conteo,pct,descripcion,alerta
+siaf_ingresos,Filas exactas duplicadas,0,0.0,Filas con todos los campos idénticos,OK
+siaf_ingresos,Duplicados por clave de negocio,8778272,81.4532,Clave: ANO_DOC + MES_DOC + SEC_EJEC + FUENTE_FINANCIAMIENTO + ESPECIFICA_DET | grupos afectados: 1928814,REVISAR

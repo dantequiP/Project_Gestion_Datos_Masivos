@@ -1,0 +1,13 @@
+﻿dataset,columna_codigo,columna_nombre,cardinalidad_codigo,cardinalidad_nombre,codigos_con_multiples_nombres,consistencia,nota
+siaf_ingresos,PLIEGO,PLIEGO_NOMBRE,180,264,74,INCONSISTENTE,74 código(s) tienen más de un nombre asociado
+siaf_ingresos,SEC_EJEC,EJECUTORA_NOMBRE,2924,2970,85,INCONSISTENTE,85 código(s) tienen más de un nombre asociado
+siaf_ingresos,EJECUTORA,EJECUTORA_NOMBRE,2124,2970,128,INCONSISTENTE,128 código(s) tienen más de un nombre asociado
+siaf_ingresos,DEPARTAMENTO_EJECUTORA,DEPARTAMENTO_EJECUTORA_NOMBRE,28,26,0,OK,Relación 1→1 correcta
+siaf_ingresos,PROVINCIA_EJECUTORA,PROVINCIA_EJECUTORA_NOMBRE,22,201,13,INCONSISTENTE,13 código(s) tienen más de un nombre asociado
+siaf_ingresos,DISTRITO_EJECUTORA,DISTRITO_EJECUTORA_NOMBRE,47,1772,36,INCONSISTENTE,36 código(s) tienen más de un nombre asociado
+siaf_ingresos,FUENTE_FINANCIAMIENTO,FUENTE_FINANCIAMIENTO_NOMBRE,4,4,0,OK,Relación 1→1 correcta
+siaf_ingresos,RUBRO,RUBRO_NOMBRE,8,8,0,OK,Relación 1→1 correcta
+siaf_ingresos,GENERICA,GENERICA_NOMBRE,9,9,0,OK,Relación 1→1 correcta
+siaf_ingresos,SUBGENERICA,SUBGENERICA_NOMBRE,6,26,5,INCONSISTENTE,5 código(s) tienen más de un nombre asociado
+siaf_ingresos,ESPECIFICA,ESPECIFICA_NOMBRE,9,133,8,INCONSISTENTE,8 código(s) tienen más de un nombre asociado
+siaf_ingresos,ESPECIFICA_DET,ESPECIFICA_DET_NOMBRE,29,474,15,INCONSISTENTE,15 código(s) tienen más de un nombre asociado

@@ -76,7 +76,7 @@ column_types:
 
   # Clasificadores institucionales — llegan como string aunque parezcan numéricos
   NIVEL_GOBIERNO:       {logical_type: string,   nullable: false, source: dictionary_csv}
-  NIVEL_GOBIERNO_NOMBRE:{logical_type: string,   nullable: false, source: dictionary_csv}
+  NIVEL_GOBIERNO_NOMBRE: {logical_type: string,   nullable: false, source: dictionary_csv}
   SECTOR:               {logical_type: integer,   nullable: false, source: dictionary_csv}
   SECTOR_NOMBRE:        {logical_type: string,   nullable: false, source: dictionary_csv}
   PLIEGO:               {logical_type: string,   nullable: false, source: dictionary_csv}
@@ -87,7 +87,7 @@ column_types:
 
   # Geográficos
   DEPARTAMENTO_EJECUTORA:       {logical_type: string, nullable: false, source: dictionary_csv}
-  DEPARTAMENTO_EJECUTORA_NOMBRE:{logical_type: string, nullable: false, source: dictionary_csv}
+  DEPARTAMENTO_EJECUTORA_NOMBRE: {logical_type: string, nullable: false, source: dictionary_csv}
   PROVINCIA_EJECUTORA:          {logical_type: string, nullable: false, source: dictionary_csv}
   PROVINCIA_EJECUTORA_NOMBRE:   {logical_type: string, nullable: false, source: dictionary_csv}
   DISTRITO_EJECUTORA:           {logical_type: string, nullable: false, source: dictionary_csv}

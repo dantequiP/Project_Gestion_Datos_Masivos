@@ -1,0 +1,17 @@
+{
+  "pipeline_name": "profiling_siaf",
+  "status": "success",
+  "started_at": "2026-06-11T00:04:39.476296",
+  "finished_at": "2026-06-11T00:06:48.338670",
+  "duration_seconds": 128.862374,
+  "parquets_procesados": 15,
+  "parquets_excluidos_diario": "todos los _diario omitidos",
+  "total_filas_bronze": 10777068,
+  "total_columnas_perfiladas": 36,
+  "columnas_con_nulos": 0,
+  "outputs": {
+    "summary_csv": "reports/profiling/siaf/siaf_profile_summary.csv",
+    "detail_csv": "reports/profiling/siaf/siaf_profile_detail.csv",
+    "dashboard_html": "reports/profiling/siaf/siaf_profile_dashboard.html"
+  }
+}

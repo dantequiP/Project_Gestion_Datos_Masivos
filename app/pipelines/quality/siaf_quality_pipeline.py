@@ -1,300 +1,278 @@
 """
 siaf_quality_pipeline.py
 
-Pipeline de calidad de datos para SIAF Ingresos.
+Orquestador del pipeline de calidad de datos para SIAF Ingresos.
+
+Flujo completo:
+    1. Carga quality_rules_siaf.yaml.
+    2. Descubre Parquets Bronze (sin _diario — regla crítica SIAF).
+    3. Carga DataFrame PySpark con mergeSchema=True.
+    4. Ejecuta SiafQualityChecker → 60+ reglas en 8 dimensiones.
+    5. Genera CSV, Parquet, HTML (reporte + dashboard) y auditoría JSON.
+    6. NO modifica datos Bronze.
+
+Archivos generados:
+    reports/quality/siaf/siaf_quality_detail.csv
+    reports/quality/siaf/siaf_quality_summary.csv
+    reports/quality/siaf/siaf_quality_failed_samples.csv
+    reports/quality/siaf/siaf_quality_dashboard.html
+    reports/quality/siaf/siaf_ingresos_quality.html
+    data/quality/siaf/siaf_quality_detail.parquet
+    data/quality/siaf/siaf_quality_summary.parquet
+    data/audit/quality/year=YYYY/month=MM/day=DD/siaf_quality_*.json
 """
 
 from __future__ import annotations
 
+import glob
 import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import yaml
+from pyspark.sql import SparkSession
 
-from app.quality.quality_report import (
-    DIMENSIONS,
-    DIMENSION_DESCRIPTIONS,
-    _css,
-    _bar,
-    _score_value,
-    _score_width,
-    status_badge,
-    severity_summary,
-    _rename_for_html,
-    _glossary_html,
+from app.quality.siaf_quality_checker import SiafQualityChecker
+from app.quality.siaf_quality_report import (
+    build_summary,
+    write_siaf_html,
+    write_siaf_dashboard_html,
 )
-from app.schema_validation.siaf_quality_checker import SiafQualityChecker, load_quality_rules
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__, log_dir=Path("logs"))
 
-
-# ──────────────────────────────────────────────────────────────────────────────
-# Construcción de resumen y auditoría
-# ──────────────────────────────────────────────────────────────────────────────
-
-def build_siaf_summary(detail_df: pd.DataFrame) -> pd.DataFrame:
-    """Construye resumen por dataset y dimensión para SIAF."""
-    rows = []
-    for dataset, ddf in detail_df.groupby("dataset"):
-        row: dict[str, Any] = {
-            "dataset": dataset,
-            "rules_evaluated": int(len(ddf)),
-            "rules_with_observations": int((ddf["failed_rows"] > 0).sum()),
-            "observations_total": int(ddf["failed_rows"].sum()),
-            "evaluated_rows_total": int(ddf["evaluated_rows"].sum()),
-        }
-        scores = []
-        for dim in DIMENSIONS:
-            dim_df = ddf[ddf["dimension"] == dim]
-            if dim_df.empty:
-                row[f"score_{dim.lower()}"] = None
-            else:
-                score = dim_df["score"].dropna().mean()
-                row[f"score_{dim.lower()}"] = round(float(score), 4) if not pd.isna(score) else None
-                if not pd.isna(score):
-                    scores.append(score)
-
-        row["score_general"] = round(float(pd.Series(scores).mean()), 4) if scores else None
-        row["estado_descriptivo"] = "Sin observaciones" if row["rules_with_observations"] == 0 else "Con observaciones"
-        rows.append(row)
-
-    return pd.DataFrame(rows)
+# ── Rutas por defecto ─────────────────────────────────────────────────────────
+BRONZE_ROOT = Path("data/bronze/siaf")
+REPORTS_ROOT = Path("reports/quality/siaf")
+DATA_QUALITY_ROOT = Path("data/quality/siaf")
+AUDIT_ROOT = Path("data/audit/quality")
+CONFIG_PATH = Path("app/config/quality_rules_siaf.yaml")
 
 
-def _dimension_cards_siaf(dataset_df: pd.DataFrame) -> str:
-    """Genera tarjetas HTML por dimensión de calidad para SIAF."""
-    import html as _html
-    cards = []
-    for dim in DIMENSIONS:
-        dim_df = dataset_df[dataset_df["dimension"] == dim]
-        if dim_df.empty:
-            score = None
-            rules = 0
-            obs = 0
-            status = "No evaluable"
-        else:
-            score = dim_df["score"].dropna().mean()
-            score = round(float(score), 4) if not pd.isna(score) else None
-            rules = len(dim_df)
-            obs = int(dim_df["failed_rows"].sum())
-            status = "Sin observaciones" if obs == 0 else "Con observaciones"
+# ── Carga de configuración ────────────────────────────────────────────────────
 
-        width = _score_width(score)
-        cards.append(f"""
-        <div class="qcard">
-          <h3>{_html.escape(dim)} <span class="score-big">{_score_value(score)}</span></h3>
-          <div class="desc">{_html.escape(DIMENSION_DESCRIPTIONS.get(dim, ""))}</div>
-          <div class="bar-wrap"><div class="bar-fill" style="width:{width:.2f}%"></div></div>
-          <div class="small">Reglas: <b>{rules}</b> · Observaciones: <b>{obs:,}</b></div>
-          <p>{status_badge(status)}</p>
-        </div>
-        """)
-    return "".join(cards)
+def load_quality_rules(config_path: Path = CONFIG_PATH) -> dict[str, Any]:
+    """Carga y valida el YAML de reglas de calidad SIAF."""
+    if not config_path.exists():
+        raise FileNotFoundError(f"No existe el archivo de reglas: {config_path}")
+    with config_path.open("r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    if not isinstance(config, dict):
+        raise ValueError("El YAML de reglas SIAF no tiene una estructura válida.")
+    for section in ["settings", "completitud", "validez", "exactitud"]:
+        if section not in config:
+            raise ValueError(f"Falta sección obligatoria en quality_rules_siaf.yaml: '{section}'")
+    logger.info("Reglas de calidad SIAF cargadas desde: %s", config_path)
+    return config
 
 
-def write_siaf_quality_dashboard(summary_df: pd.DataFrame, detail_df: pd.DataFrame, output_path: Path) -> None:
-    """Genera dashboard HTML ejecutivo de calidad SIAF."""
-    import html as _html
+# ── Descubrimiento de Parquets ────────────────────────────────────────────────
 
-    total_datasets = len(summary_df)
-    total_rules = int(summary_df["rules_evaluated"].sum())
-    total_obs_rules = int(summary_df["rules_with_observations"].sum())
-    total_observations = int(summary_df["observations_total"].sum())
-    avg_score = summary_df["score_general"].dropna().mean()
+def discover_parquet_paths(bronze_root: Path) -> list[str]:
+    """
+    Descubre Parquets Bronze de SIAF excluyendo _diario.
 
-    dim_cards = _dimension_cards_siaf(detail_df)
+    REGLA CRÍTICA heredada del schema validation:
+    Los archivos _diario son acumulativos y duplicarían montos.
+    Solo se procesan archivos mensual/anuales.
+    """
+    patron = str(bronze_root / "**" / "*.parquet")
+    todas = glob.glob(patron, recursive=True)
+    filtradas = sorted([r for r in todas if "_diario" not in r.lower()])
+    excluidos = len(todas) - len(filtradas)
 
-    ds_rows = []
-    for _, r in summary_df.iterrows():
-        ds_rows.append(f"""
-        <tr>
-          <td><b>{_html.escape(str(r['dataset']))}</b></td>
-          <td>{int(r['rules_evaluated'])}</td>
-          <td>{int(r['rules_with_observations'])}</td>
-          <td>{int(r['observations_total']):,}</td>
-          <td>{_bar(r['score_general'])}</td>
-          <td>{status_badge(str(r['estado_descriptivo']))}</td>
-        </tr>
-        """)
+    logger.info(
+        "Parquets Bronze SIAF | total=%d | excluidos(_diario)=%d | a_procesar=%d",
+        len(todas), excluidos, len(filtradas),
+    )
+    for p in filtradas:
+        logger.info("  → %s", p)
 
-    top_alerts = detail_df[detail_df["failed_rows"] > 0].sort_values("failed_rows", ascending=False).head(10)
-    alerts_html = "".join([
-        f"<div class='alert-card'><b>{_html.escape(str(r['dataset']))}</b> · "
-        f"{_html.escape(str(r['dimension']))} — {_html.escape(str(r['rule_name']))}<br>"
-        f"Columna: <code>{_html.escape(str(r['column_name']))}</code> | "
-        f"Filas observadas: {int(r['failed_rows']):,} | "
-        f"Cumplimiento: {_score_value(r['score'])} | "
-        f"Severidad: {_html.escape(str(r['severity']))}</div>"
-        for _, r in top_alerts.iterrows()
-    ]) or '<div class="alert-card">No se detectaron observaciones.</div>'
-
-    sev_df = severity_summary(detail_df)
-    sev_html = _rename_for_html(sev_df).to_html(index=False, escape=False) if not sev_df.empty else '<div class="alert-card">No hay observaciones por severidad.</div>'
-
-    doc = f"""<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
-<title>Dashboard Calidad SIAF</title><style>{_css()}</style></head><body>
-<header>
-  <h1>Dashboard de Calidad de Datos — SIAF Ingresos Bronze</h1>
-  <p>Evaluación con 8 dimensiones: completitud, validez, exactitud, consistencia, unicidad, integridad, oportunidad y conformidad</p>
-</header><main>
-<div class="note">
-  Este dashboard evalúa la calidad interna de SIAF Ingresos.
-  Las validaciones cruzadas con SISMEPRE y RENAMU se realizarán en la capa Gold.
-</div>
-<div class="cards">
-  <div class="card"><div class="label">Datasets evaluados</div><div class="value">{total_datasets}</div></div>
-  <div class="card"><div class="label">Reglas evaluadas</div><div class="value">{total_rules}</div></div>
-  <div class="card"><div class="label">Reglas con observación</div><div class="value">{total_obs_rules}</div></div>
-  <div class="card"><div class="label">Score promedio</div><div class="value">{_score_value(avg_score)}</div></div>
-</div>
-<h2 class="section-title">Resumen ejecutivo por dimensión</h2>
-<div class="quality-grid">{dim_cards}</div>
-<h2 class="section-title">Observaciones por severidad</h2>{sev_html}
-<h2 class="section-title">Resumen por dataset</h2>
-<table><thead><tr>
-  <th>Dataset</th><th>Reglas</th><th>Reglas con observación</th>
-  <th>Total observaciones</th><th>Score general</th><th>Estado</th>
-</tr></thead><tbody>{''.join(ds_rows)}</tbody></table>
-<h2 class="section-title">Principales observaciones</h2>{alerts_html}
-{_glossary_html()}
-<h2 class="section-title">Detalle completo</h2>{_rename_for_html(detail_df).to_html(index=False, escape=False)}
-</main></body></html>"""
-
-    output_path.write_text(doc, encoding="utf-8")
+    if not filtradas:
+        raise FileNotFoundError(
+            f"No se encontraron Parquets Bronze en {bronze_root} (sin _diario). "
+            "Verifica que el pipeline Bronze haya corrido primero."
+        )
+    return filtradas
 
 
-def write_siaf_quality_audit(
+# ── Auditoría JSON ────────────────────────────────────────────────────────────
+
+def write_quality_audit(
     summary_df: pd.DataFrame,
     detail_df: pd.DataFrame,
     failed_samples_df: pd.DataFrame,
     audit_root: Path,
     reports_root: Path,
     data_quality_root: Path,
+    total_rows: int,
+    n_parquets: int,
     started_at: datetime,
 ) -> Path:
-    """Escribe auditoría JSON de la corrida de calidad SIAF."""
+    """Auditoría JSON compatible con el formato del SISMEPRE."""
     finished_at = datetime.now()
+    n_rules = int(len(detail_df))
+    n_obs_rules = int((detail_df["failed_rows"] > 0).sum())
+    n_observations = int(detail_df["failed_rows"].sum())
+    n_bloqueantes = int(
+        detail_df[
+            (detail_df["failed_rows"] > 0) &
+            (detail_df["severity"].isin(["Bloqueante", "Alta"]))
+        ].shape[0]
+    )
+    status = "success" if n_bloqueantes == 0 else "warning"
+
     record = {
-        "pipeline_name": "quality_siaf",
-        "status": "success",
+        "pipeline_name": "quality_siaf_ingresos",
+        "status": status,
         "started_at": started_at.isoformat(),
         "finished_at": finished_at.isoformat(),
         "duration_seconds": (finished_at - started_at).total_seconds(),
-        "datasets_evaluated": int(len(summary_df)),
-        "rules_evaluated": int(len(detail_df)),
-        "rules_with_observations": int((detail_df["failed_rows"] > 0).sum()),
-        "observations_total": int(detail_df["failed_rows"].sum()),
+        "total_rows_bronze": total_rows,
+        "parquets_procesados": n_parquets,
+        "rules_evaluated": n_rules,
+        "rules_with_observations": n_obs_rules,
+        "observations_total": n_observations,
+        "rules_bloqueantes_o_altas_con_observacion": n_bloqueantes,
         "failed_samples_total": int(len(failed_samples_df)),
         "outputs": {
             "summary_csv": str(reports_root / "siaf_quality_summary.csv"),
             "detail_csv": str(reports_root / "siaf_quality_detail.csv"),
             "failed_samples_csv": str(reports_root / "siaf_quality_failed_samples.csv"),
             "dashboard_html": str(reports_root / "siaf_quality_dashboard.html"),
-            "summary_parquet": str(data_quality_root / "siaf_quality_summary.parquet"),
+            "report_html": str(reports_root / "siaf_ingresos_quality.html"),
             "detail_parquet": str(data_quality_root / "siaf_quality_detail.parquet"),
-            "failed_samples_parquet": str(data_quality_root / "siaf_quality_failed_samples.parquet"),
+            "summary_parquet": str(data_quality_root / "siaf_quality_summary.parquet"),
         },
     }
 
-    audit_dir = audit_root / finished_at.strftime("year=%Y/month=%m/day=%d")
+    partition = finished_at.strftime("year=%Y/month=%m/day=%d")
+    audit_dir = audit_root / partition
     audit_dir.mkdir(parents=True, exist_ok=True)
-    audit_path = audit_dir / f"siaf_quality_{finished_at.strftime('%Y%m%d_%H%M%S')}.json"
+    audit_path = (
+        audit_dir / f"siaf_quality_{finished_at.strftime('%Y%m%d_%H%M%S')}.json"
+    )
     audit_path.write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
+    logger.info("Auditoría JSON guardada: %s", audit_path)
     return audit_path
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Pipeline principal
-# ──────────────────────────────────────────────────────────────────────────────
+# ── Pipeline principal ────────────────────────────────────────────────────────
 
-def run_siaf_quality_pipeline() -> dict[str, str]:
+def run_siaf_quality_pipeline(
+    spark: SparkSession,
+    bronze_root: Path = BRONZE_ROOT,
+    reports_root: Path = REPORTS_ROOT,
+    data_quality_root: Path = DATA_QUALITY_ROOT,
+    audit_root: Path = AUDIT_ROOT,
+    config_path: Path = CONFIG_PATH,
+) -> dict[str, str]:
     """
-    Pipeline principal de calidad para SIAF Ingresos.
+    Orquesta la evaluación de calidad completa de SIAF Ingresos.
 
-    Flujo:
-    1. Carga reglas desde quality_rules_siaf.yaml.
-    2. Lee Parquet Bronze (combina todos los años disponibles).
-    3. Evalúa reglas por las 8 dimensiones de calidad.
-    4. Genera CSV, Parquet, HTML y auditoría.
-    5. No modifica archivos Bronze.
+    Parameters
+    ----------
+    spark : SparkSession
+        Sesión Spark activa (creada en run_siaf_quality.py).
+    bronze_root, reports_root, data_quality_root, audit_root, config_path
+        Rutas del proyecto. Los valores por defecto siguen la estructura estándar.
+
+    Returns
+    -------
+    dict[str, str]
+        Rutas absolutas de todos los archivos generados.
     """
     started_at = datetime.now()
-    logger.info("=== Inicio pipeline de calidad SIAF ===")
-
-    config = load_quality_rules(Path("app/config/quality_rules_siaf.yaml"))
-    settings = config["settings"]
-    reports_root = Path(settings.get("reports_root", "reports/quality/siaf"))
-    data_quality_root = Path(settings.get("data_quality_root", "data/quality/siaf"))
-    audit_root = Path(settings.get("audit_root", "data/audit/quality"))
+    logger.info("=== Inicio pipeline Quality SIAF Ingresos ===")
 
     reports_root.mkdir(parents=True, exist_ok=True)
     data_quality_root.mkdir(parents=True, exist_ok=True)
     audit_root.mkdir(parents=True, exist_ok=True)
 
-    checker = SiafQualityChecker(config)
-    detail_df, failed_samples_df = checker.run()
-    summary_df = build_siaf_summary(detail_df)
+    # 1. Reglas
+    config = load_quality_rules(config_path)
+    settings = config["settings"]
 
-    # ── Salidas tabulares ────────────────────────────────────────────────────
+    # 2. Parquets
+    parquet_paths = discover_parquet_paths(bronze_root)
+
+    # 3. Carga Spark
+    logger.info("Cargando %d Parquets en Spark...", len(parquet_paths))
+    df = spark.read.option("mergeSchema", "true").parquet(*parquet_paths)
+    total_rows = df.count()
+    logger.info("DataFrame cargado: %d filas × %d columnas", total_rows, len(df.columns))
+
+    # 4. Evaluación de calidad
+    checker = SiafQualityChecker(spark=spark, df=df, config=config)
+    detail_df, failed_samples_df = checker.run()
+    summary_df = build_summary(detail_df)
+
+    # ── Salidas ───────────────────────────────────────────────────────────────
     detail_csv = reports_root / "siaf_quality_detail.csv"
     summary_csv = reports_root / "siaf_quality_summary.csv"
     failed_samples_csv = reports_root / "siaf_quality_failed_samples.csv"
     dashboard_html = reports_root / "siaf_quality_dashboard.html"
+    report_html = reports_root / "siaf_ingresos_quality.html"
     detail_parquet = data_quality_root / "siaf_quality_detail.parquet"
     summary_parquet = data_quality_root / "siaf_quality_summary.parquet"
-    failed_samples_parquet = data_quality_root / "siaf_quality_failed_samples.parquet"
 
+    # CSV (utf-8-sig para apertura directa en Excel)
     detail_df.to_csv(detail_csv, index=False, encoding="utf-8-sig")
     summary_df.to_csv(summary_csv, index=False, encoding="utf-8-sig")
     failed_samples_df.to_csv(failed_samples_csv, index=False, encoding="utf-8-sig")
 
+    # Parquet (para consumo por Silver/Gold o analítica posterior)
     detail_df.to_parquet(detail_parquet, index=False)
     summary_df.to_parquet(summary_parquet, index=False)
-    if not failed_samples_df.empty:
-        failed_samples_df.to_parquet(failed_samples_parquet, index=False)
 
-    # ── Dashboard HTML ejecutivo ──────────────────────────────────────────────
-    write_siaf_quality_dashboard(summary_df, detail_df, dashboard_html)
+    # HTML — reporte detallado por source
+    summary_row = summary_df.iloc[0] if not summary_df.empty else pd.Series()
+    write_siaf_html(
+        detail_df=detail_df,
+        summary_row=summary_row,
+        config=config,
+        output_path=report_html,
+        total_rows=total_rows,
+        n_parquets=len(parquet_paths),
+    )
 
-    # ── Reporte individual por dataset ────────────────────────────────────────
-    # SIAF tiene un único dataset ('ingresos'), pero se genera igual que SISMEPRE
-    # para consistencia de estructura de carpetas y reportes.
-    from app.quality.quality_report import write_dataset_html as _write_ds_html
-    for _, row in summary_df.iterrows():
-        dataset = row["dataset"]
-        _write_ds_html(
-            dataset,
-            detail_df[detail_df["dataset"] == dataset].copy(),
-            row,
-            reports_root / f"{dataset}_quality.html",
-        )
+    # HTML — dashboard ejecutivo
+    write_siaf_dashboard_html(
+        summary_df=summary_df,
+        detail_df=detail_df,
+        config=config,
+        output_path=dashboard_html,
+        total_rows=total_rows,
+        n_parquets=len(parquet_paths),
+    )
 
-    # ── Auditoría ─────────────────────────────────────────────────────────────
-    audit_path = write_siaf_quality_audit(
-        summary_df, detail_df, failed_samples_df,
-        audit_root, reports_root, data_quality_root, started_at,
+    # Auditoría JSON
+    audit_path = write_quality_audit(
+        summary_df=summary_df,
+        detail_df=detail_df,
+        failed_samples_df=failed_samples_df,
+        audit_root=audit_root,
+        reports_root=reports_root,
+        data_quality_root=data_quality_root,
+        total_rows=total_rows,
+        n_parquets=len(parquet_paths),
+        started_at=started_at,
     )
 
     duration = (datetime.now() - started_at).total_seconds()
-    logger.info("=== Pipeline de calidad SIAF completado en %.1fs ===", duration)
-    logger.info("Dashboard HTML: %s", dashboard_html)
-    logger.info("Auditoría: %s", audit_path)
+    logger.info("=== Pipeline Quality SIAF completado en %.1fs ===", duration)
 
     return {
         "summary_csv": str(summary_csv),
         "detail_csv": str(detail_csv),
         "failed_samples_csv": str(failed_samples_csv),
         "dashboard_html": str(dashboard_html),
-        "summary_parquet": str(summary_parquet),
+        "report_html": str(report_html),
         "detail_parquet": str(detail_parquet),
-        "failed_samples_parquet": str(failed_samples_parquet),
-        "reports_dir": str(reports_root),
+        "summary_parquet": str(summary_parquet),
         "audit_path": str(audit_path),
+        "reports_dir": str(reports_root),
     }
-
-
-if __name__ == "__main__":
-    run_siaf_quality_pipeline()
