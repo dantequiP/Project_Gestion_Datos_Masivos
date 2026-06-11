@@ -1,0 +1,2 @@
+﻿dataset,row_count,column_count,duplicate_rows,duplicate_rows_pct,memory_mb,columns_with_missing,columns_all_missing,columns_high_missing_50pct,avg_missing_pct,avg_unique_pct,numeric_like_columns,datetime_like_columns,empty_or_null_columns,parquet_path,profile_status
+municipalidades_2022,1874,1368,0,0.0,123.8086,738,0,429,32.691,5.422,1182,0,0,data\bronze\renamu\2022_municipalidades__Base_RENAMU_2022_f\year=2026\month=05\day=27\2022_municipalidades__Base_RENAMU_2022_f_20260527_014602.parquet,OK

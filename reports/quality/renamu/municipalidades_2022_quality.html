@@ -1,0 +1,3775 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Calidad SISMEPRE - municipalidades_2022</title><style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#1f2937}
+    header{background:#1f2430;color:white;padding:24px 32px} header h1{margin:0;font-size:25px} header p{margin:8px 0 0;color:#cbd5e1}
+    main{padding:24px 32px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .card,.qcard{background:white;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #3b82f6}
+    .qcard{min-height:180px}.qcard h3{margin:0 0 6px;font-size:15px}.desc{font-size:12px;color:#6b7280;min-height:34px}
+    .label{color:#6b7280;text-transform:uppercase;font-size:12px;letter-spacing:.05em}.value{font-size:28px;font-weight:bold;margin-top:8px;color:#2f7d46}
+    .score-big{font-size:26px;font-weight:bold;color:#2f7d46;float:right}.small{font-size:12px;color:#6b7280}
+    .section-title{color:#4b5563;text-transform:uppercase;letter-spacing:.08em;font-size:13px;margin:24px 0 12px}
+    table{border-collapse:collapse;width:100%;background:white;border-radius:10px;overflow:hidden;font-size:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px}
+    th,td{border-bottom:1px solid #e5e7eb;padding:8px 10px;text-align:left;vertical-align:middle}th{background:#111827;color:white}tr:nth-child(even){background:#fafafa}
+    .bar-wrap{width:100%;height:7px;background:#e5e7eb;border-radius:999px;margin:10px 0}.bar-fill{height:7px;background:#2f7d46;border-radius:999px}
+    .inline-bar{display:inline-block;width:140px;height:8px;background:#e5e7eb;border-radius:999px;vertical-align:middle;margin-right:8px}.inline-fill{height:8px;background:#2f7d46;border-radius:999px}.bar-label{color:#2f7d46;font-weight:bold}
+    .badge{padding:5px 10px;border-radius:999px;font-weight:bold;font-size:12px;white-space:nowrap}.sin{background:#d9eadf;color:#245c36}.con{background:#fff3cd;color:#7a5b00}.noeval{background:#e5e7eb;color:#374151}
+    .alert-card{background:white;border-left:4px solid #c24141;border-radius:10px;padding:12px 16px;margin:8px 0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .note{background:#eef2ff;border-left:4px solid #3b82f6;border-radius:10px;padding:14px 16px;margin-bottom:20px}
+    code{background:#eef2ff;padding:2px 4px;border-radius:4px}
+    </style></head><body>
+    <header><h1>Calidad de Datos — municipalidades_2022</h1><p>Capa evaluada: Bronze | Este reporte no modifica datos</p></header><main>
+    <div class="note">Lectura ejecutiva: este reporte muestra el cumplimiento de reglas de calidad por dimensión. Una observación no siempre significa error crítico; su importancia depende de la severidad y de la fuente de la regla.</div>
+    <div class="cards">
+      <div class="card"><div class="label">Reglas evaluadas</div><div class="value">202</div></div>
+      <div class="card"><div class="label">Reglas con observación</div><div class="value">6</div></div>
+      <div class="card"><div class="label">Observaciones</div><div class="value">9,802</div></div>
+      <div class="card"><div class="label">Score general</div><div class="value">95.3%</div></div>
+    </div>
+    <h2 class="section-title">Resumen ejecutivo por dimensión</h2>
+    <div class="quality-grid">
+        <div class="qcard">
+          <h3>Completitud <span class="score-big">67.3%</span></h3>
+          <div class="desc">Campos obligatorios con datos disponibles.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:67.31%"></div></div>
+          <div class="small">Reglas: <b>16</b> · Observaciones: <b>9,802</b></div>
+          <p><span class="badge con">Con observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Exactitud <span class="score-big">100.0%</span></h3>
+          <div class="desc">Valores con formato correcto según el tipo esperado.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>4</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Consistencia <span class="score-big">100.0%</span></h3>
+          <div class="desc">Coherencia entre columnas relacionadas dentro del dataset.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>6</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Integridad <span class="score-big">N/E</span></h3>
+          <div class="desc">Relaciones válidas entre datasets internos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:0.00%"></div></div>
+          <div class="small">Reglas: <b>0</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge noeval">No evaluable</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Razonabilidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Valores lógicos para el dominio, como montos no negativos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>156</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Oportunidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Vigencia temporal del dato respecto al periodo de análisis.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>1</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Unicidad <span class="score-big">100.0%</span></h3>
+          <div class="desc">Ausencia de duplicados y claves candidatas únicas.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>3</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        
+        <div class="qcard">
+          <h3>Validez <span class="score-big">100.0%</span></h3>
+          <div class="desc">Formatos, catálogos y tipos de datos permitidos.</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:100.00%"></div></div>
+          <div class="small">Reglas: <b>16</b> · Observaciones: <b>0</b></div>
+          <p><span class="badge sin">Sin observaciones</span></p>
+        </div>
+        </div>
+    <h2 class="section-title">Observaciones por severidad</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Severidad</th>
+      <th>Reglas con observación</th>
+      <th>Total de observaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Baja</td>
+      <td>6</td>
+      <td>9802</td>
+    </tr>
+  </tbody>
+</table>
+    <h2 class="section-title">Principales observaciones</h2><div class='alert-card'><b>Completitud</b> — Columna con ausencia observada: P17_13_O<br>Columna: <code>P17_13_O</code> | Filas observadas: 1,810 | Cumplimiento: 3.4% | Ejemplos: <code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></div><div class='alert-card'><b>Completitud</b> — Columna con ausencia observada: P16_9_O<br>Columna: <code>P16_9_O</code> | Filas observadas: 1,757 | Cumplimiento: 6.2% | Ejemplos: <code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></div><div class='alert-card'><b>Completitud</b> — Columna con ausencia observada: P11B_18_O<br>Columna: <code>P11B_18_O</code> | Filas observadas: 1,702 | Cumplimiento: 9.2% | Ejemplos: <code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></div><div class='alert-card'><b>Completitud</b> — Columna con ausencia observada: P15A_6_O<br>Columna: <code>P15A_6_O</code> | Filas observadas: 1,632 | Cumplimiento: 12.9% | Ejemplos: <code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></div><div class='alert-card'><b>Completitud</b> — Columna con ausencia observada: P13A_9_O<br>Columna: <code>P13A_9_O</code> | Filas observadas: 1,623 | Cumplimiento: 13.4% | Ejemplos: <code>[0, 1, 2, 3, 6, 7, 8, 9, 10, 11]</code></div><div class='alert-card'><b>Completitud</b> — Columna con ausencia observada: P11A_10_O<br>Columna: <code>P11A_10_O</code> | Filas observadas: 1,278 | Cumplimiento: 31.8% | Ejemplos: <code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></div>
+    
+    <h2 class="section-title">Glosario de columnas del reporte</h2>
+    <table><thead><tr><th>Columna técnica</th><th>Nombre en español</th><th>Explicación</th></tr></thead><tbody><tr><td><code>dataset</code></td><td>Dataset evaluado</td><td>Archivo o tabla analizada.</td></tr><tr><td><code>dimension</code></td><td>Dimensión de calidad</td><td>Criterio de calidad evaluado.</td></tr><tr><td><code>rule_id</code></td><td>Identificador de regla</td><td>Código único de la regla aplicada.</td></tr><tr><td><code>rule_name</code></td><td>Regla aplicada</td><td>Descripción breve de la validación.</td></tr><tr><td><code>column_name</code></td><td>Columna evaluada</td><td>Campo específico revisado.</td></tr><tr><td><code>evaluated_rows</code></td><td>Filas evaluadas</td><td>Cantidad de registros revisados por la regla.</td></tr><tr><td><code>passed_rows</code></td><td>Filas que cumplen</td><td>Registros que cumplieron la regla.</td></tr><tr><td><code>failed_rows</code></td><td>Filas observadas</td><td>Registros que no cumplieron o quedaron observados.</td></tr><tr><td><code>score</code></td><td>Porcentaje de cumplimiento</td><td>Porcentaje de cumplimiento de la regla.</td></tr><tr><td><code>severity</code></td><td>Severidad</td><td>Nivel de importancia de la observación.</td></tr><tr><td><code>source</code></td><td>Fuente de la regla</td><td>Origen que justifica la regla: diccionario, profiling o inferencia documentada.</td></tr><tr><td><code>status</code></td><td>Estado</td><td>Resultado de la regla.</td></tr><tr><td><code>sample_failed_rows</code></td><td>Filas de ejemplo</td><td>Índices de filas usados como ejemplo de evidencia.</td></tr></tbody></table>
+    
+    <h2 class="section-title">Detalle completo de reglas</h2><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Dataset evaluado</th>
+      <th>Dimensión de calidad</th>
+      <th>Identificador de regla</th>
+      <th>Regla aplicada</th>
+      <th>Columna evaluada</th>
+      <th>Tipo de regla</th>
+      <th>Valor esperado</th>
+      <th>Filas evaluadas</th>
+      <th>Filas que cumplen</th>
+      <th>Filas observadas</th>
+      <th>Porcentaje de cumplimiento</th>
+      <th>Severidad</th>
+      <th>Fuente de la regla</th>
+      <th>Estado</th>
+      <th>Descripción de la observación</th>
+      <th>Filas de ejemplo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Unicidad</td>
+      <td>municipalidades_2022.full_row_duplicates</td>
+      <td>Filas completamente duplicadas</td>
+      <td>*</td>
+      <td>duplicate_full_rows</td>
+      <td>sin duplicados completos</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>profiling_based</td>
+      <td>Sin observaciones</td>
+      <td>Filas idénticas repetidas en el dataset.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.Año.required</td>
+      <td>Columna requerida no vacía: Año</td>
+      <td>Año</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en Año.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.idmunici.required</td>
+      <td>Columna requerida no vacía: idmunici</td>
+      <td>idmunici</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en idmunici.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.ccdd.required</td>
+      <td>Columna requerida no vacía: ccdd</td>
+      <td>ccdd</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en ccdd.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.ccpp.required</td>
+      <td>Columna requerida no vacía: ccpp</td>
+      <td>ccpp</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en ccpp.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.ccdi.required</td>
+      <td>Columna requerida no vacía: ccdi</td>
+      <td>ccdi</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en ccdi.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.Ubigeo.required</td>
+      <td>Columna requerida no vacía: Ubigeo</td>
+      <td>Ubigeo</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en Ubigeo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.Departamento.required</td>
+      <td>Columna requerida no vacía: Departamento</td>
+      <td>Departamento</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en Departamento.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.Provincia.required</td>
+      <td>Columna requerida no vacía: Provincia</td>
+      <td>Provincia</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en Provincia.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.Distrito.required</td>
+      <td>Columna requerida no vacía: Distrito</td>
+      <td>Distrito</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en Distrito.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.Tipomuni.required</td>
+      <td>Columna requerida no vacía: Tipomuni</td>
+      <td>Tipomuni</td>
+      <td>required_not_empty</td>
+      <td>no nulo/no vacío</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Registros vacíos o nulos en Tipomuni.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.P11A_10_O.observed_empty</td>
+      <td>Columna con ausencia observada: P11A_10_O</td>
+      <td>P11A_10_O</td>
+      <td>observed_empty</td>
+      <td>revisar ausencia</td>
+      <td>1874</td>
+      <td>596</td>
+      <td>1278</td>
+      <td>31.8036</td>
+      <td>Baja</td>
+      <td>profiling_based</td>
+      <td>Con observaciones</td>
+      <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.P11B_18_O.observed_empty</td>
+      <td>Columna con ausencia observada: P11B_18_O</td>
+      <td>P11B_18_O</td>
+      <td>observed_empty</td>
+      <td>revisar ausencia</td>
+      <td>1874</td>
+      <td>172</td>
+      <td>1702</td>
+      <td>9.1782</td>
+      <td>Baja</td>
+      <td>profiling_based</td>
+      <td>Con observaciones</td>
+      <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.P13A_9_O.observed_empty</td>
+      <td>Columna con ausencia observada: P13A_9_O</td>
+      <td>P13A_9_O</td>
+      <td>observed_empty</td>
+      <td>revisar ausencia</td>
+      <td>1874</td>
+      <td>251</td>
+      <td>1623</td>
+      <td>13.3938</td>
+      <td>Baja</td>
+      <td>profiling_based</td>
+      <td>Con observaciones</td>
+      <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 6, 7, 8, 9, 10, 11]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.P15A_6_O.observed_empty</td>
+      <td>Columna con ausencia observada: P15A_6_O</td>
+      <td>P15A_6_O</td>
+      <td>observed_empty</td>
+      <td>revisar ausencia</td>
+      <td>1874</td>
+      <td>242</td>
+      <td>1632</td>
+      <td>12.9136</td>
+      <td>Baja</td>
+      <td>profiling_based</td>
+      <td>Con observaciones</td>
+      <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.P16_9_O.observed_empty</td>
+      <td>Columna con ausencia observada: P16_9_O</td>
+      <td>P16_9_O</td>
+      <td>observed_empty</td>
+      <td>revisar ausencia</td>
+      <td>1874</td>
+      <td>117</td>
+      <td>1757</td>
+      <td>6.2433</td>
+      <td>Baja</td>
+      <td>profiling_based</td>
+      <td>Con observaciones</td>
+      <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Completitud</td>
+      <td>municipalidades_2022.P17_13_O.observed_empty</td>
+      <td>Columna con ausencia observada: P17_13_O</td>
+      <td>P17_13_O</td>
+      <td>observed_empty</td>
+      <td>revisar ausencia</td>
+      <td>1874</td>
+      <td>64</td>
+      <td>1810</td>
+      <td>3.4152</td>
+      <td>Baja</td>
+      <td>profiling_based</td>
+      <td>Con observaciones</td>
+      <td>Columna reportada por profiling como potencialmente vacía o incompleta.</td>
+      <td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.Tipomuni.allowed_values</td>
+      <td>Valores permitidos en Tipomuni</td>
+      <td>Tipomuni</td>
+      <td>allowed_values</td>
+      <td>['1', '2', '3']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2', '3']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.Año.allowed_values</td>
+      <td>Valores permitidos en Año</td>
+      <td>Año</td>
+      <td>allowed_values</td>
+      <td>['2022']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['2022']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_1.allowed_values</td>
+      <td>Valores permitidos en P11A_1</td>
+      <td>P11A_1</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_2.allowed_values</td>
+      <td>Valores permitidos en P11A_2</td>
+      <td>P11A_2</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_3.allowed_values</td>
+      <td>Valores permitidos en P11A_3</td>
+      <td>P11A_3</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_4.allowed_values</td>
+      <td>Valores permitidos en P11A_4</td>
+      <td>P11A_4</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_5.allowed_values</td>
+      <td>Valores permitidos en P11A_5</td>
+      <td>P11A_5</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_6.allowed_values</td>
+      <td>Valores permitidos en P11A_6</td>
+      <td>P11A_6</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_7.allowed_values</td>
+      <td>Valores permitidos en P11A_7</td>
+      <td>P11A_7</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_8.allowed_values</td>
+      <td>Valores permitidos en P11A_8</td>
+      <td>P11A_8</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_9.allowed_values</td>
+      <td>Valores permitidos en P11A_9</td>
+      <td>P11A_9</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.P11A_10.allowed_values</td>
+      <td>Valores permitidos en P11A_10</td>
+      <td>P11A_10</td>
+      <td>allowed_values</td>
+      <td>['1', '2']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores fuera del catálogo permitido ['1', '2']. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.idmunici.numeric</td>
+      <td>Columna convertible a número: idmunici</td>
+      <td>idmunici</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.ccdd.numeric</td>
+      <td>Columna convertible a número: ccdd</td>
+      <td>ccdd</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.ccpp.numeric</td>
+      <td>Columna convertible a número: ccpp</td>
+      <td>ccpp</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Validez</td>
+      <td>municipalidades_2022.ccdi.numeric</td>
+      <td>Columna convertible a número: ccdi</td>
+      <td>ccdi</td>
+      <td>numeric</td>
+      <td>numérico</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Valores no convertibles a número. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Unicidad</td>
+      <td>municipalidades_2022.unique_key.idmunici</td>
+      <td>Clave candidata única: ['idmunici']</td>
+      <td>idmunici</td>
+      <td>unique_key</td>
+      <td>['idmunici']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>inferred_business_key</td>
+      <td>Sin observaciones</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Unicidad</td>
+      <td>municipalidades_2022.unique_key.Ubigeo</td>
+      <td>Clave candidata única: ['Ubigeo']</td>
+      <td>Ubigeo</td>
+      <td>unique_key</td>
+      <td>['Ubigeo']</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>inferred_business_key</td>
+      <td>Sin observaciones</td>
+      <td>Registros duplicados según clave candidata inferida.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Consistencia</td>
+      <td>municipalidades_2022.P19D_NM_le_P19D_T</td>
+      <td>Consistencia: P19D_NM <= P19D_T</td>
+      <td>P19D_NM,P19D_T</td>
+      <td>less_or_equal</td>
+      <td>P19D_NM<=P19D_T</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde P19D_NM no es menor o igual que P19D_T.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Consistencia</td>
+      <td>municipalidades_2022.P19D_NH_le_P19D_T</td>
+      <td>Consistencia: P19D_NH <= P19D_T</td>
+      <td>P19D_NH,P19D_T</td>
+      <td>less_or_equal</td>
+      <td>P19D_NH<=P19D_T</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde P19D_NH no es menor o igual que P19D_T.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Consistencia</td>
+      <td>municipalidades_2022.P19_1_NM_le_P19_1_T</td>
+      <td>Consistencia: P19_1_NM <= P19_1_T</td>
+      <td>P19_1_NM,P19_1_T</td>
+      <td>less_or_equal</td>
+      <td>P19_1_NM<=P19_1_T</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde P19_1_NM no es menor o igual que P19_1_T.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Consistencia</td>
+      <td>municipalidades_2022.P19_1_NH_le_P19_1_T</td>
+      <td>Consistencia: P19_1_NH <= P19_1_T</td>
+      <td>P19_1_NH,P19_1_T</td>
+      <td>less_or_equal</td>
+      <td>P19_1_NH<=P19_1_T</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde P19_1_NH no es menor o igual que P19_1_T.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Consistencia</td>
+      <td>municipalidades_2022.P19_2_NM_le_P19_2_T</td>
+      <td>Consistencia: P19_2_NM <= P19_2_T</td>
+      <td>P19_2_NM,P19_2_T</td>
+      <td>less_or_equal</td>
+      <td>P19_2_NM<=P19_2_T</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde P19_2_NM no es menor o igual que P19_2_T.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Consistencia</td>
+      <td>municipalidades_2022.P19_2_NH_le_P19_2_T</td>
+      <td>Consistencia: P19_2_NH <= P19_2_T</td>
+      <td>P19_2_NH,P19_2_T</td>
+      <td>less_or_equal</td>
+      <td>P19_2_NH<=P19_2_T</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>business_rule</td>
+      <td>Sin observaciones</td>
+      <td>Registros donde P19_2_NH no es menor o igual que P19_2_T.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Oportunidad</td>
+      <td>municipalidades_2022.Año.year_not_future</td>
+      <td>Año no futuro: Año</td>
+      <td>Año</td>
+      <td>year_not_future</td>
+      <td><= 2026</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>local_csv</td>
+      <td>Sin observaciones</td>
+      <td>Años posteriores al año de ejecución del pipeline.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A.non_negative</td>
+      <td>Valor no negativo: P19A</td>
+      <td>P19A</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A_1_H.non_negative</td>
+      <td>Valor no negativo: P19A_1_H</td>
+      <td>P19A_1_H</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1798</td>
+      <td>1798</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A_1_M.non_negative</td>
+      <td>Valor no negativo: P19A_1_M</td>
+      <td>P19A_1_M</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1798</td>
+      <td>1798</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A_1_T.non_negative</td>
+      <td>Valor no negativo: P19A_1_T</td>
+      <td>P19A_1_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1798</td>
+      <td>1798</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A_2_H.non_negative</td>
+      <td>Valor no negativo: P19A_2_H</td>
+      <td>P19A_2_H</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1798</td>
+      <td>1798</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A_2_M.non_negative</td>
+      <td>Valor no negativo: P19A_2_M</td>
+      <td>P19A_2_M</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1798</td>
+      <td>1798</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19A_2_T.non_negative</td>
+      <td>Valor no negativo: P19A_2_T</td>
+      <td>P19A_2_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1798</td>
+      <td>1798</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_CH.non_negative</td>
+      <td>Valor no negativo: P19D_CH</td>
+      <td>P19D_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_CM.non_negative</td>
+      <td>Valor no negativo: P19D_CM</td>
+      <td>P19D_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_LH.non_negative</td>
+      <td>Valor no negativo: P19D_LH</td>
+      <td>P19D_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_LM.non_negative</td>
+      <td>Valor no negativo: P19D_LM</td>
+      <td>P19D_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_NH.non_negative</td>
+      <td>Valor no negativo: P19D_NH</td>
+      <td>P19D_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_NM.non_negative</td>
+      <td>Valor no negativo: P19D_NM</td>
+      <td>P19D_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_T.non_negative</td>
+      <td>Valor no negativo: P19D_T</td>
+      <td>P19D_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_VH.non_negative</td>
+      <td>Valor no negativo: P19D_VH</td>
+      <td>P19D_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19D_VM.non_negative</td>
+      <td>Valor no negativo: P19D_VM</td>
+      <td>P19D_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_CH.non_negative</td>
+      <td>Valor no negativo: P19M_CH</td>
+      <td>P19M_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_CM.non_negative</td>
+      <td>Valor no negativo: P19M_CM</td>
+      <td>P19M_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_LH.non_negative</td>
+      <td>Valor no negativo: P19M_LH</td>
+      <td>P19M_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_LM.non_negative</td>
+      <td>Valor no negativo: P19M_LM</td>
+      <td>P19M_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_NH.non_negative</td>
+      <td>Valor no negativo: P19M_NH</td>
+      <td>P19M_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_NM.non_negative</td>
+      <td>Valor no negativo: P19M_NM</td>
+      <td>P19M_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_T.non_negative</td>
+      <td>Valor no negativo: P19M_T</td>
+      <td>P19M_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_VH.non_negative</td>
+      <td>Valor no negativo: P19M_VH</td>
+      <td>P19M_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19M_VM.non_negative</td>
+      <td>Valor no negativo: P19M_VM</td>
+      <td>P19M_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_CH.non_negative</td>
+      <td>Valor no negativo: P19_1_CH</td>
+      <td>P19_1_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_CM.non_negative</td>
+      <td>Valor no negativo: P19_1_CM</td>
+      <td>P19_1_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_LH.non_negative</td>
+      <td>Valor no negativo: P19_1_LH</td>
+      <td>P19_1_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_LM.non_negative</td>
+      <td>Valor no negativo: P19_1_LM</td>
+      <td>P19_1_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_NH.non_negative</td>
+      <td>Valor no negativo: P19_1_NH</td>
+      <td>P19_1_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_NM.non_negative</td>
+      <td>Valor no negativo: P19_1_NM</td>
+      <td>P19_1_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_T.non_negative</td>
+      <td>Valor no negativo: P19_1_T</td>
+      <td>P19_1_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_VH.non_negative</td>
+      <td>Valor no negativo: P19_1_VH</td>
+      <td>P19_1_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_1_VM.non_negative</td>
+      <td>Valor no negativo: P19_1_VM</td>
+      <td>P19_1_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_CH.non_negative</td>
+      <td>Valor no negativo: P19_2_CH</td>
+      <td>P19_2_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_CM.non_negative</td>
+      <td>Valor no negativo: P19_2_CM</td>
+      <td>P19_2_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_LH.non_negative</td>
+      <td>Valor no negativo: P19_2_LH</td>
+      <td>P19_2_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_LM.non_negative</td>
+      <td>Valor no negativo: P19_2_LM</td>
+      <td>P19_2_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_NH.non_negative</td>
+      <td>Valor no negativo: P19_2_NH</td>
+      <td>P19_2_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_NM.non_negative</td>
+      <td>Valor no negativo: P19_2_NM</td>
+      <td>P19_2_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_T.non_negative</td>
+      <td>Valor no negativo: P19_2_T</td>
+      <td>P19_2_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_VH.non_negative</td>
+      <td>Valor no negativo: P19_2_VH</td>
+      <td>P19_2_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_2_VM.non_negative</td>
+      <td>Valor no negativo: P19_2_VM</td>
+      <td>P19_2_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_CH.non_negative</td>
+      <td>Valor no negativo: P19_3_CH</td>
+      <td>P19_3_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_CM.non_negative</td>
+      <td>Valor no negativo: P19_3_CM</td>
+      <td>P19_3_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_LH.non_negative</td>
+      <td>Valor no negativo: P19_3_LH</td>
+      <td>P19_3_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_LM.non_negative</td>
+      <td>Valor no negativo: P19_3_LM</td>
+      <td>P19_3_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_NH.non_negative</td>
+      <td>Valor no negativo: P19_3_NH</td>
+      <td>P19_3_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_NM.non_negative</td>
+      <td>Valor no negativo: P19_3_NM</td>
+      <td>P19_3_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_T.non_negative</td>
+      <td>Valor no negativo: P19_3_T</td>
+      <td>P19_3_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_VH.non_negative</td>
+      <td>Valor no negativo: P19_3_VH</td>
+      <td>P19_3_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_3_VM.non_negative</td>
+      <td>Valor no negativo: P19_3_VM</td>
+      <td>P19_3_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_CH.non_negative</td>
+      <td>Valor no negativo: P19_4_CH</td>
+      <td>P19_4_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_CM.non_negative</td>
+      <td>Valor no negativo: P19_4_CM</td>
+      <td>P19_4_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_LH.non_negative</td>
+      <td>Valor no negativo: P19_4_LH</td>
+      <td>P19_4_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_LM.non_negative</td>
+      <td>Valor no negativo: P19_4_LM</td>
+      <td>P19_4_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_NH.non_negative</td>
+      <td>Valor no negativo: P19_4_NH</td>
+      <td>P19_4_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_NM.non_negative</td>
+      <td>Valor no negativo: P19_4_NM</td>
+      <td>P19_4_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_T.non_negative</td>
+      <td>Valor no negativo: P19_4_T</td>
+      <td>P19_4_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_VH.non_negative</td>
+      <td>Valor no negativo: P19_4_VH</td>
+      <td>P19_4_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_4_VM.non_negative</td>
+      <td>Valor no negativo: P19_4_VM</td>
+      <td>P19_4_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_CH.non_negative</td>
+      <td>Valor no negativo: P19_5_CH</td>
+      <td>P19_5_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_CM.non_negative</td>
+      <td>Valor no negativo: P19_5_CM</td>
+      <td>P19_5_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_LH.non_negative</td>
+      <td>Valor no negativo: P19_5_LH</td>
+      <td>P19_5_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_LM.non_negative</td>
+      <td>Valor no negativo: P19_5_LM</td>
+      <td>P19_5_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_NH.non_negative</td>
+      <td>Valor no negativo: P19_5_NH</td>
+      <td>P19_5_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_NM.non_negative</td>
+      <td>Valor no negativo: P19_5_NM</td>
+      <td>P19_5_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_T.non_negative</td>
+      <td>Valor no negativo: P19_5_T</td>
+      <td>P19_5_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_VH.non_negative</td>
+      <td>Valor no negativo: P19_5_VH</td>
+      <td>P19_5_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_5_VM.non_negative</td>
+      <td>Valor no negativo: P19_5_VM</td>
+      <td>P19_5_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_CH.non_negative</td>
+      <td>Valor no negativo: P19_6_CH</td>
+      <td>P19_6_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_CM.non_negative</td>
+      <td>Valor no negativo: P19_6_CM</td>
+      <td>P19_6_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_LH.non_negative</td>
+      <td>Valor no negativo: P19_6_LH</td>
+      <td>P19_6_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_LM.non_negative</td>
+      <td>Valor no negativo: P19_6_LM</td>
+      <td>P19_6_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_NH.non_negative</td>
+      <td>Valor no negativo: P19_6_NH</td>
+      <td>P19_6_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_NM.non_negative</td>
+      <td>Valor no negativo: P19_6_NM</td>
+      <td>P19_6_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_T.non_negative</td>
+      <td>Valor no negativo: P19_6_T</td>
+      <td>P19_6_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_VH.non_negative</td>
+      <td>Valor no negativo: P19_6_VH</td>
+      <td>P19_6_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_6_VM.non_negative</td>
+      <td>Valor no negativo: P19_6_VM</td>
+      <td>P19_6_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_CH.non_negative</td>
+      <td>Valor no negativo: P19_7_CH</td>
+      <td>P19_7_CH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_CM.non_negative</td>
+      <td>Valor no negativo: P19_7_CM</td>
+      <td>P19_7_CM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_LH.non_negative</td>
+      <td>Valor no negativo: P19_7_LH</td>
+      <td>P19_7_LH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_LM.non_negative</td>
+      <td>Valor no negativo: P19_7_LM</td>
+      <td>P19_7_LM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_NH.non_negative</td>
+      <td>Valor no negativo: P19_7_NH</td>
+      <td>P19_7_NH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_NM.non_negative</td>
+      <td>Valor no negativo: P19_7_NM</td>
+      <td>P19_7_NM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_T.non_negative</td>
+      <td>Valor no negativo: P19_7_T</td>
+      <td>P19_7_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_VH.non_negative</td>
+      <td>Valor no negativo: P19_7_VH</td>
+      <td>P19_7_VH</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P19_7_VM.non_negative</td>
+      <td>Valor no negativo: P19_7_VM</td>
+      <td>P19_7_VM</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20.non_negative</td>
+      <td>Valor no negativo: P20</td>
+      <td>P20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20_1_H.non_negative</td>
+      <td>Valor no negativo: P20_1_H</td>
+      <td>P20_1_H</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>973</td>
+      <td>973</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20_1_M.non_negative</td>
+      <td>Valor no negativo: P20_1_M</td>
+      <td>P20_1_M</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>973</td>
+      <td>973</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20_1_T.non_negative</td>
+      <td>Valor no negativo: P20_1_T</td>
+      <td>P20_1_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>973</td>
+      <td>973</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20_2_H.non_negative</td>
+      <td>Valor no negativo: P20_2_H</td>
+      <td>P20_2_H</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>973</td>
+      <td>973</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20_2_M.non_negative</td>
+      <td>Valor no negativo: P20_2_M</td>
+      <td>P20_2_M</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>973</td>
+      <td>973</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P20_2_T.non_negative</td>
+      <td>Valor no negativo: P20_2_T</td>
+      <td>P20_2_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>973</td>
+      <td>973</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21.non_negative</td>
+      <td>Valor no negativo: P21</td>
+      <td>P21</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_1_H.non_negative</td>
+      <td>Valor no negativo: P21_1_H</td>
+      <td>P21_1_H</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_1_H_20.non_negative</td>
+      <td>Valor no negativo: P21_1_H_20</td>
+      <td>P21_1_H_20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_1_M.non_negative</td>
+      <td>Valor no negativo: P21_1_M</td>
+      <td>P21_1_M</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_1_M_20.non_negative</td>
+      <td>Valor no negativo: P21_1_M_20</td>
+      <td>P21_1_M_20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_1_T.non_negative</td>
+      <td>Valor no negativo: P21_1_T</td>
+      <td>P21_1_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_1_T_20.non_negative</td>
+      <td>Valor no negativo: P21_1_T_20</td>
+      <td>P21_1_T_20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_2_H.non_negative</td>
+      <td>Valor no negativo: P21_2_H</td>
+      <td>P21_2_H</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_2_H_20.non_negative</td>
+      <td>Valor no negativo: P21_2_H_20</td>
+      <td>P21_2_H_20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_2_M.non_negative</td>
+      <td>Valor no negativo: P21_2_M</td>
+      <td>P21_2_M</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_2_M_20.non_negative</td>
+      <td>Valor no negativo: P21_2_M_20</td>
+      <td>P21_2_M_20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_2_T.non_negative</td>
+      <td>Valor no negativo: P21_2_T</td>
+      <td>P21_2_T</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P21_2_T_20.non_negative</td>
+      <td>Valor no negativo: P21_2_T_20</td>
+      <td>P21_2_T_20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>541</td>
+      <td>541</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT1.non_negative</td>
+      <td>Valor no negativo: P22_AT1</td>
+      <td>P22_AT1</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT10.non_negative</td>
+      <td>Valor no negativo: P22_AT10</td>
+      <td>P22_AT10</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT11.non_negative</td>
+      <td>Valor no negativo: P22_AT11</td>
+      <td>P22_AT11</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT12.non_negative</td>
+      <td>Valor no negativo: P22_AT12</td>
+      <td>P22_AT12</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT13.non_negative</td>
+      <td>Valor no negativo: P22_AT13</td>
+      <td>P22_AT13</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT14.non_negative</td>
+      <td>Valor no negativo: P22_AT14</td>
+      <td>P22_AT14</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT15.non_negative</td>
+      <td>Valor no negativo: P22_AT15</td>
+      <td>P22_AT15</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT16.non_negative</td>
+      <td>Valor no negativo: P22_AT16</td>
+      <td>P22_AT16</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT17.non_negative</td>
+      <td>Valor no negativo: P22_AT17</td>
+      <td>P22_AT17</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT18.non_negative</td>
+      <td>Valor no negativo: P22_AT18</td>
+      <td>P22_AT18</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT19.non_negative</td>
+      <td>Valor no negativo: P22_AT19</td>
+      <td>P22_AT19</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT2.non_negative</td>
+      <td>Valor no negativo: P22_AT2</td>
+      <td>P22_AT2</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT20.non_negative</td>
+      <td>Valor no negativo: P22_AT20</td>
+      <td>P22_AT20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT21.non_negative</td>
+      <td>Valor no negativo: P22_AT21</td>
+      <td>P22_AT21</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT22.non_negative</td>
+      <td>Valor no negativo: P22_AT22</td>
+      <td>P22_AT22</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT23.non_negative</td>
+      <td>Valor no negativo: P22_AT23</td>
+      <td>P22_AT23</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT24.non_negative</td>
+      <td>Valor no negativo: P22_AT24</td>
+      <td>P22_AT24</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT3.non_negative</td>
+      <td>Valor no negativo: P22_AT3</td>
+      <td>P22_AT3</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT4.non_negative</td>
+      <td>Valor no negativo: P22_AT4</td>
+      <td>P22_AT4</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT5.non_negative</td>
+      <td>Valor no negativo: P22_AT5</td>
+      <td>P22_AT5</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT6.non_negative</td>
+      <td>Valor no negativo: P22_AT6</td>
+      <td>P22_AT6</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT7.non_negative</td>
+      <td>Valor no negativo: P22_AT7</td>
+      <td>P22_AT7</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT8.non_negative</td>
+      <td>Valor no negativo: P22_AT8</td>
+      <td>P22_AT8</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_AT9.non_negative</td>
+      <td>Valor no negativo: P22_AT9</td>
+      <td>P22_AT9</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C1.non_negative</td>
+      <td>Valor no negativo: P22_C1</td>
+      <td>P22_C1</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C10.non_negative</td>
+      <td>Valor no negativo: P22_C10</td>
+      <td>P22_C10</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C11.non_negative</td>
+      <td>Valor no negativo: P22_C11</td>
+      <td>P22_C11</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C12.non_negative</td>
+      <td>Valor no negativo: P22_C12</td>
+      <td>P22_C12</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C13.non_negative</td>
+      <td>Valor no negativo: P22_C13</td>
+      <td>P22_C13</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C14.non_negative</td>
+      <td>Valor no negativo: P22_C14</td>
+      <td>P22_C14</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C15.non_negative</td>
+      <td>Valor no negativo: P22_C15</td>
+      <td>P22_C15</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C16.non_negative</td>
+      <td>Valor no negativo: P22_C16</td>
+      <td>P22_C16</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C17.non_negative</td>
+      <td>Valor no negativo: P22_C17</td>
+      <td>P22_C17</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C18.non_negative</td>
+      <td>Valor no negativo: P22_C18</td>
+      <td>P22_C18</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C19.non_negative</td>
+      <td>Valor no negativo: P22_C19</td>
+      <td>P22_C19</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C2.non_negative</td>
+      <td>Valor no negativo: P22_C2</td>
+      <td>P22_C2</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C20.non_negative</td>
+      <td>Valor no negativo: P22_C20</td>
+      <td>P22_C20</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C21.non_negative</td>
+      <td>Valor no negativo: P22_C21</td>
+      <td>P22_C21</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C22.non_negative</td>
+      <td>Valor no negativo: P22_C22</td>
+      <td>P22_C22</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C23.non_negative</td>
+      <td>Valor no negativo: P22_C23</td>
+      <td>P22_C23</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C24.non_negative</td>
+      <td>Valor no negativo: P22_C24</td>
+      <td>P22_C24</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C3.non_negative</td>
+      <td>Valor no negativo: P22_C3</td>
+      <td>P22_C3</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C4.non_negative</td>
+      <td>Valor no negativo: P22_C4</td>
+      <td>P22_C4</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C5.non_negative</td>
+      <td>Valor no negativo: P22_C5</td>
+      <td>P22_C5</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C6.non_negative</td>
+      <td>Valor no negativo: P22_C6</td>
+      <td>P22_C6</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C7.non_negative</td>
+      <td>Valor no negativo: P22_C7</td>
+      <td>P22_C7</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C8.non_negative</td>
+      <td>Valor no negativo: P22_C8</td>
+      <td>P22_C8</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Razonabilidad</td>
+      <td>municipalidades_2022.P22_C9.non_negative</td>
+      <td>Valor no negativo: P22_C9</td>
+      <td>P22_C9</td>
+      <td>non_negative</td>
+      <td>>=0</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores negativos o no numéricos en campo cuantitativo.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Exactitud</td>
+      <td>municipalidades_2022.Ubigeo.ubigeo_6_digits</td>
+      <td>Formato esperado en Ubigeo</td>
+      <td>Ubigeo</td>
+      <td>regex</td>
+      <td>^\d{6}$</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Alta</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{6}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Exactitud</td>
+      <td>municipalidades_2022.ccdd.territorial_code_2_digits</td>
+      <td>Formato esperado en ccdd</td>
+      <td>ccdd</td>
+      <td>regex</td>
+      <td>^\d{2}$</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{2}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Exactitud</td>
+      <td>municipalidades_2022.ccpp.provincial_code_2_digits</td>
+      <td>Formato esperado en ccpp</td>
+      <td>ccpp</td>
+      <td>regex</td>
+      <td>^\d{2}$</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{2}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+    <tr>
+      <td>municipalidades_2022</td>
+      <td>Exactitud</td>
+      <td>municipalidades_2022.ccdi.district_code_2_digits</td>
+      <td>Formato esperado en ccdi</td>
+      <td>ccdi</td>
+      <td>regex</td>
+      <td>^\d{2}$</td>
+      <td>1874</td>
+      <td>1874</td>
+      <td>0</td>
+      <td>100.0000</td>
+      <td>Media</td>
+      <td>naming_pattern</td>
+      <td>Sin observaciones</td>
+      <td>Valores que no cumplen el patrón ^\d{2}$. Los vacíos se evalúan en Completitud.</td>
+      <td>[]</td>
+    </tr>
+  </tbody>
+</table>
+    </main></body></html>

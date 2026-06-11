@@ -1,0 +1,1393 @@
+# ============================================================
+# REGLAS SILVER - RENAMU 2022
+# ============================================================
+# Fuente única: municipalidades_2022 (1,874 filas x 1,368 cols)
+#
+# Origen de decisiones:
+# - integer_columns (1047): inferred_type=integer y
+#   numeric_valid_pct>=98 según renamu_profile_detail.csv.
+# - decimal_columns (1): P04_6 es la única columna con valores
+#   decimales (distancia en km, 93.4% vacíos estructurales).
+# - preserve_as_string: ccdd/ccpp/ccdi/Ubigeo/Tipomuni conservan
+#   tipo texto por convención de códigos geográficos INEI.
+#   CRÍTICO — Ubigeo: min numérico=10101 ('010101'→10101
+#   si se convierte a integer; cero inicial se pierde).
+# - drop_columns (94): VFI constantes (unique_count=1, valor
+#   siempre '1') confirmadas por profiling.
+# - documented_null_columns: 6 columnas _O (vacíos estructurales
+#   por diseño del cuestionario — solo se llenan al elegir 'Otro').
+# - Sin special_values_to_null: profiling confirma ausencia de
+#   valores 99/999 en columnas numéricas.
+# - anio_periodo_key deshabilitada: RENAMU no tiene ANO_APLICACION
+#   ni PERIODO; el año es la columna literal "Año" (integer, 2022).
+# ============================================================
+
+source_system: "RENAMU"
+
+silver_defaults:
+  bronze_base_path: "data/bronze/renamu"
+  bronze_subfolder: "2022_municipalidades__Base_RENAMU_2022_f"
+  silver_base_path: "data/silver/renamu"
+  reports_base_path: "reports/silver/renamu"
+  audit_base_path: "data/audit/silver"
+
+  add_technical_columns: true
+
+  technical_columns:
+    source_system:
+      value: "RENAMU"
+      description: "Sistema de origen (Registro Nacional de Municipalidades — INEI)."
+    source_dataset:
+      description: "Nombre del dataset de origen."
+    silver_processed_at:
+      description: "Fecha y hora en que el registro fue procesado hacia Silver."
+    record_hash:
+      description: "Huella SHA-256 del registro para trazabilidad y detección de cambios."
+    anio_periodo_key:
+      description: "No aplica para RENAMU (disabled via derived_columns.anio_periodo_key.enabled=false)."
+
+  null_handling:
+    convert_missing_tokens_to_null: true
+    missing_tokens:
+      - ""
+      - " "
+      - "NULL"
+      - "null"
+      - "None"
+      - "none"
+      - "NaN"
+      - "nan"
+      - "N/A"
+      - "n/a"
+
+  row_policy:
+    drop_empty_rows: true
+    drop_duplicate_rows: false
+    impute_missing_values: false
+
+  keep_original_column_names: true
+
+
+datasets:
+
+  municipalidades_2022:
+
+    # ----------------------------------------------------------
+    # INTEGER COLUMNS (1047)
+    # Fuente: renamu_profile_detail.csv
+    # Criterio: inferred_type=integer AND numeric_valid_pct>=98
+    # Excluidos: VFI, geo/id con tratamiento especial.
+    # 0 es valor válido en columnas de conteo.
+    # ----------------------------------------------------------
+    integer_columns:
+      - P04_1
+      - P05_CC
+      - P05_1
+      - P05_2
+      - P05_3
+      - P06_CC
+      - P06
+      - P10_4
+      - P11A_1
+      - P11A_1_1
+      - P11A_1_2
+      - P11A_2
+      - P11A_2_1
+      - P11A_2_2
+      - P11A_3
+      - P11A_3_1
+      - P11A_3_2
+      - P11A_4
+      - P11A_4_1
+      - P11A_4_2
+      - P11A_5
+      - P11A_5_1
+      - P11A_5_2
+      - P11A_6
+      - P11A_6_1
+      - P11A_6_2
+      - P11A_7
+      - P11A_7_1
+      - P11A_7_2
+      - P11A_8
+      - P11A_8_1
+      - P11A_8_2
+      - P11A_9
+      - P11A_9_1
+      - P11A_9_2
+      - P11A_10
+      - P11A_10_1
+      - P11A_10_2
+      - P11B_11
+      - P11B_11_1
+      - P11B_11_2
+      - P11B_12
+      - P11B_12_1
+      - P11B_12_2
+      - P11B_13
+      - P11B_13_1
+      - P11B_13_2
+      - P11B_14
+      - P11B_14_1
+      - P11B_14_2
+      - P11B_15
+      - P11B_15_1
+      - P11B_15_2
+      - P11B_16
+      - P11B_16_1
+      - P11B_16_2
+      - P11B_17
+      - P11B_17_1
+      - P11B_17_2
+      - P11B_18
+      - P11B_18_1
+      - P11B_18_2
+      - P12_1
+      - P12A_1
+      - P12_2
+      - P12A_2
+      - P13_1
+      - P13A_1
+      - P13_2
+      - P13A_2
+      - P13_3
+      - P13A_3
+      - P13_4
+      - P13A_4
+      - P13_5
+      - P13A_5
+      - P13_6
+      - P13A_6
+      - P13_7
+      - P13A_7
+      - P13_8
+      - P13A_8
+      - P13_9
+      - P13A_9
+      - P14
+      - P14A_1
+      - P14A_2
+      - P15_1
+      - P15A_1
+      - P15_2
+      - P15A_2
+      - P15_3
+      - P15A_3
+      - P15_4
+      - P15A_4
+      - P15_5
+      - P15A_5
+      - P15_6
+      - P15A_6
+      - P16_2
+      - P16_3
+      - P16_4
+      - P16_5
+      - P16_6
+      - P16_7
+      - P16_8
+      - P16_9
+      - P17_2
+      - P17_3
+      - P17_4
+      - P17_5
+      - P17_6
+      - P17_7
+      - P17_8
+      - P17_9
+      - P17_10
+      - P17_11
+      - P17_12
+      - P17_13
+      - P17_14
+      - P18
+      - P19D_T
+      - P19D_NM
+      - P19D_NH
+      - P19D_CM
+      - P19D_CH
+      - P19D_LM
+      - P19D_LH
+      - P19D_VM
+      - P19D_VH
+      - P19_1_T
+      - P19_1_NM
+      - P19_1_NH
+      - P19_1_CM
+      - P19_1_CH
+      - P19_1_VM
+      - P19_1_VH
+      - P19_2_T
+      - P19_2_NM
+      - P19_2_NH
+      - P19_2_CM
+      - P19_2_CH
+      - P19_2_LM
+      - P19_2_LH
+      - P19_2_VM
+      - P19_2_VH
+      - P19_3_T
+      - P19_3_NM
+      - P19_3_NH
+      - P19_3_CM
+      - P19_3_CH
+      - P19_3_LM
+      - P19_3_LH
+      - P19_3_VM
+      - P19_3_VH
+      - P19_4_T
+      - P19_4_NM
+      - P19_4_NH
+      - P19_4_CM
+      - P19_4_CH
+      - P19_4_LM
+      - P19_4_LH
+      - P19_4_VM
+      - P19_4_VH
+      - P19_5_T
+      - P19_5_NM
+      - P19_5_NH
+      - P19_5_CM
+      - P19_5_CH
+      - P19_5_LM
+      - P19_5_LH
+      - P19_5_VM
+      - P19_5_VH
+      - P19_6_T
+      - P19_6_NM
+      - P19_6_NH
+      - P19_6_CM
+      - P19_6_CH
+      - P19_6_LM
+      - P19_6_LH
+      - P19_6_VM
+      - P19_6_VH
+      - P19_7_T
+      - P19_7_NM
+      - P19_7_NH
+      - P19_7_CM
+      - P19_7_CH
+      - P19_7_LM
+      - P19_7_LH
+      - P19_7_VM
+      - P19_7_VH
+      - P19M_T
+      - P19M_NM
+      - P19M_NH
+      - P19M_CM
+      - P19M_CH
+      - P19M_LM
+      - P19M_LH
+      - P19M_VM
+      - P19M_VH
+      - P19A
+      - P19A_1_T
+      - P19A_1_M
+      - P19A_1_H
+      - P19A_2_T
+      - P19A_2_M
+      - P19A_2_H
+      - P20
+      - P20_1_T
+      - P20_1_M
+      - P20_1_H
+      - P20_2_T
+      - P20_2_M
+      - P20_2_H
+      - P21
+      - P21_1_T
+      - P21_1_M
+      - P21_1_H
+      - P21_1_T_20
+      - P21_1_M_20
+      - P21_1_H_20
+      - P21_2_T
+      - P21_2_M
+      - P21_2_H
+      - P21_2_T_20
+      - P21_2_M_20
+      - P21_2_H_20
+      - P22_AT2
+      - P22_AT3
+      - P22_AT4
+      - P22_AT5
+      - P22_AT6
+      - P22_AT7
+      - P22_AT8
+      - P22_AT9
+      - P22_AT10
+      - P22_AT11
+      - P22_AT12
+      - P22_AT13
+      - P22_AT14
+      - P22_AT15
+      - P22_AT16
+      - P22_AT17
+      - P22_AT18
+      - P22_AT19
+      - P22_AT20
+      - P22_AT21
+      - P22_AT22
+      - P22_AT23
+      - P22_AT24
+      - P22_C2
+      - P22_C3
+      - P22_C4
+      - P22_C5
+      - P22_C6
+      - P22_C7
+      - P22_C8
+      - P22_C9
+      - P22_C10
+      - P22_C11
+      - P22_C12
+      - P22_C13
+      - P22_C14
+      - P22_C15
+      - P22_C16
+      - P22_C17
+      - P22_C18
+      - P22_C19
+      - P22_C20
+      - P22_C21
+      - P22_C22
+      - P22_C23
+      - P22_C24
+      - P23_1
+      - P23_1_1
+      - P23_1_3
+      - P23_1_4
+      - P23_2
+      - P23_2_1
+      - P23_2_3
+      - P23_2_4
+      - P23_3
+      - P23_3_1
+      - P23_3_4
+      - P23_4
+      - P23_4_1
+      - P23_4_3
+      - P23_4_4
+      - P23_5
+      - P23_5_1
+      - P23_5_3
+      - P23_5_4
+      - P23_6
+      - P23_6_1
+      - P23_6_3
+      - P23_6_4
+      - P23_7
+      - P23_7_1
+      - P23_7_3
+      - P23_7_4
+      - P23_8
+      - P23_8_1
+      - P23_8_3
+      - P23_8_4
+      - P23_9
+      - P23_9_1
+      - P23_9_3
+      - P23_9_4
+      - P23_10
+      - P23_10_1
+      - P23_10_3
+      - P23_10_4
+      - P23_11
+      - P23_11_1
+      - P23_11_4
+      - P23_12
+      - P23_12_1
+      - P23_12_4
+      - P23_13
+      - P23_13_1
+      - P23_13_4
+      - P23_15
+      - P23_15_1
+      - P23_15_4
+      - P23_16
+      - P23_16_1
+      - P23_16_3
+      - P23_16_4
+      - P23_14_1
+      - P23_14_3
+      - P24
+      - P24_1_T
+      - P24_1_M
+      - P24_1_H
+      - P24_2_T
+      - P24_2_M
+      - P24_2_H
+      - P24_3_T
+      - P24_3_M
+      - P24_3_H
+      - P24_4_T
+      - P24_4_M
+      - P24_4_H
+      - P25_1_1
+      - P25_2
+      - P25_3
+      - P25_4
+      - P25_5
+      - P26A
+      - P26
+      - P26A_1
+      - P27
+      - P28_2
+      - P28_3
+      - P28_4
+      - P28_5
+      - P29_1
+      - P29_1_1
+      - P29_1_2
+      - P29_1_3
+      - P29_1_5
+      - P29_1_6
+      - P29_2
+      - P29_2_1
+      - P29_2_2
+      - P29_2_3
+      - P29_2_5
+      - P29_2_6
+      - P29_3
+      - P29_3_1
+      - P29_3_2
+      - P29_3_3
+      - P29_3_5
+      - P29_3_6
+      - P29_4
+      - P29_4_1
+      - P29_4_2
+      - P29_4_3
+      - P29_4_5
+      - P29_4_6
+      - P29_5
+      - P29_5_1
+      - P29_5_2
+      - P29_5_3
+      - P29_5_5
+      - P29_5_6
+      - P29_6
+      - P29_6_1
+      - P29_6_2
+      - P29_6_3
+      - P29_6_5
+      - P29_6_6
+      - P29_7
+      - P29_7_1
+      - P29_7_2
+      - P29_7_3
+      - P29_7_5
+      - P29_7_6
+      - P29_8
+      - P29_8_1
+      - P29_8_2
+      - P29_8_3
+      - P29_8_5
+      - P29_8_6
+      - P29_9
+      - P29_9_1
+      - P29_9_5
+      - P29_9_6
+      - P30_2
+      - P30_3
+      - P30_4
+      - P30_5
+      - P30_7
+      - P30_8
+      - P30_6
+      - P31_2
+      - P31_3
+      - P31_4
+      - P31_5
+      - P32
+      - P32_1_T
+      - P32_1_M
+      - P32_1_H
+      - P32_2_T
+      - P32_2_M
+      - P32_2_H
+      - P33A
+      - P34_1
+      - P34A_1
+      - P34_2
+      - P34A_2
+      - P34_3
+      - P34A_3
+      - P34_4
+      - P34A_4
+      - P34_5
+      - P34A_5
+      - P34_6
+      - P34A_6
+      - P34_7
+      - P34A_7
+      - P34_8
+      - P34A_8
+      - P34_9
+      - P34A_9
+      - P34_10
+      - P34A_10
+      - P34_11
+      - P34A_11
+      - P34_12
+      - P34A_12
+      - P34_13
+      - P34A_13
+      - P34_14
+      - P34A_14
+      - P34_15
+      - P34A_15
+      - P34_16
+      - P34A_16
+      - P34_17
+      - P34A_17
+      - P34_18
+      - P34A_18
+      - P34_19
+      - P34A_19
+      - P34_20
+      - P34A_20
+      - P34_21
+      - P34A_21
+      - P34_22
+      - P34A_22
+      - P34_23
+      - P34A_23
+      - P34_24
+      - P34A_24
+      - P34_25
+      - P34A_25
+      - P34_26
+      - P34A_26
+      - P34_27
+      - P34A_27
+      - P34_28
+      - P34A_28
+      - P34_29
+      - P34A_29
+      - P34_30
+      - P34A_30
+      - P34_31
+      - P34A_31
+      - P35_1
+      - P35A_1
+      - P35_2
+      - P35A_2
+      - P35_3
+      - P35A_3
+      - P35_4
+      - P35A_4
+      - P35_5
+      - P35A_5
+      - P35_6
+      - P35A_6
+      - P35_7
+      - P35A_7
+      - P35_8
+      - P35A_8
+      - P35_9
+      - P35A_9
+      - P35_10
+      - P35A_10
+      - P35_11
+      - P35A_11
+      - P36
+      - P36_1
+      - P36_2
+      - P36_3
+      - P37_1
+      - P37A_1
+      - P37_2
+      - P37A_2
+      - P37_3
+      - P37A_3
+      - P37_4
+      - P37A_4
+      - P37_5
+      - P37A_5
+      - P38
+      - P38_1
+      - P38_2
+      - P38A_1
+      - P38A_2
+      - P38A_3
+      - P39B_1
+      - P39B_2
+      - P39B_3
+      - P40_1
+      - P41_1
+      - P42_1
+      - P43_2
+      - P43_3
+      - P43_4
+      - P43_5
+      - P43_6
+      - P43_7
+      - P43_8
+      - P43_9
+      - P44_1
+      - P44_1_1
+      - P44_2
+      - P44_2_1
+      - P44_3
+      - P44_3_1
+      - P44_4
+      - P44_4_1
+      - P44_5
+      - P46_1
+      - P46A_1
+      - P46_2
+      - P46A_2
+      - P47
+      - P47_T
+      - P47_M
+      - P47_H
+      - P48_1
+      - P48A_1
+      - P48_2
+      - P48A_2
+      - P48_3
+      - P48A_3
+      - P48_4
+      - P48A_4
+      - P48_5
+      - P48A_5
+      - P48_6
+      - P48A_6
+      - P48_7
+      - P48A_7
+      - P48_8
+      - P48A_8
+      - P48_9
+      - P48A_9
+      - P48_10
+      - P48A_10
+      - P48_11
+      - P48A_11
+      - P48_12
+      - P48A_12
+      - P48B_1
+      - P48B_2
+      - P48B_3
+      - P49
+      - P49_1
+      - P49_2
+      - P50A
+      - P50B
+      - P50C
+      - P50D
+      - P50E
+      - P50F
+      - P51
+      - P51_1
+      - P51_2
+      - P52
+      - P53A_1
+      - P53_2
+      - P53_3
+      - P53_4
+      - P53_5
+      - P53_6
+      - P53_7
+      - P53_8
+      - P53_9
+      - P54
+      - P54_T
+      - P54_M
+      - P54_H
+      - P54_1_T
+      - P54_1_M
+      - P54_1_H
+      - P54_2_T
+      - P54_2_M
+      - P54_2_H
+      - P55_1
+      - P55_1_1
+      - P55_2
+      - P55_2_1
+      - P55_3
+      - P55_3_1
+      - P55_4
+      - P55_4_1
+      - P55_5
+      - P55_5_1
+      - P55_6
+      - P55_6_1
+      - P55_7
+      - P55_7_1
+      - P55_8
+      - P55_8_1
+      - P55_9
+      - P55_9_1
+      - P56
+      - P56_T
+      - P56_A
+      - P57_1
+      - P57_1_1
+      - P57_2
+      - P57_2_1
+      - P57_3
+      - P57_3_1
+      - P57_4
+      - P57_4_1
+      - P57_5
+      - P57_5_1
+      - P57_6
+      - P57_6_1
+      - P58_1
+      - P58_1_1
+      - P58_2
+      - P58_2_1
+      - P58_3
+      - P58_3_1
+      - P58_4
+      - P58_4_1
+      - P59_1
+      - P59_1_1
+      - P59_2
+      - P59_2_1
+      - P59_3
+      - P59_3_1
+      - P59_4
+      - P59_4_1
+      - P59_5
+      - P59_5_1
+      - P59_6
+      - P59_6_1
+      - P59_7
+      - P59_7_1
+      - P59_8
+      - P59_8_1
+      - P59_9
+      - P59_9_1
+      - P59_10
+      - P59_10_1
+      - P59_11
+      - P59_11_1
+      - P60A_1_1
+      - P60A_1_2
+      - P60A_2
+      - P60A_2_1
+      - P60A_2_2
+      - P60A_3
+      - P60A_3_1
+      - P60A_3_2
+      - P60A_4
+      - P60A_4_1
+      - P60A_4_2
+      - P60A_5
+      - P60A_5_1
+      - P60A_5_2
+      - P60B_1A_1
+      - P60B_1_1
+      - P60B_2A_1
+      - P60B_2_1
+      - P60B_3A_1
+      - P60B_3_1
+      - P60B_4A_1
+      - P60B_4_1
+      - P60B_5A_1
+      - P60B_5_1
+      - P60B_6A_1
+      - P60B_6_1
+      - P60B_7A_1
+      - P60B_7_1
+      - P60B_T_1
+      - P61
+      - P61_1
+      - P61_2
+      - P62
+      - P62_1
+      - P63
+      - P64
+      - P64_1
+      - P64_1_1
+      - P64_2
+      - P64_2_1
+      - P64_3
+      - P64_3_1
+      - P64_4
+      - P64_4_1
+      - P64_5
+      - P64_5_1
+      - P64_6
+      - P64_6_1
+      - P64_7
+      - P64_7_1
+      - P64_8
+      - P64_8_1
+      - P64_9
+      - P64_9_1
+      - P64_10
+      - P64_10_1
+      - P64_11
+      - P64_11_1
+      - P64_12
+      - P64_12_1
+      - P64_13
+      - P64_13_1
+      - P64_14
+      - P64_14_1
+      - P64_15
+      - P64_15_1
+      - P64_16
+      - P64_16_1
+      - P64_17
+      - P64_17_1
+      - P64_18
+      - P64_18_1
+      - P64_19
+      - P64_19_1
+      - P66_1
+      - P66_1_1
+      - P66_2
+      - P66_2_1
+      - P66_3
+      - P66_3_1
+      - P66_4
+      - P66_4_1
+      - P66_5
+      - P66_5_1
+      - P66_6
+      - P66_7
+      - P66_7_1
+      - P66_8
+      - P66_8_1
+      - P66_9
+      - P66_9_1
+      - P66_10
+      - P66_10_1
+      - P67_2
+      - P67_3
+      - P67_4
+      - P67_5
+      - P67_6
+      - P67_7
+      - P67_8
+      - P67_9
+      - P67_10
+      - P67_11
+      - P67_12
+      - P68_2
+      - P68_3
+      - P68_4
+      - P68_5
+      - P68_6
+      - P68_7
+      - P68_10
+      - P68_11
+      - P68_8
+      - P68_9
+      - P69_1
+      - P69_1_T
+      - P69_1_M
+      - P69_1_H
+      - P69_2
+      - P69_2_T
+      - P69_2_M
+      - P69_2_H
+      - P70_1
+      - P70A_1_1
+      - P70A_1_2
+      - P70A_1_3
+      - P70_2
+      - P70A_2_1
+      - P70A_2_2
+      - P70A_2_3
+      - P70_3
+      - P70A_3_1
+      - P70A_3_2
+      - P70A_3_3
+      - P70_4
+      - P70A_4_1
+      - P70A_4_2
+      - P70A_4_3
+      - P70_5
+      - P70A_5_1
+      - P70A_5_2
+      - P70A_5_3
+      - P70_6
+      - P70A_6_1
+      - P70A_6_2
+      - P70A_6_3
+      - P70_7
+      - P70A_7_1
+      - P70A_7_2
+      - P70A_7_3
+      - P70_8
+      - P70A_8_1
+      - P70A_8_2
+      - P70A_8_3
+      - P70_9
+      - P70A_9_1
+      - P70A_9_2
+      - P70A_9_3
+      - P70_10
+      - P70A_10_1
+      - P70A_10_2
+      - P70A_10_3
+      - P70_11
+      - P70A_11_1
+      - P70A_11_2
+      - P70_12
+      - P70A_12_1
+      - P70_13
+      - P70A_13_1
+      - P70_14
+      - P70A_14_1
+      - P70_15
+      - P70A_15_1
+      - P70_16
+      - P70A_16_1
+      - P71_1
+      - P71A_1
+      - P71_2
+      - P71A_2
+      - P71_3
+      - P71A_3
+      - P71_4
+      - P71A_4
+      - P71_5
+      - P71A_5
+      - P71_6
+      - P71A_6
+      - P71_7
+      - P71A_7
+      - P71_8
+      - P71A_8
+      - P71_9
+      - P71A_9
+      - P71_10
+      - P71A_10
+      - P71_11
+      - P71A_11
+      - P71_12
+      - P71A_12
+      - P72A
+      - P72A_1
+      - P72A_2
+      - P72B
+      - P72B_1
+      - P73_2
+      - P73_3
+      - P73_4
+      - P74
+      - P75
+      - P76_1
+      - P76A_1
+      - P76_2
+      - P76A_2
+      - P76_3
+      - P76A_3
+      - P76_4
+      - P76A_4
+      - P76_5
+      - P76A_5
+      - P76_6
+      - P76_7
+      - P77_2
+      - P77_3
+      - P77_4
+      - P78_2
+      - P78_3
+      - P78_4
+      - P78_5
+      - P79_1
+      - P79A_1_1
+      - P79A_1_2
+      - P79_2
+      - P79A_2_1
+      - P79A_2_2
+      - P79_3
+      - P79A_3_1
+      - P79A_3_2
+      - P79_4
+      - P79A_4_1
+      - P79A_4_2
+      - P79_5
+      - P79A_5_1
+      - P79A_5_2
+      - P79_6
+      - P79A_6_1
+      - P79A_6_2
+      - P80_2
+      - P80_3
+      - P80_4
+      - P80_5
+      - P80_6
+      - P80_7
+      - P80_8
+      - P80_9
+      - P80_10
+      - P84A
+      - P84A_1A
+      - P85_1
+      - P86_1
+      - P87_1
+      - P87_2
+      - P87_3
+      - P87_4
+      - P87_5
+      - P87_6
+      - P87A
+      - P87A_1A
+      - P88
+      - P88_2
+      - P88_3
+      - P88_4
+      - P88_5
+      - P88_6
+      - P88_7
+      - P88_8
+      - P88_9
+      - P89
+      - P89_2
+      - P89_3
+      - P89_4
+      - P89_5
+      - P89_6
+      - P90_2
+      - P90A_2
+      - P90_3
+      - P90_4
+      - P90_5
+      - P90_6
+      - P90_7
+      - P94_2
+      - P94_3
+      - P94_4
+      - P94_5
+      - P94_6
+      - P94_7
+      - P94_8
+      - P94_9
+      - P95_2
+      - P95_3
+      - P95_4
+      - P95_5
+      - P95_6
+      - P95_7
+      - P96
+      - P97_2
+      - P97_3
+      - P97_4
+      - P97_5
+      - P97_6
+      - P97_7
+      - P97_8
+      - P97_9
+      - P97_10
+      - P98_2
+      - P98_3
+      - P98_4
+      - P98_5
+      - P98_6
+      - P98_7
+      - P98_8
+      - P98_9
+      - P98_10
+      - P98_11
+      - P99_2
+      - P99_3
+      - P99_4
+      - P99_5
+      - P99_6
+      - P99_7
+      - P99_8
+      - P99_9
+      - P99_10
+      - P99_11
+      - P100_2
+      - P100_3
+      - P100_4
+      - P100_5
+      - P100_6
+      - P100_7
+      - P100_8
+      - P100_9
+      - P100_10
+      - P100_11
+      - P100_12
+      - P101_2
+      - P101_3
+      - P101_4
+      - P101_5
+      - P101_6
+      - P102
+      - P102_1_T
+      - P102_1_M
+      - P102_1_H
+      - P102_2
+      - C96_1_1_4
+      - C96_1_1_5
+      - C96_1_2_10
+      - C96_1_2_11
+      - C96_2_2
+      - C96_3_4
+      - C97_2_2_1
+      - C97_2_3
+      - C97_2_4
+
+    # ----------------------------------------------------------
+    # DECIMAL COLUMNS (1)
+    # P04_6: distancia en km al municipio más cercano.
+    # 93.4% de vacíos son estructurales.
+    # ----------------------------------------------------------
+    decimal_columns:
+      - P04_6
+
+    # ----------------------------------------------------------
+    # DATETIME COLUMNS
+    # No existen columnas de fecha en este dataset.
+    # ----------------------------------------------------------
+    datetime_columns: []
+
+    # ----------------------------------------------------------
+    # STRING COLUMNS
+    # Nombres geográficos declarados explícitamente para
+    # trazabilidad en el data dictionary Silver.
+    # ----------------------------------------------------------
+    string_columns:
+      - Departamento
+      - Provincia
+      - Distrito
+
+    # ----------------------------------------------------------
+    # PRESERVE AS STRING
+    # ----------------------------------------------------------
+    preserve_as_string:
+      ccdd:
+        reason: "Código de departamento; se conserva como texto por convención INEI (formato '01'-'25')."
+      ccpp:
+        reason: "Código de provincia; se conserva como texto por convención INEI."
+      ccdi:
+        reason: "Código de distrito; se conserva como texto por convención INEI."
+      Ubigeo:
+        reason: "CRÍTICO: min numérico=10101 implica pérdida del cero inicial ('010101'→10101). Debe ser string."
+      Tipomuni:
+        reason: "Código categórico (1=Provincial, 2=Distrital, 3=Centro Poblado); texto para integración con diccionario."
+
+    # ----------------------------------------------------------
+    # DROP COLUMNS (94 VFI constantes)
+    # unique_count=1, valor siempre '1'. Sin valor analítico.
+    # Las VFI con unique_count=2 se conservan (no-respuesta real).
+    # ----------------------------------------------------------
+    drop_columns:
+      VFI:
+        reason: "VFI constante (100% = '1'); toda municipalidad respondió. Sin valor analítico diferenciador."
+      VFI_C96:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_C97:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P100:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P101:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P102:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P11A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P11B:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P12:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P13:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P14:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P15:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P16:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P17:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P18:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P19:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P19A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P20:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P21:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P22:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P23:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P24:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P25:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P26:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P26A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P27:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P28:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P29:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P30:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P31:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P32:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P33:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P34:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P35:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P36:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P37:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P38:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P39B:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P40:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P41:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P42:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P43:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P44:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P46:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P47:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P48:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P48B:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P49:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P50:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P51:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P52:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P53:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P54:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P55:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P56:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P57:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P58:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P59:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P60A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P60B:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P61:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P62:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P63:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P64:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P66:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P67:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P68:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P69:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P70:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P71:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P72A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P72B:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P73:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P74:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P75:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P76:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P77:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P78:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P79:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P80:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P84A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P85:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P86:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P87:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P87A:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P88:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P89:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P90:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P94:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P95:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P96:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P97:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P98:
+        reason: "VFI constante (100% = '1'); sin variación."
+      VFI_P99:
+        reason: "VFI constante (100% = '1'); sin variación."
+
+    # ----------------------------------------------------------
+    # DOCUMENTED NULL COLUMNS
+    # 6 columnas _O: vacíos estructurales por diseño del
+    # cuestionario — solo se llenan al elegir opción "Otro".
+    # ----------------------------------------------------------
+    documented_null_columns:
+      P11A_10_O:
+        reason: "Texto libre 'Otro tipo de acceso a internet'; solo aplica cuando P11A_10=1. Quality: 1,278 vacíos (68.2%). Vacío estructural documentado."
+      P11B_18_O:
+        reason: "Texto libre 'Otro equipo tecnológico'; solo aplica al elegir opción 'Otro'. Quality: 1,702 vacíos (90.8%). Vacío estructural documentado."
+      P13A_9_O:
+        reason: "Texto libre 'Otro software'; solo aplica al elegir opción 'Otro'. Quality: 1,623 vacíos (86.6%). Vacío estructural documentado."
+      P15A_6_O:
+        reason: "Texto libre 'Otra fuente de energía'; solo aplica al elegir opción 'Otro'. Quality: 1,632 vacíos (87.1%). Vacío estructural documentado."
+      P16_9_O:
+        reason: "Texto libre 'Otro servicio de agua'; solo aplica al elegir opción 'Otro'. Quality: 1,757 vacíos (93.8%). Vacío estructural documentado."
+      P17_13_O:
+        reason: "Texto libre 'Otro tipo de residuo'; solo aplica al elegir opción 'Otro'. Quality: 1,810 vacíos (96.6%). Vacío estructural documentado."
+
+    # ----------------------------------------------------------
+    # DERIVED COLUMNS
+    # anio_periodo_key deshabilitada: RENAMU no tiene columnas
+    # ANO_APLICACION/PERIODO. El año es "Año" (integer, 2022).
+    # ----------------------------------------------------------
+    derived_columns:
+      anio_periodo_key:
+        enabled: false
+
+    keep_columns: all

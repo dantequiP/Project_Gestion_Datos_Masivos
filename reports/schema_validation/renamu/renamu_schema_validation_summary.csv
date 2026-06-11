@@ -1,0 +1,2 @@
+﻿dataset,dictionary_source,dictionary_error,official_columns,downloaded_columns,matched_columns,missing_in_parquet,extra_in_parquet,local_rows_parquet,parquet_path,validation_status
+municipalidades_2022,local_csv,,1369,1368,1368,1,0,1874,data\bronze\renamu\2022_municipalidades__Base_RENAMU_2022_f\year=2026\month=05\day=27\2022_municipalidades__Base_RENAMU_2022_f_20260527_014602.parquet,REVISAR
